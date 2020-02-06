@@ -10,7 +10,13 @@ using AccessibilityInsights.SharedUx.ViewModels;
 using Axe.Windows.Actions;
 using Axe.Windows.Actions.Contexts;
 using Axe.Windows.Core.Bases;
+using Axe.Windows.Desktop.UIAutomation;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Timers;
 using System.Windows;
 using System.Windows.Automation;
@@ -253,6 +259,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
                     {
                         ReadyForShowingElements();
 
+                        DumpReturn();
                         this.cbElements.ItemsSource = this.ActionViewModel.ReturnValue;
                         this.cbElements.SelectedIndex = 0;
                     }
@@ -269,6 +276,85 @@ namespace AccessibilityInsights.SharedUx.ActionViews
                     ShowErrorHResult();
                 }
             }
+        }
+
+        private void DumpReturn()
+        {
+            try
+            {
+                string folderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "AIWinDebugging");
+                if (!Directory.Exists(folderName))
+                    Directory.CreateDirectory(folderName);
+
+                string type = string.Format(CultureInfo.InvariantCulture, "{0}_{1}",
+                    this.ActionViewModel.PatternName, this.ActionViewModel.Name)
+                    .Replace(" ", "_");
+                string fileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.txt",
+                    type, DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-ffffff", CultureInfo.InvariantCulture));
+
+                const string separator = "--------------------------";
+
+                using (FileStream stream = File.Create(Path.Combine(folderName, fileName)))
+                {
+                    foreach (DesktopElement element in this.ActionViewModel.ReturnValue)
+                    {
+                        WritePropertiesToStream(stream, element.Properties);
+                        WritePatternsToStream(stream, element.Patterns);
+                        WriteLineToStream(stream, separator);
+                    }
+                }
+            }
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception) { }   // Silently eat all exceptions
+#pragma warning restore CA1031 // Do not catch general exception types
+        }
+
+        private static void WritePropertiesToStream(Stream stream, IReadOnlyDictionary<int, A11yProperty> properties)
+        {
+            if (properties == null)
+            {
+                WriteLineToStream(stream, "ERROR : Properties is null!");
+                return;
+            }
+
+            if (properties.Any())
+            {
+                WriteLineToStream(stream, "Properties");
+                foreach (var pair in properties)
+                {
+                    using (A11yProperty property = new A11yProperty(pair.Key, pair.Value))
+                    {
+                        WriteLineToStream(stream,
+                            string.Format(CultureInfo.InvariantCulture, "  {0} = {1}", property.Name, property.Value));
+                    }
+                }
+            }
+        }
+
+
+        private static void WritePatternsToStream(Stream stream, IEnumerable<A11yPattern> patterns)
+        {
+            if (patterns == null)
+            {
+                WriteLineToStream(stream, "ERROR: Patterns is null");
+                return;
+            }
+
+            if (patterns.Any())
+            {
+                WriteLineToStream(stream, "Patterns");
+                foreach (var pattern in patterns)
+                {
+                    WriteLineToStream(stream, "  " + pattern);
+                }
+            }
+        }
+
+        private static void WriteLineToStream(Stream stream, string data)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(data + "\r\n");
+            stream.Write(bytes, 0, bytes.Length);
         }
 
         /// <summary>
