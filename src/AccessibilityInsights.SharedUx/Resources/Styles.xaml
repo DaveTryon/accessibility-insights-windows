@@ -356,7 +356,7 @@
                     <Border BorderThickness="0,0,0,1" Background="{DynamicResource ResourceKey=TabHorizontalBorderBrush}">
                         <Grid x:Name="gdTab">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <ContentPresenter x:Name="ContentSite"
