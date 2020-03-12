@@ -14,6 +14,7 @@
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource ResourceKey=PrimaryBGBrush}"
         Icon="pack://application:,,,/AccessibilityInsights.SharedUx;component/Resources/Icons/BrandIcon.ico"
         Title="{x:Static Properties:Resources.TextPatternExplorerDialogWindowTitle}" Height="600" Width="650"
         ShowInTaskbar="False" Topmost="True" KeyUp="Window_KeyUp">
@@ -34,7 +35,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Label Padding="0" Margin="10" FontSize="16" FontWeight="Bold" Content="{x:Static Properties:Resources.LabelContentTextRange}" />
+                <Label Padding="0" Margin="10" FontSize="16" FontWeight="Bold" Content="{x:Static Properties:Resources.LabelContentTextRange}" Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
                 <ComboBox Margin="0,8" HorizontalAlignment="Left" Name="cbRanges" SelectionChanged="cbRanges_SelectionChanged" AutomationProperties.Name="{x:Static Properties:Resources.cbRangesAutomationPropertiesName}">
                     <ComboBoxItem Content="{x:Static Properties:Resources.ComboBoxItemContentDocument}" Tag="{x:Static Member=local:TextPatternExplorerDialog+SourceTypes.Document}"/>
                     <ComboBoxItem Content="{x:Static Properties:Resources.ComboBoxItemContentSelected}" Tag="{x:Static Member=local:TextPatternExplorerDialog+SourceTypes.Selection}"/>
