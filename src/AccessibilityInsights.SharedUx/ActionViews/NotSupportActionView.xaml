@@ -11,8 +11,8 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <StackPanel VerticalAlignment="Center" Margin="10">
-            <TextBlock TextWrapping="Wrap" Focusable="True" Text="{x:Static Properties:Resources.TextBlockText}"/>
-            <TextBlock x:Name="tbName" VerticalAlignment="Center" Margin="0,10,0,0" Focusable="True"/>
+            <TextBlock TextWrapping="Wrap" Focusable="True" Text="{x:Static Properties:Resources.TextBlockText}" Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
+            <TextBlock x:Name="tbName" VerticalAlignment="Center" Margin="0,10,0,0" Focusable="True" Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
             <Button Content="{x:Static Properties:Resources.ButtonContent}" Click="Button_Click"/>
         </StackPanel>
     </Grid>

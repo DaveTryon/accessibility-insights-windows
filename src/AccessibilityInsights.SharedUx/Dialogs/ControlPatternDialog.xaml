@@ -13,12 +13,15 @@
         WindowStartupLocation="CenterOwner"
         Icon="pack://application:,,,/AccessibilityInsights.SharedUx;component/Resources/Icons/BrandIcon.ico"
         Title="{x:Static Properties:Resources.ControlPatternDialogWindowTitle}" Height="500" Width="450"
-        ShowInTaskbar="False" Topmost="True" KeyUp="Window_KeyUp">
+        ShowInTaskbar="False" Topmost="True" KeyUp="Window_KeyUp" Background="{DynamicResource ResourceKey=PrimaryBGBrush}">
+    <Window.Resources>
+        <ResourceDictionary Source="..\Resources\Styles.xaml"/>
+    </Window.Resources>
     <Grid>
-        <TabControl x:Name="tcActions"
-                Margin="10">
+        <TabControl x:Name="tcActions" Background="Transparent"
+                Margin="4">
             <TabControl.ItemContainerStyle>
-                <Style TargetType="{x:Type TabItem}">
+                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource tabItemActions}">
                     <Setter Property="Header" Value="{Binding Name}"/>
                     <Setter Property="Content" Value="{Binding Converter={converters:ActionViewModelConverter}}"/>
                 </Style>

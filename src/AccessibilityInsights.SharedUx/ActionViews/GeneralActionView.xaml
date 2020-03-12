@@ -13,10 +13,15 @@
              d:DesignHeight="300" d:DesignWidth="300" IsVisibleChanged="UserControl_IsVisibleChanged">
     <UserControl.Resources>
         <ResourceDictionary>
-            <local:DynamicDataTemplateSelector x:Key="DynamicDataTemplateSelector" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\Styles.xaml"/>
+                <ResourceDictionary>
+                    <local:DynamicDataTemplateSelector x:Key="DynamicDataTemplateSelector" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="10">
+    <Grid Margin="10" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="35"/>
@@ -34,6 +39,9 @@
                     <TextBox Text="{Binding ParamValue, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="False"
                              Grid.Column="1" VerticalContentAlignment="Center"
+                             Background="{DynamicResource ResourceKey=PrimaryBGBrush}"
+                             Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"
+                             CaretBrush="{DynamicResource ResourceKey=PrimaryFGBrush}"
                              AutomationProperties.Name="{Binding Name}"
                              AutomationProperties.HelpText="{x:Static properties:Resources.dgParamsTextBoxAutomationPropertiesName}"/>
                 </DataTemplate>
@@ -67,18 +75,22 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label x:Name="lbDelay" Grid.Column="0" VerticalAlignment="Center" Content="{x:Static properties:Resources.lbDelayContent}"/>
+            <Label x:Name="lbDelay" Grid.Column="0" VerticalAlignment="Center" Content="{x:Static properties:Resources.lbDelayContent}" Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
             <TextBox x:Name="tbDelay" Grid.Column="1"
+                     Background="{DynamicResource ResourceKey=PrimaryBGBrush}"
+                     Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"
+                     CaretBrush="{DynamicResource ResourceKey=PrimaryFGBrush}"
                      Margin="5" AutomationProperties.LabeledBy="{Binding ElementName=lbDelay}"
                      Text="0" PreviewTextInput="tbDelay_PreviewTextInput"/>
             <Button x:Name="btnAction" Grid.Column="2" Width="70" Content="{x:Static properties:Resources.btnActionContent}"
                     AutomationProperties.Name="{x:Static properties:Resources.btnActionAutomationPropertiesName}" Click="Button_Click"
-                    Margin="5"/>
+                    Margin="5" Style="{StaticResource BtnActions}"/>
         </Grid>
         <TextBlock x:Name="tbResult" Focusable="True"
                    Grid.Row="2"
                    Margin="10,0,0,0"
                    VerticalAlignment="Top"
+                   Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"
                    AutomationProperties.Name="{x:Static properties:Resources.tbResultAutomationPropertiesName}"/>
         <DataGrid x:Name="dgReturn"
                   Grid.Row="2"

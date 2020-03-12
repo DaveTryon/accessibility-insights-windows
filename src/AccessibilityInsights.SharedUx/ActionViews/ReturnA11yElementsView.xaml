@@ -69,13 +69,16 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label x:Name="lbDelay" Grid.Column="0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.lbDelayContent}"/>
+            <Label x:Name="lbDelay" Grid.Column="0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.lbDelayContent}" Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
             <TextBox x:Name="tbDelay" Grid.Column="1"
                      Margin="5"
                      VerticalContentAlignment="Center"
                      Text="0" AutomationProperties.LabeledBy="{Binding ElementName=lbDelay}"
+                     Background="{DynamicResource ResourceKey=PrimaryBGBrush}"
+                     Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"
+                     CaretBrush="{DynamicResource ResourceKey=PrimaryFGBrush}"
                      PreviewTextInput="tbDelay_PreviewTextInput"/>
-            <Button x:Name="btnAction" Grid.Column="2" Width="70" Content="{x:Static Properties:Resources.btnActionContent}"
+            <Button x:Name="btnAction" Grid.Column="2" Width="70" Content="{x:Static Properties:Resources.btnActionContent}" Style="{StaticResource BtnActions}"
                     AutomationProperties.Name="{x:Static Properties:Resources.btnActionAutomationPropertiesName}" Click="btnRun_Click"
                     Margin="5,5,0,5"/>
         </Grid>
@@ -84,7 +87,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label x:Name="lbElements" Content="{x:Static Properties:Resources.lbElementsContent}"
+            <Label x:Name="lbElements" Content="{x:Static Properties:Resources.lbElementsContent}" Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"
                    VerticalAlignment="Center"/>
             <ComboBox x:Name="cbElements"
                       Margin="0,5,0,5"
@@ -160,6 +163,7 @@
                    Grid.Row="3"
                    Margin="10,0,0,0"
                    VerticalAlignment="Top"
+                   Foreground="{DynamicResource ResourceKey=PrimaryFGBrush}"
                    AutomationProperties.Name="{x:Static Properties:Resources.tbResultAutomationPropertiesName}"/>
         <controls:DisplayCountControl x:Name="ctrlCountDown"
                                       Grid.Row="3"
