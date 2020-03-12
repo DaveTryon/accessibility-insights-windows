@@ -383,7 +383,7 @@
                         </MultiTrigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="gdTab" Property="Background" Value="{DynamicResource ResourceKey=SelectedTabBrush}"/>
-                            <Setter TargetName="rctActiveBar" Property="Fill" Value="{DynamicResource ResourceKey=ActiveBlueBrush}"/>
+                            <Setter TargetName="rctActiveBar" Property="Fill" Value="{DynamicResource ResourceKey=ActiveTabMarkerBrush}"/>
                             <Setter TargetName="ContentSite" Property="TextElement.Foreground" Value="{DynamicResource ResourceKey=SelectedTabFGBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">

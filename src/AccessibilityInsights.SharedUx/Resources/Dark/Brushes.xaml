@@ -16,7 +16,7 @@
     <SolidColorBrush po:Freeze="True" x:Key="DisabledOverlayBrush" Color="#FDFDFD"/>    <!-- MainWindow: Overlay for "Tab Stops" ? -->
     <SolidColorBrush po:Freeze="True" x:Key="SelectedTabBrush" Color="#6D767E"/>        <!-- (UPDATED) Background brush of selected tab in Tests view -->
     <SolidColorBrush po:Freeze="True" x:Key="TabHoverBrush" Color="#444C52"/>           <!-- (UPDATED) Hover color in main window (Detail/HowToFix) -->
-    <SolidColorBrush po:Freeze="True" x:Key="ActiveBlueBrush" Color="#FF0078D6"/>       <!-- "Passed and uncertain tests" foreground, also tree icon -->
+    <SolidColorBrush po:Freeze="True" x:Key="ActiveTabMarkerBrush" Color="#22272B"/>    <!-- (UPDATED) Color used to highlight "active tab" in Tests view -->
     <SolidColorBrush po:Freeze="True" x:Key="TabBorderBrush" Color="#6D767E"/>          <!-- (UPDATED) Vertical Border on tab items in test mode -->
     <SolidColorBrush po:Freeze="True" x:Key="UnselectedTabBrush" Color="#22272B"/>      <!-- (UPDATED) Background brush of non-selected items in list view -->
     <SolidColorBrush po:Freeze="True" x:Key="SelectedACRowBGBrush" Color="#31383D"/>    <!-- (UPDATED) Background brush for selected row in Automated checks -->
