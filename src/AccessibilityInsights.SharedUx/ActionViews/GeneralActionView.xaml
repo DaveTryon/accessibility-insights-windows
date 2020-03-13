@@ -21,7 +21,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="10" >
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="35"/>
@@ -33,6 +33,9 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutomationProperties.Name="{x:Static properties:Resources.dgParamsAutomationName}"
+                  Background="Transparent"
+                  BorderBrush="Yellow"
+                  BorderThickness="10"
                   Focusable="False">
             <DataGrid.Resources>
                 <DataTemplate x:Key="TextBoxTemplate">
@@ -48,14 +51,19 @@
                 <DataTemplate x:Key="ComboBoxTemplate">
                     <ComboBox SelectedItem="{Binding ParamValue, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ParamEnums}" PreviewKeyDown="ComboBox_PreviewKeyDown" KeyUp="ComboBox_KeyUp"/>
                 </DataTemplate>
-                <Style TargetType="DataGridCell" x:Key="dgCellRight">
+                <Style TargetType="DataGridCell" x:Key="dgNew">
+                    <Setter Property="Foreground" Value="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
+                    <Setter Property="Background" Value="{DynamicResource ResourceKey=PrimaryBGBrush}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Style>
+                <Style TargetType="DataGridCell" x:Key="dgCellRight" BasedOn="{StaticResource dgNew}">
                     <EventSetter Event="GotKeyboardFocus" Handler="DataGridCell_GotKeyboardFocus"/>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="{x:Static properties:Resources.dgParamsParameterHeader}" Width="Auto">
                     <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource dgNew}">
                             <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
                         </Style>
                     </DataGridTemplateColumn.CellStyle>
