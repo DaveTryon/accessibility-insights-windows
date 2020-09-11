@@ -144,20 +144,26 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
 
                     // block clicking "next" until login request is done
                     ToggleLoading(true);
-                    await AzureDevOps.HandleLoginAsync(CredentialPromptType.PromptIfNeeded, serverUri).ConfigureAwait(false);
 
-                    if (AzureDevOps.ConnectedToAzureDevOps)
-                    {
-                        AzureDevOps.Configuration.SavedConnection = new ConnectionInfo(serverUri, null, null);
-                        ChangeStates(ControlState.EditingServer);
-                    }
-                    else
-                    {
-                        ToggleLoading(false);
-                        Dispatcher.Invoke(() => MessageDialog.Show(string.Format(CultureInfo.InvariantCulture,
-                            Properties.Resources.UnableToConnectFormattedMessage, serverUri.ToString())));
-                        Dispatcher.Invoke(ServerComboBox.Focus);
-                    }
+                    await Task.Delay(2000).ConfigureAwait(true);
+
+                    AzureDevOps.Configuration.SavedConnection = new ConnectionInfo(serverUri, null, null);
+                    ChangeStates(ControlState.EditingServer);
+                    
+                    //await AzureDevOps.HandleLoginAsync(CredentialPromptType.PromptIfNeeded, serverUri).ConfigureAwait(false);
+
+                    //if (AzureDevOps.ConnectedToAzureDevOps)
+                    //{
+                    //    AzureDevOps.Configuration.SavedConnection = new ConnectionInfo(serverUri, null, null);
+                    //    ChangeStates(ControlState.EditingServer);
+                    //}
+                    //else
+                    //{
+                    //    ToggleLoading(false);
+                    //    Dispatcher.Invoke(() => MessageDialog.Show(string.Format(CultureInfo.InvariantCulture,
+                    //        Properties.Resources.UnableToConnectFormattedMessage, serverUri.ToString())));
+                    //    Dispatcher.Invoke(ServerComboBox.Focus);
+                    //}
                 }
                 else
                 {
@@ -232,6 +238,17 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         }
         #endregion
 
+        private static async Task<List<TeamProjectViewModel>> FakeUpdateTeamProjects()
+        {
+            List<TeamProjectViewModel> fakeTeamProjects = new List<TeamProjectViewModel>();
+            fakeTeamProjects.Add(new TeamProjectViewModel(new AdoTeam("fake team", Guid.Empty), null));
+            var window = new Window();
+            window.Show();
+            await Task.Delay(5000).ConfigureAwait(true);
+            window.Close();
+            return fakeTeamProjects;
+        }
+
         /// <summary>
         /// Switch screens in this connection config view
         /// </summary>
@@ -250,7 +267,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                 {
                     ToggleLoading(true);
                     Dispatcher.Invoke(projects.Clear);
-                    var newProjectList = await UpdateTeamProjects().ConfigureAwait(true); // need to come back to original UI thread. 
+                    var newProjectList = await FakeUpdateTeamProjects().ConfigureAwait(true); // need to come back to original UI thread. 
                     Dispatcher.Invoke(() => newProjectList.ForEach(p => projects.Add(p)));
                     ToggleLoading(false);
                     Dispatcher.Invoke(() => serverTreeview.ItemsSource = projects);
