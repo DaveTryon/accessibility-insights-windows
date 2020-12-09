@@ -63,6 +63,8 @@ namespace AccessibilityInsights.SharedUx.Dialogs
                 g.CopyFromScreen(SystemInformation.VirtualScreen.Left, SystemInformation.VirtualScreen.Top, 0, 0, screenshot.Size);
             }
 
+            screenshot = VisionSimulator.SimulateAchromatopsia(screenshot);
+
             imgScreenshot.Source = screenshot.ConvertToSource();
         }
 
