@@ -313,6 +313,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
                 const int bitsPerPixel = 4;
                 BitmapData bitmapData = holder.BitmapData;
                 int stride = Math.Abs(bitmapData.Stride);  // Stride can be negative, we'll always be positive
+                ColorCache colorCache = new ColorCache();
 
                 int pixelDataSize = bitmap.Height * stride;
                 byte[] pixelData = new byte[pixelDataSize];
@@ -333,7 +334,9 @@ namespace AccessibilityInsights.SharedUx.Utilities
 
                         System.Drawing.Color oldColor = System.Drawing.Color.FromArgb(
                             pixelData[offsetRed], pixelData[offsetGreen], pixelData[offsetBlue]);
-                        System.Drawing.Color newColor = pixelCallback(oldColor);
+
+                        System.Drawing.Color newColor = colorCache.GetMappedColor(oldColor, pixelCallback);
+
                         pixelData[offsetRed] = newColor.R;
                         pixelData[offsetGreen] = newColor.G;
                         pixelData[offsetBlue] = newColor.B;
