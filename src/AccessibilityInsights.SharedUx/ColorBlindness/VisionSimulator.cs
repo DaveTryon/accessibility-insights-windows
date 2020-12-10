@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.ColorBlindness;
+using AccessibilityInsights.SharedUx.Utilities;
 using System.Drawing;
 
 using Condition = MathNet.Numerics.LinearAlgebra.Matrix<double>;
@@ -56,25 +57,15 @@ namespace AccessibilityInsights.SharedUx.Utilities
             TypicalVision = Condition.Build.DenseOfArray(typicalVision);
         }
 
-        internal static Bitmap SimulateProtonopia(Bitmap image) => SimulateCondition(image, Protonopia);
-        internal static Bitmap SimulateDeuteranopia(Bitmap image) => SimulateCondition(image, Deuteranopia);
-        internal static Bitmap SimulateTritanopia(Bitmap image) => SimulateCondition(image, Tritanopia);
-        internal static Bitmap SimulateAchromatopsia(Bitmap image) => SimulateCondition(image, Achromatopsia);
-        internal static Bitmap SimulateTypicalVision(Bitmap image) => SimulateCondition(image, TypicalVision);
+        internal static void SimulateProtonopia(Bitmap image) => SimulateCondition(image, Protonopia);
+        internal static void SimulateDeuteranopia(Bitmap image) => SimulateCondition(image, Deuteranopia);
+        internal static void SimulateTritanopia(Bitmap image) => SimulateCondition(image, Tritanopia);
+        internal static void SimulateAchromatopsia(Bitmap image) => SimulateCondition(image, Achromatopsia);
+        internal static void SimulateTypicalVision(Bitmap image) => SimulateCondition(image, TypicalVision);
 
-        private static Bitmap SimulateCondition(Bitmap image, Condition condition)
+        private static void SimulateCondition(Bitmap image, Condition condition)
         {
-            Bitmap simulatedImage = new Bitmap(image);
-            for (int x = 0; x < image.Width; x++)
-            {
-                for (int y = 0; y < image.Height; y++)
-                {
-                    Color input = image.GetPixel(x, y);
-                    simulatedImage.SetPixel(x, y, SimulateColor(input, condition));
-                }
-            }
-
-            return simulatedImage;
+            image.UpdateBitmap(color => SimulateColor(color, condition));
         }
 
         private static Color SimulateColor(Color inputColor, Condition condition)

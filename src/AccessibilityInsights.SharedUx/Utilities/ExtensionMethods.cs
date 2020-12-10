@@ -15,9 +15,11 @@ using Axe.Windows.Desktop.Utility;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -299,6 +301,49 @@ namespace AccessibilityInsights.SharedUx.Utilities
             return (from s in System.Windows.Forms.Screen.AllScreens
                     where s.Bounds.Contains(p)
                     select s).Any();
+        }
+
+        internal static void UpdateBitmap(this Bitmap bitmap, Func<System.Drawing.Color, System.Drawing.Color> pixelCallback)
+        {
+            if (bitmap.PixelFormat != System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+                throw new ArgumentException("Only 32 bit bitmaps are supported!", nameof(bitmap));
+
+            using (LockBitsHolder holder = new LockBitsHolder(bitmap))
+            {
+                const int bitsPerPixel = 4;
+                BitmapData bitmapData = holder.BitmapData;
+                int stride = Math.Abs(bitmapData.Stride);  // Stride can be negative, we'll always be positive
+
+                int pixelDataSize = bitmap.Height * stride;
+                byte[] pixelData = new byte[pixelDataSize];
+
+                Marshal.Copy(bitmapData.Scan0, pixelData, 0, pixelDataSize);
+
+                int rowOffset = 0;
+
+                // Iterate through all pixels
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    int pixelOffset = rowOffset;
+                    for (int x = 0; x < bitmap.Width; x++, pixelOffset += bitsPerPixel)
+                    {
+                        int offsetBlue = pixelOffset;
+                        int offsetGreen = pixelOffset + 1;
+                        int offsetRed = pixelOffset + 2;
+
+                        System.Drawing.Color oldColor = System.Drawing.Color.FromArgb(
+                            pixelData[offsetRed], pixelData[offsetGreen], pixelData[offsetBlue]);
+                        System.Drawing.Color newColor = pixelCallback(oldColor);
+                        pixelData[offsetRed] = newColor.R;
+                        pixelData[offsetGreen] = newColor.G;
+                        pixelData[offsetBlue] = newColor.B;
+                    }
+
+                    rowOffset += stride;
+                }
+
+                Marshal.Copy(pixelData, 0, bitmapData.Scan0, pixelDataSize);
+            }
         }
     }
 }
