@@ -305,12 +305,12 @@ namespace AccessibilityInsights.SharedUx.Utilities
 
         internal static void UpdateBitmap(this Bitmap bitmap, Func<System.Drawing.Color, System.Drawing.Color> pixelCallback)
         {
-            if (bitmap.PixelFormat != System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-                throw new ArgumentException("Only 32 bit bitmaps are supported!", nameof(bitmap));
+            if (bitmap.PixelFormat != System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                throw new ArgumentException("Only 24 bit bitmaps are supported!", nameof(bitmap));
 
             using (LockBitsHolder holder = new LockBitsHolder(bitmap))
             {
-                const int bitsPerPixel = 4;
+                const int bitsPerPixel = 3;
                 BitmapData bitmapData = holder.BitmapData;
                 int stride = Math.Abs(bitmapData.Stride);  // Stride can be negative, we'll always be positive
                 ColorCache colorCache = new ColorCache();
