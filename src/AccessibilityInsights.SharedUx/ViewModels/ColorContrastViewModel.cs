@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using AccessibilityInsights.SharedUx.ColorBlindness;
 using Axe.Windows.Core.Bases;
 using System;
 using System.Globalization;
@@ -24,7 +25,10 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public ColorContrastViewModel() { }
+        public ColorContrastViewModel()
+        {
+            _currentVisionCondition = VisionCondition.Achromatopsia;
+        }
 
         /// <summary>
         /// Reset fields to initial state
@@ -57,7 +61,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             get
             {
-                return firstColor;
+                return VisionSimulator.SimulateCondition(firstColor, CurrentVisionCondition);
             }
             set
             {
@@ -72,12 +76,23 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             get
             {
-                return secondColor;
+                return VisionSimulator.SimulateCondition(secondColor, CurrentVisionCondition);
             }
             set
             {
                 secondColor = value;
                 // Indicates all properties have changed
+                OnPropertyChanged(null);
+            }
+        }
+
+        private VisionCondition _currentVisionCondition;
+        public VisionCondition CurrentVisionCondition
+        {
+            get => _currentVisionCondition;
+            set
+            {
+                _currentVisionCondition = value;
                 OnPropertyChanged(null);
             }
         }

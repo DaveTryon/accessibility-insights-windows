@@ -53,7 +53,6 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             CaptureScreenshot();
             InitializeUpdateTimer();
             UpdatePos();
-            VisionSimulator.CurrentCondition = VisionCondition.Achromatopsia;
         }
 
         private void CaptureScreenshot()
@@ -85,14 +84,13 @@ namespace AccessibilityInsights.SharedUx.Dialogs
 
         private void UpdateColor(System.Drawing.Color col)
         {
-            System.Drawing.Color simulatedColor = VisionSimulator.SimulateCurrentCondition(col);
             if (selectingFirst)
             {
-                ccVM.FirstColor = simulatedColor.ToMediaColor();
+                ccVM.FirstColor = col.ToMediaColor();
             }
             else if (selectingSecond)
             {
-                ccVM.SecondColor = simulatedColor.ToMediaColor();
+                ccVM.SecondColor = col.ToMediaColor();
             }
         }
 
@@ -119,7 +117,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
 
             using (Bitmap b = desktopScreenshot.Clone(desktopRegion, desktopScreenshot.PixelFormat))
             {
-                VisionSimulator.SimulateCurrentCondition(b);
+                VisionSimulator.SimulateCondition(b, ccVM.CurrentVisionCondition);
                 eyedropperPreview.Source = b.ConvertToSource();
             }
 

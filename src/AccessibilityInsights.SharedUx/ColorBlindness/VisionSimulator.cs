@@ -15,8 +15,6 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
         private readonly static Condition Achromatopsia;
         private readonly static Condition TypicalVision;
 
-        internal static VisionCondition CurrentCondition { get; set; }
-
 #pragma warning disable CA1810 // Initialize reference type static fields inline
         static VisionSimulator()
 #pragma warning restore CA1810 // Initialize reference type static fields inline
@@ -60,27 +58,11 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
             Tritanopia = Condition.Build.DenseOfArray(tritanopia);
             Achromatopsia = Condition.Build.DenseOfArray(achromatopsia);
             TypicalVision = Condition.Build.DenseOfArray(typicalVision);
-
-            CurrentCondition = VisionCondition.TypicalVision;
         }
 
-        internal static void SimulateCurrentCondition(Bitmap image) => SimulateCondition(image, GetCurrentCondition());
-        internal static void SimulateProtonopia(Bitmap image) => SimulateCondition(image, Protonopia);
-        internal static void SimulateDeuteranopia(Bitmap image) => SimulateCondition(image, Deuteranopia);
-        internal static void SimulateTritanopia(Bitmap image) => SimulateCondition(image, Tritanopia);
-        internal static void SimulateAchromatopsia(Bitmap image) => SimulateCondition(image, Achromatopsia);
-        internal static void SimulateTypicalVision(Bitmap image) => SimulateCondition(image, TypicalVision);
-
-        internal static Color SimulateCurrentCondition(Color color) => SimulateColor(color, GetCurrentCondition());
-        internal static Color SimulateProtonopia(Color color) => SimulateColor(color, Protonopia);
-        internal static Color SimulateDeuteranopia(Color color) => SimulateColor(color, Deuteranopia);
-        internal static Color SimulateTritanopia(Color color) => SimulateColor(color, Tritanopia);
-        internal static Color SimulateAchromatopsia(Color color) => SimulateColor(color, Achromatopsia);
-        internal static Color SimulateTypicalVisionColor(Color color) => SimulateColor(color, TypicalVision);
-
-        private static Condition GetCurrentCondition()
+        private static Condition GetCondition(VisionCondition visionCondition)
         {
-            switch (CurrentCondition)
+            switch (visionCondition)
             {
                 case VisionCondition.Achromatopsia: return Achromatopsia;
                 case VisionCondition.Deuteranopia: return Deuteranopia;
@@ -89,12 +71,35 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
                 default: return TypicalVision;
             }
         }
-        private static void SimulateCondition(Bitmap image, Condition condition)
+
+        internal static void SimulateCondition(Bitmap image, VisionCondition visionCondition)
         {
-            image.UpdateBitmap(color => SimulateColor(color, condition));
+            image.UpdateBitmap(color => SimulateCondition(color, GetCondition(visionCondition)));
         }
 
-        private static Color SimulateColor(Color inputColor, Condition condition)
+        internal static void SimulateCondition(Bitmap image, Condition condition)
+        {
+            image.UpdateBitmap(color => SimulateCondition(color, condition));
+        }
+
+        internal static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, VisionCondition visionCondition)
+        {
+            return SimulateCondition(color, GetCondition(visionCondition));
+        }
+
+        internal static Color SimulateCondition(Color color, VisionCondition visionCondition)
+        {
+            return SimulateCondition(color, GetCondition(visionCondition));
+        }
+
+        internal static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, Condition condition)
+        {
+            Color convertedColor = Color.FromArgb(color.A, color.R, color.G, color.B);
+            Color simulatedColor = SimulateCondition(convertedColor, condition);
+            return System.Windows.Media.Color.FromArgb(simulatedColor.A, simulatedColor.R, simulatedColor.G, simulatedColor.B);
+        }
+
+        internal static Color SimulateCondition(Color inputColor, Condition condition)
         {
             LMSColor lms = new LMSColor(inputColor);
             lms.ApplyTransform(condition);

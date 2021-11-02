@@ -3,7 +3,7 @@
 
 namespace AccessibilityInsights.SharedUx.ColorBlindness
 {
-    internal enum VisionCondition
+    public enum VisionCondition
     {
         TypicalVision,
         Protonopia,
