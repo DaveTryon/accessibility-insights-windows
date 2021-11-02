@@ -87,11 +87,6 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
             return SimulateCondition(color, GetConditionMatrix(visionCondition));
         }
 
-        private static void SimulateCondition(Bitmap image, ConditionMatrix conditionMatrix)
-        {
-            image.UpdateBitmap(color => SimulateCondition(color, conditionMatrix));
-        }
-
         private static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, ConditionMatrix conditionMatrix)
         {
             Color convertedColor = Color.FromArgb(color.A, color.R, color.G, color.B);
