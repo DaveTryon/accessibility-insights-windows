@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using AccessibilityInsights.SharedUx.ColorBlindness;
 using AccessibilityInsights.SharedUx.Utilities;
 using AccessibilityInsights.SharedUx.ViewModels;
 using AccessibilityInsights.Win32;
@@ -52,6 +53,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             CaptureScreenshot();
             InitializeUpdateTimer();
             UpdatePos();
+            VisionSimulator.CurrentCondition = VisionCondition.Achromatopsia;
         }
 
         private void CaptureScreenshot()
@@ -83,13 +85,14 @@ namespace AccessibilityInsights.SharedUx.Dialogs
 
         private void UpdateColor(System.Drawing.Color col)
         {
+            System.Drawing.Color simulatedColor = VisionSimulator.SimulateCurrentCondition(col);
             if (selectingFirst)
             {
-                ccVM.FirstColor = col.ToMediaColor();
+                ccVM.FirstColor = simulatedColor.ToMediaColor();
             }
             else if (selectingSecond)
             {
-                ccVM.SecondColor = col.ToMediaColor();
+                ccVM.SecondColor = simulatedColor.ToMediaColor();
             }
         }
 
@@ -116,6 +119,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
 
             using (Bitmap b = desktopScreenshot.Clone(desktopRegion, desktopScreenshot.PixelFormat))
             {
+                VisionSimulator.SimulateCurrentCondition(b);
                 eyedropperPreview.Source = b.ConvertToSource();
             }
 

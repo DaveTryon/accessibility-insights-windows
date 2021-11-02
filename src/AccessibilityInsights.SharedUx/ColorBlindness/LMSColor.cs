@@ -16,8 +16,11 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 
         private Vector<double> _lms;
 
+#pragma warning disable CA1810 // Initialize reference type static fields inline
         static LMSColor()
+#pragma warning restore CA1810 // Initialize reference type static fields inline
         {
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
             // Matrices are based on https://ixora.io/projects/colorblindness/color-blindness-simulation-research/
             double[,] fromRgbArray =
             {
@@ -31,6 +34,7 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
                 { -1.1252419, 2.29317094, -0.1678952 },
                 { 0.02980165, -0.19318073, 1.16364789 },
             };
+#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
 
             FromRgb = Transform.Build.DenseOfArray(fromRgbArray);
             ToRgb = Transform.Build.DenseOfArray(toRgbArray);
