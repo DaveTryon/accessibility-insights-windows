@@ -12,7 +12,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 {
     /// <summary>
     /// Wraps and provides access to highlight capabilities that are 'hollow', e.g.
-    /// hovering over the resulting rectangle still allows clicking through to the 
+    /// hovering over the resulting rectangle still allows clicking through to the
     /// underlying element
     /// </summary>
     public class HollowHighlightDriver:IDisposable
@@ -75,7 +75,9 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         /// <param name="el"></param>
         public void SetElement(A11yElement el)
         {
+#pragma warning disable CA1062 // Validate arguments of public methods
             SetElementInternal(el);
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
 
         /// <summary>
@@ -84,25 +86,23 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         /// <param name="element"></param>
         void SetElementInternal(A11yElement element)
         {
-            if (element != null && element.BoundingRectangle != null)
+            bool visible = element != null && !element.BoundingRectangle.IsEmpty;
+            if (visible)
             {
                 if (this.BoundingRectangle == null || element.BoundingRectangle.Equals(this.BoundingRectangle) == false)
                 {
                     this.Highlighter.SetLocation(element.BoundingRectangle);
                     this.BoundingRectangle = element.BoundingRectangle;
                 }
-                
+
                 if (this.IsEnabled)
                 {
-                    this.Highlighter.IsVisible = true;
                     var text = GetHighlightText(element);
                     this.Highlighter.SetText(text);
                 }
             }
-            else
-            {
-                this.Highlighter.IsVisible = false;
-            }
+
+            this.Highlighter.IsVisible = this.IsEnabled && visible;
         }
 
         /// <summary>

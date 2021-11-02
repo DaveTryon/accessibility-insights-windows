@@ -1,19 +1,19 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using AccessibilityInsights.SharedUx.Dialogs;
+using AccessibilityInsights.SharedUx.Interfaces;
+using AccessibilityInsights.SharedUx.Properties;
 using Axe.Windows.Core.Attributes;
 using Axe.Windows.Core.Bases;
-using AccessibilityInsights.SharedUx.Dialogs;
+using Axe.Windows.Core.Misc;
+using Axe.Windows.Core.Types;
+using Axe.Windows.Desktop.UIAutomation.Patterns;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using Axe.Windows.Core.Types;
-using Axe.Windows.Desktop.UIAutomation.Patterns;
-using Axe.Windows.Core.Misc;
-using AccessibilityInsights.SharedUx.Interfaces;
-using AccessibilityInsights.SharedUx.Properties;
-using System;
 
 namespace AccessibilityInsights.SharedUx.ViewModels
 {
@@ -37,7 +37,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// Get ActionViewModels based on Pattern Methods
         /// </summary>
         /// <returns></returns>
-        public List<BaseActionViewModel> GetActionViewModels()
+        public IList<BaseActionViewModel> GetActionViewModels()
         {
             return (from m in this.Pattern.Methods
                     select BaseActionViewModel.GetActionViewModel(this.Pattern, m)).ToList();
@@ -118,7 +118,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             }
         }
 
-        public List<PatternPropertyUIWrapper> Properties { get; private set; }
+        public IList<PatternPropertyUIWrapper> Properties { get; private set; }
 
         public Visibility ActionVisibility { get; private set; }
 
@@ -202,7 +202,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
                 throw new ArgumentNullException(nameof(p));
 
             /// Trim node text if it contains a newline and append ...
-            /// Full value will be available via tooltip 
+            /// Full value will be available via tooltip
             int idx = p.NodeValue.IndexOfAny(new char[] { '\r', '\n' });
             this.NodeValue = idx == -1 ? p.NodeValue : p.NodeValue.Substring(0, idx) + "...\"";
 

@@ -51,7 +51,12 @@ namespace AccessibilityInsights.Extensions.Interfaces.IssueReporting
         bool TryGetCurrentSerializedSettings(out string settings);
 
         /// <summary>
-        /// Control to let user configure/login to issue reporting service. 
+        /// Passes along the configurationPath
+        /// </summary>
+        void SetConfigurationPath(string configurationPath);
+
+        /// <summary>
+        /// Control to let user configure/login to issue reporting service.
         /// UpdateSaveButton action needs to be called when the extension is ready to save.
         /// </summary>
         IssueConfigurationControl RetrieveConfigurationControl(Action UpdateSaveButton);
@@ -61,6 +66,6 @@ namespace AccessibilityInsights.Extensions.Interfaces.IssueReporting
         /// </summary>
         /// <param name="issueInfo">Information that describes the issue to create</param>
         /// <returns>Optionally, an issue result with details about this filed issue</returns>
-        Task<IIssueResult> FileIssueAsync(IssueInformation issueInfo);
+        Task<IIssueResultWithPostAction> FileIssueAsync(IssueInformation issueInfo);
     }
 }

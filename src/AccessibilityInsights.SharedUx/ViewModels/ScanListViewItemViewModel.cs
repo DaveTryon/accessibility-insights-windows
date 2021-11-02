@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
+using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
+using AccessibilityInsights.SharedUx.Properties;
+using AccessibilityInsights.SharedUx.Utilities;
 using Axe.Windows.Core.Bases;
 using Axe.Windows.Core.HelpLinks;
 using Axe.Windows.Core.Misc;
 using Axe.Windows.Core.Results;
 using Axe.Windows.Desktop.Utility;
-using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
-using AccessibilityInsights.SharedUx.Properties;
-using AccessibilityInsights.SharedUx.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,7 +25,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// </summary>
     public class ScanListViewItemViewModel:ViewModelBase
     {
-        public static List<ScanListViewItemViewModel> GetScanListViewItemViewModels(A11yElement e)
+        public static IList<ScanListViewItemViewModel> GetScanListViewItemViewModels(A11yElement e)
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
@@ -178,9 +178,12 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             }
 
             this.AutomationHelpText = GetAutomationHelpText();
-           
+
             StringBuilder sb = new StringBuilder();
-            sr.Messages.ForEach(m => sb.AppendLine(m));
+            foreach (var message in sr.Messages)
+            {
+                sb.AppendLine(message);
+            }
             this.HowToFixText = sb.ToString();
             this.Source = sr.Source;
         }

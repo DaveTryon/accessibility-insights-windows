@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 namespace AccessibilityInsights.SharedUx.Controls.CustomControls
 {
     /// <summary>
-    /// A GridViewColumn styled so that "cells" look like DataGridCells, complete with some custom 
+    /// A GridViewColumn styled so that "cells" look like DataGridCells, complete with some custom
     /// resizing behavior. Meant to be used in conjunction with <see cref="GridView"/>.
     /// </summary>
     public partial class CustomGridViewColumn : GridViewColumn
@@ -40,6 +41,7 @@ namespace AccessibilityInsights.SharedUx.Controls.CustomControls
             {
                 SetValue(HeaderTextProperty, value);
                 tbHeader.Text = value;
+                AutomationProperties.SetName(gvcHeader, value);
             }
         }
 

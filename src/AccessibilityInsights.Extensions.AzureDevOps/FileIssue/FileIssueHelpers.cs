@@ -3,9 +3,11 @@
 using AccessibilityInsights.Extensions.AzureDevOps.Enums;
 using AccessibilityInsights.Extensions.Helpers;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
+using Microsoft.Web.WebView2.Core;
 using mshtml;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -37,15 +39,15 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         /// <param name="zoomLevel">Zoom level for issue file window</param>
         /// <param name="updateZoom">Callback to update configuration with zoom level</param>
         /// <returns></returns>
-        internal (int? issueId, string newIssueId) FileNewIssue(IssueInformation issueInfo, ConnectionInfo connection, bool onTop, int zoomLevel, Action<int> updateZoom)
+        internal (int? issueId, string newIssueId) FileNewIssue(IssueInformation issueInfo, ConnectionInfo connection, bool onTop, int zoomLevel, Action<int> updateZoom, string configurationPath)
         {
-            return FileNewIssueTestable(issueInfo, connection, onTop, zoomLevel, updateZoom, null);
+            return FileNewIssueTestable(issueInfo, connection, onTop, zoomLevel, updateZoom, configurationPath, null);
         }
 
         /// <summary>
         /// Testable version of FileNewIssue, allows caller to specify an issueId instead of going off-box
         /// </summary>
-        internal (int? issueId, string newIssueId) FileNewIssueTestable(IssueInformation issueInfo, ConnectionInfo connection, bool onTop, int zoomLevel, Action<int> updateZoom, int? testIssueId)
+        internal (int? issueId, string newIssueId) FileNewIssueTestable(IssueInformation issueInfo, ConnectionInfo connection, bool onTop, int zoomLevel, Action<int> updateZoom, string configurationPath, int? testIssueId)
         {
             if (issueInfo == null)
                 throw new ArgumentNullException(nameof(issueInfo));
@@ -61,7 +63,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
 
                 int? issueId = testIssueId.HasValue
                     ? testIssueId.Value
-                    : FileIssueWindow(url, onTop, zoomLevel, updateZoom);
+                    : FileIssueWindow(url, onTop, zoomLevel, updateZoom, configurationPath);
 
                 return (issueId, a11yIssueId);
             }
@@ -76,7 +78,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
 
         /// <summary>
         /// Attaches screenshot and results file to existing issue
-        /// Default case - resulting test file will open in A11yFileMode.Inspect mode, 
+        /// Default case - resulting test file will open in A11yFileMode.Inspect mode,
         ///     no additional loading parameters needed
         /// </summary>
         /// <param name="rect">Bounding rect of element for screenshot</param>
@@ -207,9 +209,9 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         }
 
         /// <summary>
-        /// Remove internal text from repro step. 
-        /// since the internal text is wrapped in a "div", find a div with matching key text and remove the child nodes of div. 
-        /// generally, keyText is guid value. 
+        /// Remove internal text from repro step.
+        /// since the internal text is wrapped in a "div", find a div with matching key text and remove the child nodes of div.
+        /// generally, keyText is guid value.
         /// </summary>
         /// <param name="inputHTML"></param>
         /// <param name="keyText"></param>
@@ -222,8 +224,8 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
             doc2.write(htmlText);
             IHTMLDOMNode node = null;
 
-            // search div with matching issueguid. 
-            // remove any of it if there is matched one. 
+            // search div with matching issueguid.
+            // remove any of it if there is matched one.
             var divnodes = doc.getElementsByTagName("div");
 
             if (divnodes != null)
@@ -283,16 +285,36 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         /// Change the configuration zoom level for the embedded browser
         /// </summary>
         /// <param name="url"></param>
-        private static int? FileIssueWindow(Uri url, bool onTop, int zoomLevel, Action<int> updateZoom)
+        private static int? FileIssueWindow(Uri url, bool onTop, int zoomLevel, Action<int> updateZoom, string configurationPath)
         {
-            System.Diagnostics.Trace.WriteLine(Invariant($"Url is {url.AbsoluteUri.Length} long: {url}"));
-            IEBrowserEmulation.SetFeatureControls();
-            var dlg = new IssueFileForm(url, onTop, zoomLevel, updateZoom);
+            if (!IsWebView2RuntimeInstalled())
+            {
+                var webView = new WebviewRuntimeNotInstalled(onTop);
+                webView.ShowDialog();
+                return null;
+            }
+
+            Trace.WriteLine(Invariant($"Url is {url.AbsoluteUri.Length} long: {url}"));
+            var dlg = new IssueFileForm(url, onTop, zoomLevel, updateZoom, configurationPath);
             dlg.ScriptToRun = "window.onerror = function(msg,url,line) { window.external.Log(msg); return true; };";
 
             dlg.ShowDialog();
 
             return dlg.IssueId;
+        }
+
+        private static bool IsWebView2RuntimeInstalled()
+        {
+            try
+            {
+                CoreWebView2Environment.GetAvailableBrowserVersionString();
+                return true;
+            }
+            catch (WebView2RuntimeNotFoundException e)
+            {
+                e.ReportException();
+                return false;
+            }
         }
 
         /// <summary>

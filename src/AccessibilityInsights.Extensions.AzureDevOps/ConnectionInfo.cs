@@ -45,16 +45,8 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         public ConnectionInfo(Uri serverUrl, TeamProject project, AdoTeam team)
         {
             ServerUri = serverUrl;
-            if (project != null)
-            {
-                TeamProject typedProject = project as TeamProject;
-                Project = typedProject ?? new TeamProject(project);
-            }
-            if (team != null)
-            {
-                AdoTeam typedTeam = team as AdoTeam;
-                Team = typedTeam ?? new AdoTeam(team);
-            }
+            Project = project;
+            Team = team;
         }
 
         /// <summary>
@@ -99,7 +91,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                 return false;
             }
 
-            // crash was reported over watson. 
+            // crash was reported over watson.
             // make sure Project and Team are not null first.
             return ServerUri != null && ServerUri.Equals(other.ServerUri)
                 && Project != null && Project.Equals(other.Project)

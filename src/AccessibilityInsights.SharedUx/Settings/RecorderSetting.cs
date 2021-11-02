@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Axe.Windows.Desktop.Types;
 using Axe.Windows.Core.Types;
+using Axe.Windows.Desktop.Types;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,14 +18,14 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// <summary>
         /// List of Events for recorder setting
         /// </summary>
-        public List<RecordEntitySetting> Events { get; set; }
+        public IList<RecordEntitySetting> Events { get; set; }
 #pragma warning restore CA2227 // Collection properties should be read only
 
 #pragma warning disable CA2227 // Collection properties should be read only
         /// <summary>
         /// List of Properties for recorder setting
         /// </summary>
-        public List<RecordEntitySetting> Properties { get; set; }
+        public IList<RecordEntitySetting> Properties { get; set; }
 #pragma warning restore CA2227 // Collection properties should be read only
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace AccessibilityInsights.SharedUx.Settings
         #region Static methods to get instance
         public static RecorderSetting LoadConfiguration(string path)
         {
-            // Get Recorder configuration from local location. but if it is not available, get it from default location. 
+            // Get Recorder configuration from local location. but if it is not available, get it from default location.
             RecorderSetting config = new RecorderSetting();
             config = RecorderSetting.LoadFromJSON<RecorderSetting>(path);
             if (config == null)
@@ -58,7 +58,7 @@ namespace AccessibilityInsights.SharedUx.Settings
             }
             else
             {
-                // check whether there is any new events to be added into configuration. 
+                // check whether there is any new events to be added into configuration.
                 var events = EventType.GetInstance();
                 var ms = from e in events.GetKeyValuePairList()
                          where IsNotInList(e.Key, config.Events)
@@ -85,12 +85,12 @@ namespace AccessibilityInsights.SharedUx.Settings
         }
 
         /// <summary>
-        /// check whether key exist in the given list. 
+        /// check whether key exist in the given list.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="events"></param>
         /// <returns></returns>
-        private static bool IsNotInList(int key, List<RecordEntitySetting> events)
+        private static bool IsNotInList(int key, IList<RecordEntitySetting> events)
         {
             return !(from e in events
                      where e.Id == key

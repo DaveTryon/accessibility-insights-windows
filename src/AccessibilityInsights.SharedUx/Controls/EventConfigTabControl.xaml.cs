@@ -84,7 +84,7 @@ namespace AccessibilityInsights.SharedUx.Controls
 
             var properties = new EventConfigNodeViewModel("Properties", isThreeState: true) { Depth = 1 };
             properties.AddChildren(el.Properties.Values);
-            
+
             if (properties.Children.Any())
             {
                 properties.SortChildren();
@@ -144,7 +144,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             add = custom.Where(id => !CustomPropertiesNode.Children.Select(c => c.Id).Contains(id)).ToList();
             CustomPropertiesNode.AddChildren(add, EventConfigNodeType.Property);
             CustomPropertiesNode.SortChildren();
-         
+
             if (CustomPropertiesNode.Children.Count > 0)
             {
                 CustomNode.AddChild(CustomPropertiesNode);
@@ -275,11 +275,19 @@ namespace AccessibilityInsights.SharedUx.Controls
             this.RootNodes?.Clear();
             this.trviewConfigEvents.ItemsSource = null;
             this.RootNodes = null;
-            ConfigurationManager.GetDefaultInstance().EventConfig.Events.ForEach(e => e.CheckedCount = 0);
-            ConfigurationManager.GetDefaultInstance().EventConfig.Properties.ForEach(e => e.CheckedCount = 0);
+            ClearCheckedCounts(ConfigurationManager.GetDefaultInstance().EventConfig.Events);
+            ClearCheckedCounts(ConfigurationManager.GetDefaultInstance().EventConfig.Properties);
             this.ckbxAllEvents.IsChecked = false;
             ConfigurationManager.GetDefaultInstance().EventConfig.IsListeningAllEvents = false;
             this.tbElement.Text = "";
+        }
+
+        private static void ClearCheckedCounts(IEnumerable<RecordEntitySetting> settings)
+        {
+            foreach (RecordEntitySetting setting in settings)
+            {
+                setting.CheckedCount = 0;
+            }
         }
 
         /// <summary>

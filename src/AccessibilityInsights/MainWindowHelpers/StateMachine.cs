@@ -33,7 +33,7 @@ namespace AccessibilityInsights
         public AppPage CurrentPage { get; set; } = AppPage.Start;
 
         /// <summary>
-        /// Current view in current page. 
+        /// Current view in current page.
         /// e.g.
         /// Inspect
         ///  . Live
@@ -97,7 +97,7 @@ namespace AccessibilityInsights
 
                 if (sa.HasPOIElement())
                 {
-                    var poi = GetDataAction.GetElementContext(sa.GetSelectedElementContextId().Value);
+                    var poi = GetDataAction.GetElementContext(sa.SelectedElementContextId.Value);
                     this.StartEventsMode(poi.Element);
                     UpdateMainWindowUI();
                 }
@@ -136,23 +136,24 @@ namespace AccessibilityInsights
             HollowHighlightDriver.GetInstance(HighlighterType.Selected).Clear();
             ImageOverlayDriver.ClearDefaultInstance();
 
-            // this can be disabled if previous action was loading old data format. 
-            // bring it back to enabled state. 
+            // this can be disabled if previous action was loading old data format.
+            // bring it back to enabled state.
             this.btnHilighter.IsEnabled = true;
 
-            // since we comes back to live mode, enable highlighter by default. 
+            // since we comes back to live mode, enable highlighter by default.
             SelectAction.GetDefaultInstance().ClearSelectedContext();
 
-            // turn highlighter on once you get back to selection mode. 
+            // turn highlighter on once you get back to selection mode.
             SetHighlightBtnState(true);
             var highlightDriver = HollowHighlightDriver.GetDefaultInstance();
             highlightDriver.HighlighterMode = ConfigurationManager.GetDefaultInstance().AppConfig.HighlighterMode;
             highlightDriver.IsEnabled = true;
             highlightDriver.SetElement(null);
 
-            /// make sure that all Mode UIs are clean since new selection will be done. 
+            /// make sure that all Mode UIs are clean since new selection will be done.
             CleanUpAllModeUIs();
 
+#pragma warning disable CA1508 // Dead code warning doesn't apply here
             if (this.CurrentPage == AppPage.Start
                 || (this.CurrentPage == AppPage.CCA)
                 || (this.CurrentPage == AppPage.Test)
@@ -166,6 +167,7 @@ namespace AccessibilityInsights
                 this.CurrentPage = AppPage.Inspect;
                 this.CurrentView = InspectView.Live;
             }
+#pragma warning restore CA1508 // Dead code warning doesn't apply here
 
             // garbage collection for any UI elements
             GC.Collect();
@@ -173,14 +175,14 @@ namespace AccessibilityInsights
             // enable element selector
             EnableElementSelector();
 
-            // if it was open when the switch back button is clicked. 
+            // if it was open when the switch back button is clicked.
             HideConfigurationMode();
 
             UpdateMainWindowUI();
         }
 
         /// <summary>
-        /// Make sure that Live mode UI is clean. 
+        /// Make sure that Live mode UI is clean.
         /// </summary>
         private void CleanUpAllModeUIs()
         {
@@ -192,7 +194,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Checking whether app is still in Selecting an element or not. 
+        /// Checking whether app is still in Selecting an element or not.
         /// Old live mode
         /// </summary>
         /// <returns></returns>
@@ -224,7 +226,7 @@ namespace AccessibilityInsights
                 {
                     if (ctrlLiveMode.SelectedInHierarchyElement.Item2 == 0)
                     {
-                        SetDataAction.ReleaseDataContext(SelectAction.GetDefaultInstance().GetSelectedElementContextId().Value);
+                        SetDataAction.ReleaseDataContext(SelectAction.GetDefaultInstance().SelectedElementContextId.Value);
                     }
                     else
                     {
@@ -249,7 +251,7 @@ namespace AccessibilityInsights
         /// </summary>
         private void HandleInspectTabClick()
         {
-            // make sure that configuration page is closed. 
+            // make sure that configuration page is closed.
             HideConfigurationMode();
 
             HandleBackToSelectingState();
@@ -262,7 +264,7 @@ namespace AccessibilityInsights
         /// </summary>
         private void HandleTestTabClick()
         {
-            // make sure that configuration page is closed. 
+            // make sure that configuration page is closed.
             HideConfigurationMode();
 
             switch (this.CurrentPage)
@@ -320,7 +322,7 @@ namespace AccessibilityInsights
 
             StartCCAMode((CCAView)this.CurrentView);
 
-            // if it was open when the switch back button is clicked. 
+            // if it was open when the switch back button is clicked.
             HideConfigurationMode();
 
             UpdateMainWindowUI();
@@ -389,7 +391,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Select an element in Snapshot from Test Mode(Automated Check) to show "How to fix" info. 
+        /// Select an element in Snapshot from Test Mode(Automated Check) to show "How to fix" info.
         /// </summary>
         internal void HandleSelectElementToShowHowToFix()
         {
@@ -409,7 +411,7 @@ namespace AccessibilityInsights
             {
                 if (ctrlLiveMode.SelectedInHierarchyElement.Item2 == 0)
                 {
-                    SetDataAction.ReleaseDataContext(SelectAction.GetDefaultInstance().GetSelectedElementContextId().Value);
+                    SetDataAction.ReleaseDataContext(SelectAction.GetDefaultInstance().SelectedElementContextId.Value);
                 }
                 else
                 {
@@ -468,7 +470,7 @@ namespace AccessibilityInsights
 
         /// <summary>
         /// Handle File open request
-        /// if it was based on double clicking.  open file. 
+        /// if it was based on double clicking.  open file.
         /// </summary>
         /// <return>true if file open was handled. otherwise, false.</return>
         private bool HandleFileAssociationOpenRequest()
@@ -514,7 +516,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Handle configuration changed 
+        /// Handle configuration changed
         /// - apply changes as needed
         /// - Send telemetry
         /// </summary>
@@ -570,7 +572,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Start Configuration mode. 
+        /// Start Configuration mode.
         /// - if connection is true, routes to connection configuration
         /// </summary>
         private void HandleConfigurationModeStart(bool connection)

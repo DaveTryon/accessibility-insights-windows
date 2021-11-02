@@ -26,7 +26,7 @@ namespace AccessibilityInsights.ExtensionsTests.DummyClasses
 
         public string LogoText => throw new NotImplementedException();
 
-        public Task<IIssueResult> FileIssueAsync(IssueInformation issueInfo)
+        public Task<IIssueResultWithPostAction> FileIssueAsync(IssueInformation issueInfo)
         {
             throw new NotImplementedException();
         }
@@ -37,6 +37,11 @@ namespace AccessibilityInsights.ExtensionsTests.DummyClasses
         }
 
         public IssueConfigurationControl RetrieveConfigurationControl(Action UpdateSaveButton)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetConfigurationPath(string configurationPath)
         {
             throw new NotImplementedException();
         }

@@ -42,9 +42,9 @@ namespace AccessibilityInsights.SharedUx.Utilities
     {
         /// <summary>
         /// Get the suggested file name based on Filetype.
-        /// format would be 
+        /// format would be
         /// A11yTestFile mm-dd-yy [0-9].a11ytest
-        /// try up to 100 and if there still is existing one, exit with 100. 
+        /// try up to 100 and if there still is existing one, exit with 100.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="filetype"> type of file</param>
@@ -105,7 +105,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         }
 
         /// <summary>
-        /// Copy string to clipboard with error handling. 
+        /// Copy string to clipboard with error handling.
         /// </summary>
         /// <param name="sb"></param>
         public static void CopyStringToClipboard(this StringBuilder sb)
@@ -127,7 +127,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         }
 
         /// <summary>
-        /// Get Root Node Hierarchy ViewModel based on currently populated data. 
+        /// Get Root Node Hierarchy ViewModel based on currently populated data.
         /// </summary>
         /// <param name="dc">Datacontext to create nodes from</param>
         /// <param name="showAncestry">Should ancestory be shown</param>
@@ -138,7 +138,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
             if (dc?.RootElment?.Properties != null && dc.RootElment.Properties.Count != 0 && dc.Element != null)
             {
                 // if need to show ancestry, start from rootnode
-                // if not show ancestry, but element has no parent, return element itself. 
+                // if not show ancestry, but element has no parent, return element itself.
                 return new HierarchyNodeViewModel(showAncestry ? dc.RootElment : dc.Element.Parent != null ? dc.Element.Parent : dc.Element, showUncertain, isLiveMode);
             }
 
@@ -147,10 +147,10 @@ namespace AccessibilityInsights.SharedUx.Utilities
 
         /// <summary>
         /// Get ScanResultsViewModel List
-        /// Any results with Fail or ScanNotSupported state are picked up for this. 
+        /// Any results with Fail or ScanNotSupported state are picked up for this.
         /// </summary>
         /// <returns></returns>
-        public static List<RuleResultViewModel> GetRuleResultsViewModelList(this ElementDataContext sc)
+        public static IList<RuleResultViewModel> GetRuleResultsViewModelList(this ElementDataContext sc)
         {
             if (sc == null)
                 throw new ArgumentNullException(nameof(sc));
@@ -174,7 +174,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
             if (list.Count != 0)
             {
                 var gs = from l in list
-                         orderby l.Item1.Description, l.Item2.Glimpse                         
+                         orderby l.Item1.Description, l.Item2.Glimpse
                          select new RuleResultViewModel(l.Item2, l.Item1);
 
                 return gs.ToList();
@@ -193,7 +193,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         public static WindowsPoint GetTopLeftPoint(this Window window)
         {
             WindowsPoint topLeft = new WindowsPoint();
-            // .Top & .Left are not updated when window is maximized, so need to 
+            // .Top & .Left are not updated when window is maximized, so need to
             //  recover the position of the window in this case
             var left = typeof(Window).GetField("_actualLeft", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             var top = typeof(Window).GetField("_actualTop", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
@@ -288,9 +288,14 @@ namespace AccessibilityInsights.SharedUx.Utilities
                 throw new ArgumentNullException(nameof(bitmap));
 
             var hbmp = bitmap.GetHbitmap();
-            var result = Imaging.CreateBitmapSourceFromHBitmap(hbmp, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            NativeMethods.DeleteObject(hbmp);
-            return result;
+            try
+            {
+                return Imaging.CreateBitmapSourceFromHBitmap(hbmp, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally
+            {
+                NativeMethods.DeleteObject(hbmp);
+            }
         }
 
         /// <summary>

@@ -212,6 +212,9 @@
         <Setter Property="KeyboardNavigation.IsTabStop" Value="True"/>
         <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
     </Style>
+    <Style TargetType="{x:Type Label}" x:Key="LblFocusablePrimaryFG" BasedOn="{StaticResource ResourceKey=LblFocusable}">
+        <Setter Property="Foreground" Value="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
+    </Style>
     <Style TargetType="{x:Type TextBlock}" x:Key="TxtTelemetrySettingInfo">
         <Setter Property="FontSize" Value="10"/>
         <Setter Property="Foreground" Value="{DynamicResource ResourceKey=SecondaryFGBrush}"/>
@@ -352,22 +355,18 @@
         <Setter Property="Padding" Value="0"/>
     </Style>
     <Style TargetType="{x:Type TextBlock}" x:Key="tbLink">
+        <Setter Property="TextDecorations" Value="Underline"/>
         <Setter Property="Focusable" Value="True"/>
         <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
         <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ButtonLinkFGBrush}"/>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="TextDecorations" Value="Underline"/>
-            </Trigger>
-            <Trigger Property="IsFocused" Value="True">
-                <Setter Property="TextDecorations" Value="Underline"/>
-            </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type Hyperlink}" x:Key="hLink" BasedOn="{StaticResource {x:Type Hyperlink}}">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ButtonLinkHoverFGBrush}"/>
@@ -506,6 +505,9 @@
         <Setter Property="Foreground" Value="{DynamicResource ResourceKey=PrimaryFGBrush}" />
     </Style>
     <Style x:Key="lviTabStops" TargetType="{x:Type ListViewItem}">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2,0"/>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="False">
                 <Setter Property="Foreground" Value="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
@@ -518,6 +520,11 @@
                 <Setter Property="Foreground" Value="{DynamicResource ResourceKey=TSRowSelectedFGBrush}"/>
                 <Setter Property="Background" Value="{DynamicResource ResourceKey=TSRowSelectedBGBrush}"/>
                 <Setter Property="FontWeight" Value="Bold"/>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=PrimaryBGBrush}"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Margin" Value="1, 1, 2, 1" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -1203,6 +1210,9 @@
     <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxContastingBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=PrimaryFGBrush}"/>
     </Style>
+    <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxNoDarkThemeContrastingBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=NoDarkThemeContrastingFGBrush}"/>
+    </Style>
     <Style TargetType="{x:Type CheckBox}" x:Key="CkbxRightSide" BasedOn="{StaticResource CheckBoxContastingBorder}">
         <Setter Property="FontSize" Value="14"/>
     </Style>
@@ -1225,6 +1235,7 @@
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource ResourceKey=SelectedBrush}"/>
                             <Setter Property="Foreground" Value="{DynamicResource ResourceKey=SelectedTextBrush}"/>
                             <Setter TargetName="fbIcn" Property="Foreground" Value="{DynamicResource ResourceKey=SelectedTextBrush}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
                         </Trigger>
                         <Trigger Property="IsHighlighted" Value="false">
                             <Setter TargetName="fbIcn" Property="Foreground" Value="{DynamicResource ResourceKey=IconBrush}"/>

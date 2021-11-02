@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using AccessibilityInsights.SharedUx.ColorBlindness;
 using AccessibilityInsights.SharedUx.Utilities;
 using AccessibilityInsights.SharedUx.ViewModels;
 using AccessibilityInsights.Win32;
@@ -28,7 +27,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
         ColorContrastViewModel ccVM;
         bool selectingFirst;
         bool selectingSecond;
-        Bitmap screenshot;
+        Bitmap desktopScreenshot;
         Timer updatePosTimer;
         TransformGroup renderTransformGroup;
         Action<object, EventArgs> onClose;
@@ -57,16 +56,12 @@ namespace AccessibilityInsights.SharedUx.Dialogs
 
         private void CaptureScreenshot()
         {
-            screenshot = new Bitmap(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            desktopScreenshot = new Bitmap(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            using (Graphics g = Graphics.FromImage(screenshot))
+            using (Graphics g = Graphics.FromImage(desktopScreenshot))
             {
-                g.CopyFromScreen(SystemInformation.VirtualScreen.Left, SystemInformation.VirtualScreen.Top, 0, 0, screenshot.Size);
+                g.CopyFromScreen(SystemInformation.VirtualScreen.Left, SystemInformation.VirtualScreen.Top, 0, 0, desktopScreenshot.Size);
             }
-
-            VisionSimulator.SimulateAchromatopsia(screenshot);
-
-            imgScreenshot.Source = screenshot.ConvertToSource();
         }
 
         private void InitializeUpdateTimer()
@@ -82,15 +77,8 @@ namespace AccessibilityInsights.SharedUx.Dialogs
         private void InitializeRenderTransform()
         {
             renderTransformGroup = new TransformGroup();
-            renderTransformGroup.Children.Add(new TranslateTransform());
             renderTransformGroup.Children.Add(new ScaleTransform(zoomLevel,  zoomLevel));
-            imgScreenshot.RenderTransform = renderTransformGroup;
-        }
-
-        private void UpdateImageTranslation(System.Drawing.Point pos)
-        {
-            (renderTransformGroup.Children[0] as TranslateTransform).X = -(pos.X - SystemInformation.VirtualScreen.Left - radius / zoomLevel);
-            (renderTransformGroup.Children[0] as TranslateTransform).Y = -(pos.Y - SystemInformation.VirtualScreen.Top - radius / zoomLevel);
+            eyedropperPreview.RenderTransform = renderTransformGroup;
         }
 
         private void UpdateColor(System.Drawing.Color col)
@@ -105,16 +93,34 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             }
         }
 
+        private static System.Drawing.Point ScreenCoordsToScreenshotPos(System.Drawing.Point pos)
+        {
+            return new System.Drawing.Point(pos.X - SystemInformation.VirtualScreen.Left, pos.Y - SystemInformation.VirtualScreen.Top);
+        }
+
         private void UpdatePos()
         {
-            var pos = Control.MousePosition;
+            var mousePos = Control.MousePosition;
             var dpi = VisualTreeHelper.GetDpi(this);
 
-            UpdateImageTranslation(pos);
-            UpdateColor(screenshot.GetPixel(pos.X - SystemInformation.VirtualScreen.Left, pos.Y - SystemInformation.VirtualScreen.Top));
+            var screenshotPosition = ScreenCoordsToScreenshotPos(mousePos);
+            UpdateColor(desktopScreenshot.GetPixel(screenshotPosition.X, screenshotPosition.Y));
 
-            this.Left = pos.X / dpi.DpiScaleX - radius;
-            this.Top = pos.Y / dpi.DpiScaleY - radius;
+            Rectangle desktopRegion = new Rectangle(
+                screenshotPosition.X - radius / zoomLevel,
+                screenshotPosition.Y - radius / zoomLevel,
+                radius * 2,
+                radius * 2
+            );
+            desktopRegion.Intersect(new Rectangle(System.Drawing.Point.Empty, desktopScreenshot.Size));
+
+            using (Bitmap b = desktopScreenshot.Clone(desktopRegion, desktopScreenshot.PixelFormat))
+            {
+                eyedropperPreview.Source = b.ConvertToSource();
+            }
+
+            this.Left = mousePos.X / dpi.DpiScaleX - radius;
+            this.Top = mousePos.Y / dpi.DpiScaleY - radius;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -139,7 +145,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
         {
             updatePosTimer.Stop();
             updatePosTimer.Dispose();
-            screenshot.Dispose();
+            desktopScreenshot.Dispose();
             onClose.Invoke(null, new EventArgs());
         }
 
@@ -157,16 +163,16 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             switch (e.Key)
             {
                 case Key.Up:
-                    MoveCursor(0, -StepSize(e, Height));
+                    MoveCursor(0, -StepSize(Height));
                     break;
                 case Key.Down:
-                    MoveCursor(0, StepSize(e, Height));
+                    MoveCursor(0, StepSize(Height));
                     break;
                 case Key.Left:
-                    MoveCursor(-StepSize(e, Width), 0);
+                    MoveCursor(-StepSize(Width), 0);
                     break;
                 case Key.Right:
-                    MoveCursor(StepSize(e, Width), 0);
+                    MoveCursor(StepSize(Width), 0);
                     break;
                 case Key.Enter:
                 case Key.Escape:
@@ -177,7 +183,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             e.Handled = true;
         }
 
-        private int StepSize(System.Windows.Input.KeyEventArgs e, double stepWithCtrl)
+        private static int StepSize(double stepWithCtrl)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 return (int)(stepWithCtrl / zoomLevel);

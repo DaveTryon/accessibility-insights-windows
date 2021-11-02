@@ -7,6 +7,7 @@ namespace AccessibilityInsights.Win32
 {
     // Some of these definitions originated from https://pinvoke.net/namespace
 #pragma warning disable CA1712 // Do not prefix enum values with type name
+#pragma warning disable CA1008 // These are defined by Win32 and we won't add a 0 value if not called for
 
     /// <summary>
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646309(v=vs.85).aspx
@@ -54,9 +55,11 @@ namespace AccessibilityInsights.Win32
         MaxTokenInfoClass,
     }
 
+#pragma warning disable CA1711 // These are Win32 definitions
     /// <summary>
     /// Windows Style Extended
     /// </summary>
+    [Flags]
     public enum WindowStylesEx
     {
         WS_EX_ACCEPTFILES = 0x00000010,
@@ -84,6 +87,7 @@ namespace AccessibilityInsights.Win32
         WS_EX_TRANSPARENT = 0x00000020,
         WS_EX_WINDOWEDGE = 0x00000100
     }
+#pragma warning restore CA1711 // These are Win32 definitions
 
     public enum TernaryRasterOperations
     {
@@ -180,6 +184,7 @@ namespace AccessibilityInsights.Win32
         CLEARTYPE_NATURAL_QUALITY = 6,
     }
 
+    [Flags]
     public enum FontPitchAndFamily : UInt32
     {
         DEFAULT_PITCH = 0,
@@ -290,6 +295,7 @@ namespace AccessibilityInsights.Win32
         SM_SYSTEMDOCKED = 0x2004,
     }
 
+    [Flags]
     public enum WindowStyles : uint
     {
         WS_POPUP = 0x80000000,
@@ -317,6 +323,7 @@ namespace AccessibilityInsights.Win32
         ForceMinimize = 11
     }
 
+#pragma warning disable CA1027 // These are not flags
     public enum StockObjects
     {
         WHITE_BRUSH = 0,
@@ -340,7 +347,9 @@ namespace AccessibilityInsights.Win32
         DC_BRUSH = 18,
         DC_PEN = 19,
     }
+#pragma warning restore CA1027 // These are not flags
 
+    [Flags]
     public enum ClassStyles : uint
     {
         ByteAlignClient = 0x1000,
@@ -357,6 +366,7 @@ namespace AccessibilityInsights.Win32
         VerticalRedraw = 0x1
     }
 
+#pragma warning disable CA1027 // These are not flags
     public enum CombineRgnStyles : int
     {
         RGN_AND = 1,
@@ -367,6 +377,7 @@ namespace AccessibilityInsights.Win32
         RGN_MIN = RGN_AND,
         RGN_MAX = RGN_COPY
     }
+#pragma warning restore CA1027 // These are not flags
 
     internal enum WinTrustDataUIChoice : uint
     {
@@ -415,7 +426,7 @@ namespace AccessibilityInsights.Win32
         UseDefaultOsverCheck = 0x00000400,
         LifetimeSigningFlag = 0x00000800,
         CacheOnlyUrlRetrieval = 0x00001000,     // affects CRL retrieval and AIA retrieval
-        DisableMD2andMD4 = 0x00002000           // Win7 SP1+: Disallows use of MD2 or MD4 in the chain except for the root 
+        DisableMD2andMD4 = 0x00002000           // Win7 SP1+: Disallows use of MD2 or MD4 in the chain except for the root
     }
 
     internal enum WinTrustDataUIContext : uint
@@ -465,5 +476,6 @@ namespace AccessibilityInsights.Win32
         LOGPIXELSY = 90
     }
 
+#pragma warning restore CA1008 // These are defined by Win32 and we won't add a 0 value if not called for
 #pragma warning restore CA1712 // Do not prefix enum values with type name
 }

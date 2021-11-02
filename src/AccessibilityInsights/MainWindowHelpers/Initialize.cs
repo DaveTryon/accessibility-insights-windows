@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.Enums;
 using AccessibilityInsights.Extensions;
@@ -14,6 +15,7 @@ using AccessibilityInsights.Win32;
 using Axe.Windows.Actions;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -66,15 +68,12 @@ namespace AccessibilityInsights
             else
             {
                 HandleBackToSelectingState();
-                // make sure that we disable selector before showing update
-                // otherwise, UI could be in weird state (Main window is gray out but still show selection and update dialog is disappearing)
-                DisableElementSelector();
                 ShowTelemetryDialog();
-                CheckForUpdates();
                 EnableElementSelector();
+                CheckForUpdates();
             }
 
-            // chrome height is set to make sure system menu is shown over title bar area. 
+            // chrome height is set to make sure system menu is shown over title bar area.
             var chrome = new WindowChrome();
             chrome.CaptionHeight = 35;
             WindowChrome.SetWindowChrome(this, chrome);
@@ -85,13 +84,12 @@ namespace AccessibilityInsights
         private void BackToSelectingOnDispatcher(Task<bool> _) => Dispatcher.Invoke(HandleBackToSelectingState);
 
         /// <summary>
-        ///  Update main window layout. 
+        ///  Update main window layout.
         /// </summary>
         private void UpdateMainWindowLayout()
         {
-            var layout = ConfigurationManager.GetDefaultInstance().AppLayout;
-
-            FixWindowPositionForStartup();
+            AppLayout layout = ConfigurationManager.GetDefaultInstance().AppLayout;
+            EnsureWindowIsInVirtualScreen(layout);
 
             this.Top = layout.Top;
             this.Left = layout.Left;
@@ -100,10 +98,26 @@ namespace AccessibilityInsights
             this.WindowState = layout.WinState;
         }
 
+        /// <summary>Load and register for custom UI Automation properties if a configuration file exists.</summary>
+        private static void InitCustomUIA(string ConfigurationFolderPath, TelemetryBuffer telemetryBuffer)
+        {
+            const string ConfigurationFileName = "CustomUIA.json";
+            string path = Path.Combine(ConfigurationFolderPath, ConfigurationFileName);
+            if (File.Exists(path))
+            {
+                Axe.Windows.Core.CustomObjects.Config config = CustomUIAAction.ReadConfigFromFile(path);
+                if (config?.Properties != null)
+                {
+                    CustomUIAAction.RegisterCustomProperties(config.Properties);
+                    telemetryBuffer.AddEventFactory(() => TelemetryEventFactory.ForCustomUIAPropertyCount(config.Properties.Length));
+                }
+            }
+        }
+
         /// <summary>
-        /// Populate all configurations
+        /// Populate all configurations. Call this method before calling any extension-dependent methods!
         /// </summary>
-        private static void PopulateConfigurations()
+        private static void PopulateConfigurations(TelemetryBuffer telemetryBuffer)
         {
             var defaultPaths = FixedConfigSettingsProvider.CreateDefaultSettingsProvider();
             var configPathProvider = new FixedConfigSettingsProvider(
@@ -117,19 +131,27 @@ namespace AccessibilityInsights
             // Populate the App Config and Test Config
             ConfigurationManager.GetDefaultInstance(configPathProvider);
 
+            InitCustomUIA(configPathProvider.ConfigurationFolderPath, telemetryBuffer);
+
             // based on customer feedback, we will set default selection mode to Element
-            // when AccessibilityInsights starts up. 
+            // when AccessibilityInsights starts up.
             ConfigurationManager.GetDefaultInstance().AppConfig.IsUnderElementScope = true;
 
             // Configure the correct ReleaseChannel for autoupdate
             Container.SetAutoUpdateReleaseChannel(ConfigurationManager.GetDefaultInstance().AppConfig.ReleaseChannel.ToString());
 
-            // enable/disable telemetry
-            if (ConfigurationManager.GetDefaultInstance().AppConfig.EnableTelemetry)
-                TelemetryController.EnableTelemetry();
-
             // Update theming since it depends on config options
             SetColorTheme();
+        }
+
+        private static void InitializeTelemetry()
+        {
+            // Opt into telemetry if allowed and user has chosen to do so
+            if (TelemetryController.DoesGroupPolicyAllowTelemetry &&
+                ConfigurationManager.GetDefaultInstance().AppConfig.EnableTelemetry)
+            {
+                TelemetryController.OptIntoTelemetry();
+            }
         }
 
         /// <summary>
@@ -209,7 +231,7 @@ namespace AccessibilityInsights
 
         /// <summary>
         /// Set Hot Key for event recording
-        /// honor the value from Configuration file. 
+        /// honor the value from Configuration file.
         /// </summary>
         private void SetHotKeyForToggleRecord()
         {
@@ -234,10 +256,10 @@ namespace AccessibilityInsights
                                       {
                                           var sa = SelectAction.GetDefaultInstance();
 
-                                          // make sure that POI is set. 
+                                          // make sure that POI is set.
                                           if (this.IsInSelectingState() && sa.HasPOIElement())
                                           {
-                                              this.StartEventsMode(GetDataAction.GetElementContext(sa.GetSelectedElementContextId().Value).Element);
+                                              this.StartEventsMode(GetDataAction.GetElementContext(sa.SelectedElementContextId.Value).Element);
                                               UpdateMainWindowUI();
                                           }
                                       }
@@ -250,7 +272,7 @@ namespace AccessibilityInsights
 
         /// <summary>
         /// Set Hot Key for event recording
-        /// honor the value from Configuration file. 
+        /// honor the value from Configuration file.
         /// </summary>
         private void SetHotKeyForTogglePause()
         {
@@ -279,7 +301,7 @@ namespace AccessibilityInsights
 
         /// <summary>
         /// Set Hot Key for Mode Switch
-        /// honor the value from Configuration file. 
+        /// honor the value from Configuration file.
         /// </summary>
         private void SetHotKeyForModeSwitch()
         {
@@ -391,45 +413,84 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Sets window position to avoid opening window offscreen. Modelled after explorer's behavior
-        /// If fully offscreen, open in default position
-        /// If partially offscreen, move onscreen
+        /// Make sure that the app layout is fully within the virtual screen, including resizing it
+        /// if necessary.
         /// </summary>
-        /// <returns></returns>
-        private void FixWindowPositionForStartup()
+        /// <param name="layout">The layout. Its position will be modified only if necessary</param>
+        private void EnsureWindowIsInVirtualScreen(AppLayout layout)
         {
-            var layout = ConfigurationManager.GetDefaultInstance().AppLayout;
+            EnsureWindowIsInVirtualScreenWithInjection(layout, this.Top, this.Left,
+                SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop,
+                SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight);
+        }
+
+        /// <summary>
+        /// Return the first defined number from an array of potentialNumbers.
+        /// Will return 0.0 if they're all NaN.
+        /// </summary>
+        private static double GetFirstDefinedNumber(double[] potentialNumbers)
+        {
+            foreach(double potentialNumber in potentialNumbers)
+            {
+                if (!double.IsNaN(potentialNumber))
+                {
+                    return potentialNumber;
+                }
+            }
+
+            return 0.0; // Our ultimate fallback value
+        }
+
+        internal static void EnsureWindowIsInVirtualScreenWithInjection(AppLayout layout,
+            double windowTop, double windowLeft, double virtualLeft,
+            double virtualTop, double virtualWidth, double virtualHeight)
+        {
+            double virtualRight = virtualLeft + virtualWidth;
+            double virtualBottom = virtualTop + virtualHeight;
 
             if (layout != null)
             {
-                // If the window is completely offscreen, open it in default location
-                if ((layout.Left <= SystemParameters.VirtualScreenLeft - layout.Width) ||
-                        (layout.Top <= SystemParameters.VirtualScreenTop - layout.Height) ||
-                        (SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth <= layout.Left) ||
-                        (SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight <= layout.Top))
-                {
-                    layout.Top = this.Top;
-                    layout.Left = this.Left;
-                }
-                else // if the window is partially offscreen, move it the appropriate vertical and/or horizontal distance to become fully onscreen
-                {
-                    if (layout.Left < SystemParameters.VirtualScreenLeft)
-                    {
-                        layout.Left = SystemParameters.VirtualScreenLeft;
-                    }
-                    else if (SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth - layout.Width < layout.Left)
-                    {
-                        layout.Left = SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth - layout.Width;
-                    }
+                const double fallbackWindowPosition = 200.0;
+                layout.Top = GetFirstDefinedNumber(new double[] { layout.Top, windowTop, fallbackWindowPosition });
+                layout.Left = GetFirstDefinedNumber(new double[] { layout.Left, windowLeft, fallbackWindowPosition });
 
-                    if (layout.Top < SystemParameters.VirtualScreenTop)
-                    {
-                        layout.Top = SystemParameters.VirtualScreenTop;
-                    }
-                    else if (SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight - layout.Height < layout.Top)
-                    {
-                        layout.Top = SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight - layout.Height;
-                    }
+                double top = layout.Top;
+                double left = layout.Left;
+                double right = left + layout.Width;
+                double bottom = top + layout.Height;
+
+                // If the window is completely offscreen, open it in default location
+                if ((right <= virtualLeft) ||
+                    (bottom <= virtualTop) ||
+                    (left >= virtualRight) ||
+                    (top >= virtualBottom))
+                {
+                    top = layout.Top = windowTop;
+                    left = layout.Left = windowLeft;
+                }
+
+                // Adjust the window extents to keep it fully within the virtual screen
+                layout.Width = Math.Min(layout.Width, virtualWidth);
+                layout.Height = Math.Min(layout.Height, virtualHeight);
+                right = left + layout.Width;
+                bottom = top + layout.Height;
+
+                if (right > virtualRight)
+                {
+                    layout.Left = virtualRight - layout.Width;
+                }
+                else if (left < virtualLeft)
+                {
+                    layout.Left = virtualLeft;
+                }
+
+                if (bottom > virtualBottom)
+                {
+                    layout.Top = virtualBottom - layout.Height;
+                }
+                else if (top < virtualTop)
+                {
+                    layout.Top = virtualTop;
                 }
             }
         }

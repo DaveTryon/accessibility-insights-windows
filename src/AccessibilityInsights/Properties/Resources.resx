@@ -261,21 +261,6 @@
   <data name="Window_ClosingException" xml:space="preserve">
     <value>Exception while closing MainWindow</value>
   </data>
-  <data name="btnReleaseNotesText" xml:space="preserve">
-    <value>Release notes</value>
-  </data>
-  <data name="btnUpdateLaterText" xml:space="preserve">
-    <value>Later</value>
-  </data>
-  <data name="btnUpdateNowText" xml:space="preserve">
-    <value>Update now</value>
-  </data>
-  <data name="ReleaseNotes_ClickLoadErrorMessage" xml:space="preserve">
-    <value>There was an error loading the URL.\nURL:</value>
-  </data>
-  <data name="ReleaseNotes_ClickURLErrorMessage" xml:space="preserve">
-    <value>The URL was not properly formatted.\nURL:</value>
-  </data>
   <data name="btnOkContent" xml:space="preserve">
     <value>Save and close</value>
   </data>
@@ -488,9 +473,6 @@ Please ensure that you are opening a valid test file using the most recent relea
     <value>Prerelease Build ({0})</value>
     <comment>{0} receives the build version</comment>
   </data>
-  <data name="UpdateDialogWindowTitle" xml:space="preserve">
-    <value>There is an update available</value>
-  </data>
   <data name="SetElementInspectTestDetail" xml:space="preserve">
     <value>Inspect Test Detail of {0}</value>
   </data>
@@ -499,12 +481,6 @@ Please ensure that you are opening a valid test file using the most recent relea
   </data>
   <data name="UpdateMainWindowLoginFieldsSignedInAs" xml:space="preserve">
     <value>Signed into {0}</value>
-  </data>
-  <data name="MainWindow_ShowUpgradeDialog_An_update_is_required" xml:space="preserve">
-    <value>An update is required.</value>
-  </data>
-  <data name="MainWindow_ShowUpgradeDialog_An_update_is_available" xml:space="preserve">
-    <value>An update is available.</value>
   </data>
   <data name="bdLeftNavAutomationPropertiesName" xml:space="preserve">
     <value>Navigation Bar</value>
@@ -536,5 +512,29 @@ Please ensure that you are opening a valid test file using the most recent relea
   </data>
   <data name="RequiredUpdateFailedUnknown" xml:space="preserve">
     <value>There was a problem updating the application. Because this is a required update, the app will be shut down. Please check your internet connection and try again.</value>
+  </data>
+  <data name="SentenceEndPeriod" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="SnapshotModeControl_AvailablePatterns" xml:space="preserve">
+    <value>Available patterns:</value>
+  </data>
+  <data name="SnapshotModeControl_AvailableProperties" xml:space="preserve">
+    <value>Available properties</value>
+  </data>
+  <data name="SnapshotModeControl_GlimpseFormat" xml:space="preserve">
+    <value>Glimpse: {0}</value>
+  </data>
+  <data name="MainWindow_DefaultTimerDelayInSeconds" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="MainWindow_One" xml:space="preserve">
+    <value>One</value>
+  </data>
+  <data name="MainWindow_QuestionMark" xml:space="preserve">
+    <value>_?</value>
+  </data>
+  <data name="MainWindow_Two" xml:space="preserve">
+    <value>Two</value>
   </data>
 </root>

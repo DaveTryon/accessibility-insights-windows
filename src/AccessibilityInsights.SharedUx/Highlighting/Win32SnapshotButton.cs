@@ -120,15 +120,15 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         private Bitmap LoadBeakerImage(double DPI)
         {
             System.Drawing.FontFamily family;
-            // Create font 
+            // Create font
             using (PrivateFontCollection fonts = LoadFontResource())
             {
-                // Get font family 
+                // Get font family
                 family = (System.Drawing.FontFamily)fonts.Families.GetValue(0);
             }
-            // Create bitmap 
+            // Create bitmap
             Bitmap bitmap = new Bitmap(Convert.ToInt32(DefaultWidth * DPI), Convert.ToInt32(DefaultHeight * DPI));
-            // Create graphics from image 
+            // Create graphics from image
             using (Graphics g = Graphics.FromImage(bitmap))
             using (StringFormat sf = new StringFormat())
             {
@@ -204,7 +204,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
         private double UpdateBeakerSize()
         {
-            double currentDPI = this.HiLighterRect != null ? this.HiLighterRect.GetDPI() : 1.0;
+            double currentDPI = this.HiLighterRect.IsEmpty ? 1.0 : this.HiLighterRect.GetDPI();
 
             this.Width = Convert.ToInt32((Convert.ToDouble(DefaultWidth) * currentDPI));
             this.Height = Convert.ToInt32((Convert.ToDouble(DefaultHeight) * currentDPI));

@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace AccessibilityInsights.SharedUx.Behaviors
 {
@@ -25,6 +24,7 @@ namespace AccessibilityInsights.SharedUx.Behaviors
         {
             base.OnAttached();
 
+            AssociatedObject.AddHandler(Button.KeyDownEvent, new KeyEventHandler(CancelButtonTooltipOnEscape), true);
             AssociatedObject.AddHandler(Button.LostKeyboardFocusEvent, new KeyboardFocusChangedEventHandler(ClearButtonTooltip), true);
             AssociatedObject.AddHandler(Button.GotKeyboardFocusEvent, new KeyboardFocusChangedEventHandler(ShowButtonTooltip), true);
             AssociatedObject.AddHandler(Button.MouseEnterEvent, new MouseEventHandler(ButtonMouseEnter), true);
@@ -32,11 +32,19 @@ namespace AccessibilityInsights.SharedUx.Behaviors
 
         private static void ClearButtonTooltip()
         {
-            if ((currentToolTipButton as Control)?.ToolTip != null && 
+            if ((currentToolTipButton as Control)?.ToolTip != null &&
                 (currentToolTipButton as Control).ToolTip.GetType().Name.Equals("ToolTip", StringComparison.Ordinal))
             {
                 ToolTip tt = (ToolTip)(currentToolTipButton as Control).ToolTip;
                 tt.IsOpen = false;
+            }
+        }
+
+        private static void CancelButtonTooltipOnEscape(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                ClearButtonTooltip();
             }
         }
 
@@ -60,18 +68,6 @@ namespace AccessibilityInsights.SharedUx.Behaviors
                     tt.Placement = PlacementMode.Left;
                     tt.PlacementRectangle = new Rect(0, (sender as Control).Height + 5, 0, 0);
                     tt.IsOpen = true;
-
-                    // set up a timer to clear the tooltip after 5 secs if focus has not been changed
-                    DispatcherTimer timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(5) };
-                    timer.Tick += delegate (object _sender, EventArgs _e)
-                    {
-                        ((DispatcherTimer)timer).Stop();
-                        if (tt.IsOpen)
-                        {
-                            tt.IsOpen = false;
-                        }
-                    };
-                    timer.Start();
                 }
             }
         }

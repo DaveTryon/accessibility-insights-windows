@@ -57,9 +57,11 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         void FlushToken(Uri url);
 
         /// <summary>
-        /// Refreshes profile of current user 
+        /// Refreshes profile of current user
         /// </summary>
         Task PopulateUserProfile();
+
+        Task<bool> CheckIfAbleToGetProjects();
 
         /// <summary>
         /// Disconnects from AzureDevOps, resets AzureDevOps instance

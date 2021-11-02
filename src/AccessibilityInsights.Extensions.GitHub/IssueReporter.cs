@@ -33,6 +33,7 @@ namespace AccessibilityInsights.Extensions.GitHub
             this.IsConfigured = isConfigured;
         }
 
+#pragma warning disable CA1024 // This should not be a property
         public IssueReporter GetDefaultInstance()
         {
             if (_instance == null)
@@ -41,11 +42,14 @@ namespace AccessibilityInsights.Extensions.GitHub
             }
             return _instance;
         }
+#pragma warning restore CA1024 // This should not be a property
 
         public string ServiceName => Properties.Resources.extensionName;
 
         public Guid StableIdentifier => new Guid ("bbdf3582-d4a6-4b76-93ea-ef508d1fd4b8");
         public bool IsConfigured { get; private set; }
+
+        public string ConfigurationPath { get; private set; }
 
         public ReporterFabricIcon Logo => ReporterFabricIcon.GitHubLogo;
 
@@ -55,12 +59,12 @@ namespace AccessibilityInsights.Extensions.GitHub
 
         public bool CanAttachFiles => false;
 
-        public Task<IIssueResult> FileIssueAsync(IssueInformation issueInfo)
+        public Task<IIssueResultWithPostAction> FileIssueAsync(IssueInformation issueInfo)
         {
-            return Task.Run<IIssueResult>(() => FileIssueAsyncAction(issueInfo));
+            return Task.Run<IIssueResultWithPostAction>(() => FileIssueAsyncAction(issueInfo));
         }
 
-        private IIssueResult FileIssueAsyncAction(IssueInformation issueInfo)
+        private IIssueResultWithPostAction FileIssueAsyncAction(IssueInformation issueInfo)
         {
             if (this.IsConfigured)
             {
@@ -112,6 +116,11 @@ namespace AccessibilityInsights.Extensions.GitHub
         {
             settings = null;
             return false;
+        }
+
+        public void SetConfigurationPath(string configurationPath)
+        {
+            this.ConfigurationPath = configurationPath;
         }
     }
 }

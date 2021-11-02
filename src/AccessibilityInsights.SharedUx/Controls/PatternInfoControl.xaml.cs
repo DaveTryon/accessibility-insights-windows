@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
+using AccessibilityInsights.SharedUx.Settings;
 using AccessibilityInsights.SharedUx.Utilities;
 using AccessibilityInsights.SharedUx.ViewModels;
 using Axe.Windows.Core.Bases;
 using Axe.Windows.Core.Types;
-using Axe.Windows.Desktop.UIAutomation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +33,10 @@ namespace AccessibilityInsights.SharedUx.Controls
         public PatternInfoControl()
         {
             InitializeComponent();
-            PatternType.GetInstance().GetKeyValuePairList().ForEach(kv => ExpStates[kv.Key] = false);
+            foreach (var kv in PatternType.GetInstance().GetKeyValuePairList())
+            {
+                ExpStates[kv.Key] = false;
+            }
             HidePatternsTree();
         }
 
@@ -63,7 +66,7 @@ namespace AccessibilityInsights.SharedUx.Controls
 
         private static IEnumerable<int> GetBasicPropertyList()
         {
-            return DesktopElementHelper.GetCorePropertiesList();
+            return PropertySettings.DefaultCoreProperties;
         }
 
         private void UpdateControlPatterns()
@@ -139,7 +142,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Available patterns:");
-            // patterns   
+            // patterns
             foreach (var pt in this.Element.Patterns)
             {
                 AddPatternToStringBuilder(sb, pt);

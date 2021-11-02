@@ -78,7 +78,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Indicate how to do the data context population. 
+        /// Indicate how to do the data context population.
         /// Live/Snapshot/Load
         /// </summary>
         public DataContextMode DataContextMode { get; set; } = DataContextMode.Test;
@@ -104,13 +104,13 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Event handler when node selection is changed in treeview. 
+        /// Event handler when node selection is changed in treeview.
         /// </summary>
         public void SelectedElementChanged()
         {
             A11yElement element = this.ctrlHierarchy.SelectedInHierarchyElement;
 
-            // selection only when UI snapshot is done. 
+            // selection only when UI snapshot is done.
             if (element != null && this.IsVisible)
             {
                 UpdateElementInfoUI(element);
@@ -141,7 +141,7 @@ namespace AccessibilityInsights.Modes
 
                     if (contextChanged && this.DataContextMode != DataContextMode.Load)
                     {
-                        // send telemetry of scan results. 
+                        // send telemetry of scan results.
                         var dc = GetDataAction.GetElementDataContext(ecId);
                         dc.PublishScanResults();
                     }
@@ -176,7 +176,7 @@ namespace AccessibilityInsights.Modes
                         var imageOverlay = ImageOverlayDriver.GetDefaultInstance();
 
                         imageOverlay.SetImageElement(ecId);
-                        //disable button on highlighter. 
+                        //disable button on highlighter.
                         imageOverlay.SetHighlighterButtonClickHandler(null);
 
                         if (Configuration.IsHighlighterOn)
@@ -238,7 +238,7 @@ namespace AccessibilityInsights.Modes
                     }
                     else
                     {
-                        // Set the right view state : 
+                        // Set the right view state :
                         if (MainWin.CurrentView is TestView iv && iv == TestView.ElementHowToFix)
                         {
                             MainWin.SetCurrentViewAndUpdateUI(TestView.ElementHowToFix);
@@ -264,7 +264,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Fire Async Content Loaded Event to notify Snapshot mode data load completion. 
+        /// Fire Async Content Loaded Event to notify Snapshot mode data load completion.
         /// </summary>
         /// <param name="state"></param>
         private void FireAsyncContentLoadedEvent(AsyncContentLoadedState state)
@@ -286,7 +286,7 @@ namespace AccessibilityInsights.Modes
         private void UpdateElementInfoUI(A11yElement e)
         {
             this.ctrlTabs.SetElement(e, false, this.ElementContext.Id);
-            
+
             ImageOverlayDriver.GetDefaultInstance().SetSingleElement(this.ElementContext.Id, e.UniqueId);
         }
 
@@ -390,14 +390,14 @@ namespace AccessibilityInsights.Modes
             }
             else if (this.ElementContext != null)
             {
-                var se = this.ctrlHierarchy.GetSelectedElement() ?? this.ElementContext.Element;
+                var se = this.ctrlHierarchy.SelectedElement ?? this.ElementContext.Element;
 
                 // glimpse
-                sb.AppendFormat(CultureInfo.InvariantCulture, "Glimpse: {0}", se.Glimpse);
+                sb.AppendFormat(CultureInfo.CurrentCulture, Properties.Resources.SnapshotModeControl_GlimpseFormat, se.Glimpse);
                 sb.AppendLine();
                 sb.AppendLine();
 
-                sb.AppendLine("Available properties");
+                sb.AppendLine(Properties.Resources.SnapshotModeControl_AvailableProperties);
                 // properties
                 foreach (var p in se.Properties)
                 {
@@ -407,7 +407,7 @@ namespace AccessibilityInsights.Modes
 
                 sb.AppendLine();
 
-                sb.AppendLine("Available patterns:");
+                sb.AppendLine(Properties.Resources.SnapshotModeControl_AvailablePatterns);
                 // patterns
                 foreach (var pt in se.Patterns)
                 {
@@ -433,7 +433,7 @@ namespace AccessibilityInsights.Modes
 
         /// <summary>
         /// Refresh Data
-        /// it is called from state machine to handle Refresh button under title bar. 
+        /// it is called from state machine to handle Refresh button under title bar.
         /// </summary>
         public void Refresh()
         {
@@ -452,7 +452,7 @@ namespace AccessibilityInsights.Modes
             if (newData)
             {
                 ImageOverlayDriver.ClearDefaultInstance();
-                var ecId = SelectAction.GetDefaultInstance().GetSelectedElementContextId().Value;
+                var ecId = SelectAction.GetDefaultInstance().SelectedElementContextId.Value;
                 SetDataAction.ReleaseDataContext(ecId);
 #pragma warning disable CS4014
                 // NOTE: We aren't awaiting this async call, so if you
@@ -492,7 +492,7 @@ namespace AccessibilityInsights.Modes
                 {
                     try
                     {
-                        SaveAction.SaveSnapshotZip(dlg.FileName, this.ElementContext.Id, this.ctrlHierarchy.GetSelectedElement().UniqueId, A11yFileMode.Inspect);
+                        SaveAction.SaveSnapshotZip(dlg.FileName, this.ElementContext.Id, this.ctrlHierarchy.SelectedElement.UniqueId, A11yFileMode.Inspect);
                     }
 #pragma warning disable CA1031 // Do not catch general exception types
                     catch (Exception ex)
@@ -555,6 +555,6 @@ namespace AccessibilityInsights.Modes
         {
             MainWin.HandleFileBugLiveMode();
         }
-    }  
+    }
 }
 

@@ -21,7 +21,7 @@ namespace AccessibilityInsights.SharedUx.Controls
     /// </summary>
     public partial class EventConfigurationControl : UserControl
     {
-        public List<RecordEntitySetting> List { get; private set; }
+        public IList<RecordEntitySetting> List { get; private set; }
         public static readonly RoutedCommand AddEventCommand = new RoutedCommand();
         public static readonly RoutedCommand RemoveEventCommand = new RoutedCommand();
         public static readonly RoutedCommand MoveFocusToAvailableEventsCommand = new RoutedCommand();
@@ -31,7 +31,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// <summary>
         /// List on right side in user's order
         /// </summary>
-        public List<RecordEntitySetting> SelectedList { get; private set; }
+        public IList<RecordEntitySetting> SelectedList { get; private set; }
 
         /// <summary>
         /// Dependency property to allow drag n drop reordering
@@ -72,7 +72,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             {
                 this.SetValue(CanDragReorderProperty, value);
             }
-        }      
+        }
 
         /// <summary>
         /// Dependency property to show properties column labels
@@ -215,7 +215,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// Set the list of all events and generate selected list
         /// </summary>
         /// <param name="list"></param>
-        public void SetList(List<RecordEntitySetting> list)
+        public void SetList(IList<RecordEntitySetting> list)
         {
             this.List = list;
             this.SelectedList = this.List.Where(l => l.IsRecorded).ToList();
@@ -223,10 +223,10 @@ namespace AccessibilityInsights.SharedUx.Controls
         }
 
         /// <summary>
-        /// Set list and selected list 
+        /// Set list and selected list
         /// </summary>
         /// <param name="list"></param>
-        public void SetLists(List<RecordEntitySetting> list, List<RecordEntitySetting> selList)
+        public void SetLists(IList<RecordEntitySetting> list, IList<RecordEntitySetting> selList)
         {
             this.List = list;
             this.SelectedList = selList;
@@ -235,6 +235,7 @@ namespace AccessibilityInsights.SharedUx.Controls
 
         private void UpdateListViews()
         {
+#pragma warning disable CA1508 // Dead code warning doesn't apply here
             using (new ListViewSelectionLock(this.lvLeft))
             using (new ListViewSelectionLock(this.lvRight))
             {
@@ -251,6 +252,7 @@ namespace AccessibilityInsights.SharedUx.Controls
                 textboxSearch.Text = "";
                 FireAsyncContentLoadedEvent();
             } // using
+#pragma warning restore CA1508 // Dead code warning doesn't apply here
         }
 
         private void FireAsyncContentLoadedEvent()
@@ -302,7 +304,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             foreach (RecordEntitySetting l in this.lvLeft.SelectedItems)
             {
                 SelectedList.Add(l);
-                l.IsRecorded = true;                
+                l.IsRecorded = true;
             }
 
             UpdateListViews();
@@ -422,7 +424,7 @@ namespace AccessibilityInsights.SharedUx.Controls
                 int destPos = SelectedList.IndexOf(target);
 
                 lvi.BorderBrush = new SolidColorBrush(Colors.Black);
-             
+
                 if (sourcePos > destPos)
                 {
                     lvi.BorderThickness = new Thickness(0, 1, 0, 0);
@@ -490,7 +492,7 @@ namespace AccessibilityInsights.SharedUx.Controls
                        select new Tuple<RecordEntitySetting, int>(item, SelectedList.IndexOf(item));
 
             foreach (var l in list)
-            {               
+            {
                 SelectedList.Remove(l.Item1);
                 SelectedList.Insert(l.Item2 - 1, l.Item1);
             }

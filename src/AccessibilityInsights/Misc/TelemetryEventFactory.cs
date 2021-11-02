@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using AccessibilityInsights.SetupLibrary;
 using AccessibilityInsights.SharedUx.Telemetry;
 using AccessibilityInsights.Win32;
@@ -29,15 +30,6 @@ namespace AccessibilityInsights.Misc
                 {
                     { TelemetryProperty.ReleaseChannel, oldChannel.ToString() },
                     { TelemetryProperty.ReleaseChannelConsidered, newChannel.ToString() },
-                });
-        }
-
-        public static TelemetryEvent ForReleaseNotesClick(string error)
-        {
-            return new TelemetryEvent(TelemetryAction.Upgrade_Update_ReleaseNote,
-                new Dictionary<TelemetryProperty, string>
-                {
-                    { TelemetryProperty.Error, error },
                 });
         }
 
@@ -122,6 +114,16 @@ namespace AccessibilityInsights.Misc
                     { TelemetryProperty.UIAccessEnabled, NativeMethods.IsRunningWithUIAccess().ToString(CultureInfo.InvariantCulture) },
                     { TelemetryProperty.InstalledDotNetFrameworkVersion, formattedDotNetFrameworkVersion }
                 });
+        }
+
+        public static TelemetryEvent ForCustomUIAPropertyCount(int count)
+        {
+            return new TelemetryEvent(TelemetryAction.Custom_UIA,
+                new Dictionary<TelemetryProperty, string>
+                {
+                    [TelemetryProperty.CustomUIAPropertyCount] = count.ToString(CultureInfo.InvariantCulture)
+                }
+            );
         }
     }
 }

@@ -147,6 +147,9 @@
   <data name="GeneralActionView_Button_Click_Input_should_be_int_value_greater_than_equal_to_0" xml:space="preserve">
     <value>Input should be int value greater than or equal to 0.</value>
   </data>
+  <data name="ActionsDefaultDelayInSeconds" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="GeneralActionView_ExecuteAction_Execution_result_passed" xml:space="preserve">
     <value>Execution result passed</value>
   </data>
@@ -292,7 +295,7 @@
     <value>Set _delay</value>
   </data>
   <data name="tbMouseDelayAutomationName" xml:space="preserve">
-    <value>Set delay in MS</value>
+    <value>Set delay in milliseconds</value>
   </data>
   <data name="LabelContentOtherOptions" xml:space="preserve">
     <value>Other options</value>
@@ -339,12 +342,6 @@
   <data name="lblIssueFiling" xml:space="preserve">
     <value>Issue Filing</value>
   </data>
-  <data name="btnNextAutomationPropertiesName" xml:space="preserve">
-    <value>Next</value>
-  </data>
-  <data name="RunTextFastPass" xml:space="preserve">
-    <value>Quickly find accessibility issues with FastPass:</value>
-  </data>
   <data name="RunTextTabStops" xml:space="preserve">
     <value>Tab Stops</value>
   </data>
@@ -390,8 +387,11 @@
   <data name="lvResultsListViewAutomationPropertiesName" xml:space="preserve">
     <value>{1} errors - {0}, {2} children highlighted</value>
   </data>
-  <data name="lvResultsListViewHelpText" xml:space="preserve">
+  <data name="lvResultsListViewHelpTextCollapsed" xml:space="preserve">
     <value>Press right arrow key to expand, enter or space to toggle children highlighting</value>
+  </data>
+  <data name="lvResultsListViewHelpTextExpanded" xml:space="preserve">
+    <value>Press left arrow key to collapse, enter or space to toggle children highlighting</value>
   </data>
   <data name="lblCongratsContent" xml:space="preserve">
     <value>Congratulations</value>
@@ -417,8 +417,8 @@
   <data name="ColorContrastAutomationPropertiesName" xml:space="preserve">
     <value>Color contrast analyzer</value>
   </data>
-  <data name="RunTextGuidance" xml:space="preserve">
-    <value>Guidance</value>
+  <data name="TabStopsControl_TabStopsLink" xml:space="preserve">
+    <value>Learn more about tab stops.</value>
   </data>
   <data name="firstChooserAutomationPropertiesName" xml:space="preserve">
     <value>first color</value>
@@ -444,7 +444,7 @@
   <data name="smallSampleText" xml:space="preserve">
     <value>The quick brown fox</value>
   </data>
-  <data name="largeTextResultAutomationHelpText" xml:space="preserve">
+  <data name="ColorContrast_LargeTextResultHelpText" xml:space="preserve">
     <value>Test result large text</value>
   </data>
   <data name="ColorContrast_OpenLinkFailed" xml:space="preserve">
@@ -479,41 +479,8 @@
   <data name="TabStopControl_StartRecordingEvent_NoSelection" xml:space="preserve">
     <value>No element is selected yet. please select first!!</value>
   </data>
-  <data name="tbTitleText" xml:space="preserve">
-    <value>What's new</value>
-  </data>
-  <data name="RunTextInspectLiveUIATree" xml:space="preserve">
-    <value>Inspect the live UI Automation tree using Inspect mode.</value>
-  </data>
-  <data name="RunTextInspectMode" xml:space="preserve">
-    <value>Verify an element has the expected UI Automation properties:</value>
-  </data>
-  <data name="tbFastPassInfoText" xml:space="preserve">
-    <value>FastPass is a lightweight, two-step process that helps developers identify common, high-impact accessibility issues in less than 5 minutes.</value>
-  </data>
-  <data name="FastPassLink" xml:space="preserve">
-    <value>Learn more about FastPass.</value>
-  </data>
   <data name="MultiBindingStringFormattbFastPass" xml:space="preserve">
     <value>{0} in less than {1}</value>
-  </data>
-  <data name="RunTextFileBugs" xml:space="preserve">
-    <value>File bugs:</value>
-  </data>
-  <data name="RunTextLogBugsIn" xml:space="preserve">
-    <value>Can’t fix a bug right now? Log the bug in Azure Boards, complete with a snapshot file.</value>
-  </data>
-  <data name="FileBugLink" xml:space="preserve">
-    <value>Learn more about bug filing.</value>
-  </data>
-  <data name="RunTextColorContrast" xml:space="preserve">
-    <value>Check color contrast:</value>
-  </data>
-  <data name="RunTextManualColorTest" xml:space="preserve">
-    <value>Identify accessibility issues caused by low color contrast.</value>
-  </data>
-  <data name="CCALink" xml:space="preserve">
-    <value>Learn more about checking color contrast.</value>
   </data>
   <data name="ColorChooserAutomationPropertiesName" xml:space="preserve">
     <value>Color chooser</value>
@@ -749,15 +716,6 @@
   <data name="lbNoPatternContent" xml:space="preserve">
     <value>No available pattern...</value>
   </data>
-  <data name="ProgressRingControlAutomationPropertiesName" xml:space="preserve">
-    <value>Progress Loading Ring</value>
-  </data>
-  <data name="LabelContentLoading" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="ProgressRingControl_IsInternalScreenReaderActive_Software_Microsoft_Windows_NT_CurrentVersion_AccessibilityTemp" xml:space="preserve">
-    <value>Software\Microsoft\Windows NT\CurrentVersion\AccessibilityTemp</value>
-  </data>
   <data name="PropertyInfoControlAutomationPropertiesName" xml:space="preserve">
     <value>Selected Element Properties</value>
   </data>
@@ -787,9 +745,6 @@
   </data>
   <data name="StartupModeControl_moreGuidanceText" xml:space="preserve">
     <value>More guidance and tutorials</value>
-  </data>
-  <data name="StartupModeControl_latestReleaseNotes" xml:space="preserve">
-    <value>go to the latest release notes</value>
   </data>
   <data name="StartUpModeControlAutomationPropertiesName" xml:space="preserve">
     <value>Welcome page</value>
@@ -826,9 +781,6 @@
   </data>
   <data name="tbVideoText2" xml:space="preserve">
     <value>Learn about Accessibility Insights for Windows with this 4-minute introductory video.</value>
-  </data>
-  <data name="LocalizedControlType_Page" xml:space="preserve">
-    <value>page</value>
   </data>
   <data name="btnVideo_ClickException" xml:space="preserve">
     <value>Failed to start the video. please use this URL to open page.
@@ -999,12 +951,6 @@
   <data name="TextBlockTextPressEscabeToCancel" xml:space="preserve">
     <value>Press Escape to cancel.</value>
   </data>
-  <data name="MessageDialogWindowTitle" xml:space="preserve">
-    <value>Microsoft Accessibility Insights</value>
-  </data>
-  <data name="btnCloseAutomationPropertiesName1" xml:space="preserve">
-    <value>OK</value>
-  </data>
   <data name="MoveTextRangeDialogWindowTitle" xml:space="preserve">
     <value>Move/Compare TextRange...</value>
   </data>
@@ -1025,9 +971,6 @@
   </data>
   <data name="MoveTextRangeDialog_btnAction_Click_Return_0" xml:space="preserve">
     <value>Return: {0}</value>
-  </data>
-  <data name="btnRefreshAutomationPropertiesName" xml:space="preserve">
-    <value>Refresh</value>
   </data>
   <data name="PropertyConfigDialogWindowTitle" xml:space="preserve">
     <value>Properties Configuration</value>
@@ -1279,13 +1222,13 @@
     <value>Sample large text</value>
   </data>
   <data name="ColorContrast_SmallSampleBoldHelpText" xml:space="preserve">
-    <value>Sample small bold text</value>
+    <value>Sample regular bold text</value>
   </data>
   <data name="ColorContrast_SmallSampleHelpText" xml:space="preserve">
-    <value>Sample small text</value>
+    <value>Sample regular text</value>
   </data>
   <data name="ColorContrast_SmallTextResultHelpText" xml:space="preserve">
-    <value>Test result small text</value>
+    <value>Test result regular text</value>
   </data>
   <data name="PropertyConfigDialogAutomationName" xml:space="preserve">
     <value>Select properties to always show</value>
@@ -1367,14 +1310,8 @@ We collect anonymized data to identify the top accessibility issues found by use
   <data name="lblAutoDetectContent" xml:space="preserve">
     <value>Auto detect contrast ratio</value>
   </data>
-  <data name="InspectModeLink" xml:space="preserve">
-    <value>Learn more about Inspect.</value>
-  </data>
   <data name="ColorContrast_AutoDetectGuidance" xml:space="preserve">
-    <value>Auto-detection allows you to evaulate color contrast ratios by hovering over an element or setting the keyboard focus on it.</value>
-  </data>
-  <data name="ADO_URL_Fromat_Message" xml:space="preserve">
-    <value>URL format is not valid. Example URL: https://dev.azure.com/fabrikam</value>
+    <value>Auto-detection allows you to evaluate color contrast ratios by hovering over an element or setting the keyboard focus on it.</value>
   </data>
   <data name="hlHelpName" xml:space="preserve">
     <value>Help</value>
@@ -1523,5 +1460,95 @@ Do you want to change the channel? </value>
   </data>
   <data name="AutomatedChecksControl_RuleSourceLabel" xml:space="preserve">
     <value>Rule source</value>
+  </data>
+  <data name="ApplicationSettingsControl_Fontsize" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="ApplicationSettingsControl_milliseconds" xml:space="preserve">
+    <value>milliseconds</value>
+  </data>
+  <data name="HierarchyControl_Control" xml:space="preserve">
+    <value>_Control</value>
+  </data>
+  <data name="HierarchyControl_Content" xml:space="preserve">
+    <value>Con_tent</value>
+  </data>
+  <data name="HierarchyControl_Raw" xml:space="preserve">
+    <value>_Raw</value>
+  </data>
+  <data name="ScannerResultControl_Issue" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="ScannerResultControl_Rule" xml:space="preserve">
+    <value>Rule</value>
+  </data>
+  <data name="SentenceEndPeriod" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="AutomatedChecksControl_CloseParenthesis" xml:space="preserve">
+    <value>)</value>
+  </data>
+  <data name="AutomatedChecksControl_ElementPath" xml:space="preserve">
+    <value>Element path</value>
+  </data>
+  <data name="AutomatedChecksControl_Issue" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="AutomatedChecksControl_OpenParenthesis" xml:space="preserve">
+    <value>(</value>
+  </data>
+  <data name="MoveTextRangeDialog_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="MoveTextRangeDialog_Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="StartUpModeControl_ShiftF7" xml:space="preserve">
+    <value>Shift + F7</value>
+  </data>
+  <data name="StartUpModeControl_ShiftF8" xml:space="preserve">
+    <value>Shift + F8</value>
+  </data>
+  <data name="StartUpModeControl_ShiftF9" xml:space="preserve">
+    <value>Shift + F9</value>
+  </data>
+  <data name="TabStopControl_RecordedOrderResults" xml:space="preserve">
+    <value>Recorded order results</value>
+  </data>
+  <data name="TextRangeControl_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="ColorContrast_NonTextObjectsTestResultHelpText" xml:space="preserve">
+    <value>Test result Graphical objects</value>
+  </data>
+  <data name="UpdateContainedDialogAutomationName" xml:space="preserve">
+    <value>There is an update available</value>
+  </data>
+  <data name="UpdateContainedDialog_An_update_is_required" xml:space="preserve">
+    <value>An update is required</value>
+  </data>
+  <data name="UpdateContainedDialog_An_update_is_available" xml:space="preserve">
+    <value>An update is available</value>
+  </data>
+  <data name="ReleaseNotes_ClickLoadErrorMessage" xml:space="preserve">
+    <value>There was an error loading the URL.\nURL: {0}</value>
+  </data>
+  <data name="ReleaseNotes_ClickURLErrorMessage" xml:space="preserve">
+    <value>The URL was not properly formatted.\nURL: {0}</value>
+  </data>
+  <data name="ReleaseNotesText" xml:space="preserve">
+    <value>View the release notes here.</value>
+  </data>
+  <data name="btnUpdateLaterText" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="btnUpdateNowText" xml:space="preserve">
+    <value>Update now</value>
+  </data>
+  <data name="closeDialogText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ApplicationSettingsControl_TelemetryDisabledByAdministrator" xml:space="preserve">
+    <value>Telemetry has been disabled by an administrator of this computer.</value>
   </data>
 </root>

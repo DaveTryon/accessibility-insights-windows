@@ -28,12 +28,14 @@ namespace AccessibilityInsights.SharedUx.FileIssue
             {
                 lock (_lockObject)
                 {
+#pragma warning disable CA1508 // Analyzer doesn't understand threading
                     if (_defaultInstance == null)
                     {
                         IssueReporterManager newInstance = new IssueReporterManager();
                         newInstance.RestorePersistedConfigurations();
                         _defaultInstance = newInstance;
                     }
+#pragma warning restore CA1508 // Analyzer doesn't understand threading
                 }
             }
             return _defaultInstance;
@@ -97,7 +99,7 @@ namespace AccessibilityInsights.SharedUx.FileIssue
 
         private void SaveConfigsDictionary(Dictionary<Guid, string> configsDictionary)
         {
-            _appConfig.IssueReporterSerializedConfigs = 
+            _appConfig.IssueReporterSerializedConfigs =
                 JsonConvert.SerializeObject(configsDictionary);
         }
 
@@ -119,10 +121,7 @@ namespace AccessibilityInsights.SharedUx.FileIssue
             }
         }
 
-        public Dictionary<Guid, IIssueReporting> GetIssueFilingOptionsDict()
-        {
-            return IssueReportingOptionsDict;
-        }
+        public Dictionary<Guid, IIssueReporting> IssueFilingOptionsDict => IssueReportingOptionsDict;
 
         /// <summary>
         /// Sets the issue reporter guid in the issue reporter manager and makes sure that the bug reporter instance is updated.

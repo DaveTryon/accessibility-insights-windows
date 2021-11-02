@@ -2,13 +2,17 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<NoWarn>RS0016</NoWarn>
-      <!-- used by Microsoft.CodeAnalysis.NetAnalyzers -->
-      <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <NoWarn>RS0016;CA1704;CA1708;CA1813;CA2201</NoWarn>
+    <!-- used by Microsoft.CodeAnalysis.NetAnalyzers -->
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="$(TEMP)\A11yInsightsVersionInfo.cs" Link="A11yInsightsVersionInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(TEMP)\A11yInsightsAttributesInfo.cs" Link="A11yInsightsAttributesInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -27,11 +31,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.2">
+    <PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Text.Analyzers" Version="2.6.4">
+    <PackageReference Include="Text.Analyzers" Version="3.3.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -322,15 +322,6 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Release notes.
-        /// </summary>
-        public static string btnReleaseNotesText {
-            get {
-                return ResourceManager.GetString("btnReleaseNotesText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string btnSaveAutomationPropertiesName {
@@ -372,24 +363,6 @@ namespace AccessibilityInsights.Properties {
         public static string btnTimerAutomationPropertiesName {
             get {
                 return ResourceManager.GetString("btnTimerAutomationPropertiesName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Later.
-        /// </summary>
-        public static string btnUpdateLaterText {
-            get {
-                return ResourceManager.GetString("btnUpdateLaterText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Update now.
-        /// </summary>
-        public static string btnUpdateNowText {
-            get {
-                return ResourceManager.GetString("btnUpdateNowText", resourceCulture);
             }
         }
         
@@ -745,20 +718,38 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An update is available..
+        ///   Looks up a localized string similar to 5.
         /// </summary>
-        public static string MainWindow_ShowUpgradeDialog_An_update_is_available {
+        public static string MainWindow_DefaultTimerDelayInSeconds {
             get {
-                return ResourceManager.GetString("MainWindow_ShowUpgradeDialog_An_update_is_available", resourceCulture);
+                return ResourceManager.GetString("MainWindow_DefaultTimerDelayInSeconds", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An update is required..
+        ///   Looks up a localized string similar to One.
         /// </summary>
-        public static string MainWindow_ShowUpgradeDialog_An_update_is_required {
+        public static string MainWindow_One {
             get {
-                return ResourceManager.GetString("MainWindow_ShowUpgradeDialog_An_update_is_required", resourceCulture);
+                return ResourceManager.GetString("MainWindow_One", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _?.
+        /// </summary>
+        public static string MainWindow_QuestionMark {
+            get {
+                return ResourceManager.GetString("MainWindow_QuestionMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two.
+        /// </summary>
+        public static string MainWindow_Two {
+            get {
+                return ResourceManager.GetString("MainWindow_Two", resourceCulture);
             }
         }
         
@@ -862,24 +853,6 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was an error loading the URL.\nURL:.
-        /// </summary>
-        public static string ReleaseNotes_ClickLoadErrorMessage {
-            get {
-                return ResourceManager.GetString("ReleaseNotes_ClickLoadErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The URL was not properly formatted.\nURL:.
-        /// </summary>
-        public static string ReleaseNotes_ClickURLErrorMessage {
-            get {
-                return ResourceManager.GetString("ReleaseNotes_ClickURLErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to There was a problem updating the application. Because this is a required update, the app will be shut down. Please check your internet connection and try again..
         /// </summary>
         public static string RequiredUpdateFailedUnknown {
@@ -907,6 +880,15 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ..
+        /// </summary>
+        public static string SentenceEndPeriod {
+            get {
+                return ResourceManager.GetString("SentenceEndPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only the first {0:N0} elements are being scanned. You will not be able to save the results or file any bugs from this scan..
         /// </summary>
         public static string SetElementCultureInfoFormatMessage {
@@ -930,6 +912,33 @@ namespace AccessibilityInsights.Properties {
         public static string SetElementInspectTestDetail {
             get {
                 return ResourceManager.GetString("SetElementInspectTestDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available patterns:.
+        /// </summary>
+        public static string SnapshotModeControl_AvailablePatterns {
+            get {
+                return ResourceManager.GetString("SnapshotModeControl_AvailablePatterns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available properties.
+        /// </summary>
+        public static string SnapshotModeControl_AvailableProperties {
+            get {
+                return ResourceManager.GetString("SnapshotModeControl_AvailableProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Glimpse: {0}.
+        /// </summary>
+        public static string SnapshotModeControl_GlimpseFormat {
+            get {
+                return ResourceManager.GetString("SnapshotModeControl_GlimpseFormat", resourceCulture);
             }
         }
         
@@ -1264,15 +1273,6 @@ namespace AccessibilityInsights.Properties {
         public static string TitleTextMapTestTabStops {
             get {
                 return ResourceManager.GetString("TitleTextMapTestTabStops", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is an update available.
-        /// </summary>
-        public static string UpdateDialogWindowTitle {
-            get {
-                return ResourceManager.GetString("UpdateDialogWindowTitle", resourceCulture);
             }
         }
         

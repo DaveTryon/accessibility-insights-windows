@@ -26,7 +26,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         const int Default_Font_Height = 25;
 
         IntPtr hWnd;
-        
+
         public string WindowClassName { get; private set; }
         IntPtr hInstance;
 
@@ -117,7 +117,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
             set
             {
                 this.text = value;
-                if (value == null || string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     this.IsVisible = false;
                 }

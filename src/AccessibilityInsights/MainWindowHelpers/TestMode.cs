@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.Enums;
 using AccessibilityInsights.Misc;
+using AccessibilityInsights.SharedUx.Dialogs;
+using AccessibilityInsights.SharedUx.Highlighting;
+using AccessibilityInsights.SharedUx.Telemetry;
 using Axe.Windows.Actions;
 using Axe.Windows.Desktop.Settings;
-using AccessibilityInsights.SharedUx.Telemetry;
-using AccessibilityInsights.SharedUx.Dialogs;
 using System;
 using System.Globalization;
-using AccessibilityInsights.SharedUx.Highlighting;
-using AccessibilityInsights.CommonUxComponents.Dialogs;
 
 namespace AccessibilityInsights
 {
@@ -52,11 +52,11 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Start snapshot mode. 
+        /// Start snapshot mode.
         /// </summary>
         private void StartElementDetailView()
         {
-            var ecId = SelectAction.GetDefaultInstance().GetSelectedElementContextId();
+            var ecId = SelectAction.GetDefaultInstance().SelectedElementContextId;
             if (ecId != null)
             {
                 this.CurrentPage = AppPage.Test;
@@ -92,7 +92,7 @@ namespace AccessibilityInsights
         /// <param name="followUp">An action to perform after tests have been run</param>
         private void StartElementHowToFixView(Action followUp = null)
         {
-            var ecId = SelectAction.GetDefaultInstance().GetSelectedElementContextId();
+            var ecId = SelectAction.GetDefaultInstance().SelectedElementContextId;
 
             this.CurrentPage = AppPage.Test;
             this.CurrentView = TestView.ElementHowToFix;
@@ -131,18 +131,18 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Start fastpass mode. 
+        /// Start fastpass mode.
         /// </summary>
         private void StartTestAutomatedChecksView()
         {
-            var ec = SelectAction.GetDefaultInstance().GetSelectedElementContextId();
+            var ec = SelectAction.GetDefaultInstance().SelectedElementContextId;
 
             if (ec != null)
             {
                 DisableElementSelector();
 
                 ctrlCurMode.HideControl();
-                // make sure that we honor loaded data. but in this case, some of manual test should be disabled. 
+                // make sure that we honor loaded data. but in this case, some of manual test should be disabled.
                 ctrlTestMode.DataContextMode = GetDataContextModeForTest();
                 ctrlCurMode = ctrlTestMode;
                 ctrlCurMode.ShowControl();
@@ -174,7 +174,7 @@ namespace AccessibilityInsights
         /// <param name="view"></param>
         internal void SetCurrentViewAndUpdateUI(dynamic view)
         {
-            var ec = SelectAction.GetDefaultInstance().GetSelectedElementContextId();
+            var ec = SelectAction.GetDefaultInstance().SelectedElementContextId;
 
             this.CurrentView = view;
             if (ec != null)

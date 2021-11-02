@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using AccessibilityInsights.SharedUx.ViewModels;
 using Axe.Windows.Core.Bases;
 using Axe.Windows.Core.Results;
-using AccessibilityInsights.SharedUx.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
         }
 
         /// <summary>
-        /// Load the UI Automation elements hierarchy tree from JSON file. 
+        /// Load the UI Automation elements hierarchy tree from JSON file.
         /// it returns the root UI Automation element from the tree.
         /// </summary>
         /// <param name="path"></param>
@@ -50,10 +50,11 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
                     var next = elements.Dequeue();
                     if (next.Children != null)
                     {
-                        next.Children.ForEach(c => {
+                        foreach (var c in next.Children)
+                        {
                             c.Parent = next;
                             elements.Enqueue(c);
-                        });
+                        };
                     }
                 }
             }
@@ -62,7 +63,7 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
         }
 
         /// <summary>
-        /// Populates all descendents with test results and sets them to 
+        /// Populates all descendents with test results and sets them to
         ///     pass if the control is a button (any predicate would work)
         ///     and returns number that should pass
         /// </summary>
@@ -70,15 +71,17 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
         /// <returns></returns>
         private static void PopulateChildrenTests(A11yElement e)
         {
-            e.ScanResults.Items.ForEach(item => {
+            foreach (var item in e.ScanResults.Items)
+            {
                 item.Items = new List<RuleResult>();
                 RuleResult r = new RuleResult();
                 r.Status = e.ControlTypeId == Axe.Windows.Core.Types.ControlType.UIA_ButtonControlTypeId ? ScanStatus.Pass : ScanStatus.Fail;
                 item.Items.Add(r);
-            });
-            e.Children.ForEach(c => {
+            };
+            foreach (var c in e.Children)
+            {
                 PopulateChildrenTests(c);
-            });
+            };
         }
     }
 }

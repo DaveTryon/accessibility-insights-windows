@@ -76,7 +76,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
         /// <summary>
         /// Set Background image with Element on highlighter
-        /// it is to set bounding rectangle of background image based on screenshot element. 
+        /// it is to set bounding rectangle of background image based on screenshot element.
         /// </summary>
         /// <param name="ecId"></param>
         /// <param name="eId"></param>
@@ -135,6 +135,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
         static ImageOverlayDriver defaultHighlightImageAction;
 
+#pragma warning disable CA1024 // This should not be a property
         /// <summary>
         /// Get default HighlightAction
         /// </summary>
@@ -148,6 +149,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
             return defaultHighlightImageAction;
         }
+#pragma warning restore CA1024 // This should not be a property
 
         /// <summary>
         /// Clear default Highlighter instance

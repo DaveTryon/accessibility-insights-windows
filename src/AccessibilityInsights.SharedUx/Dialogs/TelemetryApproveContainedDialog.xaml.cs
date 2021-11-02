@@ -55,14 +55,14 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             DialogResult = ckbxAgreeToHelp.IsChecked ?? false;
 
             if (DialogResult)
-                TelemetryController.EnableTelemetry();
+                TelemetryController.OptIntoTelemetry();
             else
-                TelemetryController.DisableTelemetry();
+                TelemetryController.OptOutOfTelemetry();
 
             WaitHandle.Set();
         }
 
-        protected override void SetFocusOnDefaultControl()
+        public override void SetFocusOnDefaultControl()
         {
             btnExit.Focus();
         }

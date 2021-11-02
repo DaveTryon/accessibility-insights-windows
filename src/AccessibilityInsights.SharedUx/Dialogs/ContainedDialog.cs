@@ -24,7 +24,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
         /// </summary>
         protected Action<ContainedDialog> HideDialog { get; set; }
 
-        public ContainedDialog()
+        protected ContainedDialog()
         {
             KeyDown += ContainedDialog_KeyUp;
             var rd = new ResourceDictionary()
@@ -55,7 +55,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             WaitHandle.Set();
         }
 
-        protected abstract void SetFocusOnDefaultControl();
+        public abstract void SetFocusOnDefaultControl();
 
         public Task<bool> ShowDialog(Action<ContainedDialog> hideDialog)
         {

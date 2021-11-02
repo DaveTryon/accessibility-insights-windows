@@ -121,14 +121,14 @@ namespace AccessibilityInsights
         /// <summary>
         /// allow/disallow Element selection or mode switch
         /// </summary>
-        /// <param name="allow"></param>
-        public void SetAllowFurtherAction(bool allow)
+        /// <param name="enabled"></param>
+        public void SetAllowFurtherAction(bool enabled)
         {
             lock (_lockObject)
             {
-                if (AllowFurtherAction != allow && IsCurrentModeAllowingSelection())
+                if (AllowFurtherAction != enabled && IsCurrentModeAllowingSelection())
                 {
-                    AllowFurtherAction = allow;
+                    AllowFurtherAction = enabled;
                 }
             }
         }
@@ -150,15 +150,19 @@ namespace AccessibilityInsights
 
         public MainWindow()
         {
+            TelemetryBuffer telemetryBuffer = new TelemetryBuffer();
+
             SystemEvents.UserPreferenceChanging += SystemEvents_UserPreferenceChanging;
 
             SetColorTheme();
 
-            ///in case we need to do any debugging with elevated app
+            // in case we need to do any debugging with elevated app
             SupportDebugging();
 
             // create necessary config folders & their internal config files
-            PopulateConfigurations();
+            PopulateConfigurations(telemetryBuffer);
+
+            InitializeTelemetry();
 
             SetFontSize();
 
@@ -173,7 +177,7 @@ namespace AccessibilityInsights
             this.TreeNavigator = new TreeNavigator(this);
             this.TreeNavigator.SelectionChanged += this.HandleTargetSelectionChanged;
 
-            InitTelemetry();
+            InitTelemetry(telemetryBuffer);
 
             InitPanes();
         }
@@ -181,7 +185,7 @@ namespace AccessibilityInsights
         /// <summary>
         /// Set up some context properties like installation id, app version, session id
         /// </summary>
-        private static void InitTelemetry()
+        private static void InitTelemetry(TelemetryBuffer telemetryBuffer)
         {
             var configFolder = ConfigurationManager.GetDefaultInstance().SettingsProvider.ConfigurationFolderPath;
             // Initialize user info from file if it exists, reset if needed, and re-serialize
@@ -192,6 +196,7 @@ namespace AccessibilityInsights
             Logger.AddOrUpdateContextProperty(TelemetryProperty.SessionType, "Desktop");
             Logger.AddOrUpdateContextProperty(TelemetryProperty.ReleaseChannel, ConfigurationManager.GetDefaultInstance().AppConfig.ReleaseChannel.ToString());
             Logger.PublishTelemetryEvent(Misc.TelemetryEventFactory.ForMainWindowStartup());
+            telemetryBuffer.ProcessEventFactories(Logger.PublishTelemetryEvent);
         }
 
         /// <summary>
@@ -202,7 +207,7 @@ namespace AccessibilityInsights
         private void SystemEvents_UserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
         {
             // TODO DHT: General triggers when changing dark mode--is it too expensive?
-            if (e.Category == UserPreferenceCategory.Color || 
+            if (e.Category == UserPreferenceCategory.Color ||
                 e.Category == UserPreferenceCategory.VisualStyle ||
                 e.Category == UserPreferenceCategory.General)
             {
@@ -270,7 +275,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// To debug elevated app, Set "AttachAccessibilityInsights" Env Variable and run it. 
+        /// To debug elevated app, Set "AttachAccessibilityInsights" Env Variable and run it.
         /// </summary>
         private static void SupportDebugging()
         {
@@ -302,7 +307,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Handle OnLoaded Event for Main window. 
+        /// Handle OnLoaded Event for Main window.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -320,7 +325,7 @@ namespace AccessibilityInsights
 
             handleWindowStateChange();
 
-            // update version string. 
+            // update version string.
             UpdateVersionString();
 
             Initialize();
@@ -391,7 +396,7 @@ namespace AccessibilityInsights
                 {
                     Debug.WriteLine(Properties.Resources.onClosedDebugMessage);
 
-                    // close silently since it is the end of process. 
+                    // close silently since it is the end of process.
                 }
 #pragma warning restore CA1031 // Do not catch general exception types
                 finally
@@ -665,7 +670,7 @@ namespace AccessibilityInsights
 
         #region LeftNavButtons
         /// <summary>
-        /// Event handler for Inspect Tab button. 
+        /// Event handler for Inspect Tab button.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -721,6 +726,7 @@ namespace AccessibilityInsights
                 if (selectedIssueReporterGuid != Guid.Empty)
                 {
                     IssueReporterManager.GetInstance().SetIssueReporter(selectedIssueReporterGuid);
+                    IssueReporter.SetConfigurationPath(ConfigurationManager.GetDefaultInstance().SettingsProvider.ConfigurationFolderPath);
                     var serializedConfigsDict = appConfig.IssueReporterSerializedConfigs;
                     if (serializedConfigsDict != null)
                     {
@@ -916,7 +922,7 @@ namespace AccessibilityInsights
             int sec;
             if (int.TryParse(tbxTimer.Text, out sec))
             {
-                sec = Math.Max(sec, 1); // make sure that delay is bigger than 1 seconds. 
+                sec = Math.Max(sec, 1); // make sure that delay is bigger than 1 seconds.
                 this.tbxTimer.Text = sec.ToString(CultureInfo.InvariantCulture); // set the new value back.
                 this.StartTimerAutoSnap(sec);
             }
@@ -963,7 +969,7 @@ namespace AccessibilityInsights
         /// <param name="e"></param>
         private void btnCrumbOne_Click(object sender, RoutedEventArgs e)
         {
-            /// make sure that we are not capturing data. 
+            /// make sure that we are not capturing data.
             if (IsCapturingData() == false)
             {
                 switch (this.CurrentPage)

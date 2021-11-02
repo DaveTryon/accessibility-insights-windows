@@ -23,10 +23,10 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
 {
     /// <summary>
     /// Color contrast user control
-    /// 
+    ///
     /// maintains two color choosers and computes color contrast between
     /// them when they are populated
-    /// 
+    ///
     /// maintains an eyedropper screenshot that is shared
     /// between the two color choosers
     /// </summary>
@@ -45,7 +45,7 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
             InitializeComponent();
             this.ContrastVM = new ColorContrastViewModel();
 
-            // When user interacts with color chooser, reset selected element, hide pixel locations, and 
+            // When user interacts with color chooser, reset selected element, hide pixel locations, and
             //  begin recording if eyedropper action is selected
             this.firstChooser.ColorChangerInvoked += Chooser_ColorPickerClicked;
             this.secondChooser.ColorChangerInvoked += Chooser_ColorPickerClicked;
@@ -115,16 +115,23 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
         {
             var bmc = new BitmapCollection(bitmap);
             var result = bmc.RunColorContrastCalculation();
-            var pair = result.GetMostLikelyColorPair();
+            var pair = result.MostLikelyColorPair;
 
             if (pair == null)
             {
                 throw new InvalidOperationException("Unable to determine colors!");
             }
 
+            SetConfidenceVisibility(Visibility.Visible);
             this.ContrastVM.FirstColor = pair.DarkerColor.DrawingColor.ToMediaColor();
             this.ContrastVM.SecondColor = pair.LighterColor.DrawingColor.ToMediaColor();
             tbConfidence.Text = result.ConfidenceValue().ToString();
+        }
+
+        private void SetConfidenceVisibility(Visibility visibility)
+        {
+            tbConfidence.Visibility = visibility;
+            tbConfidenceLabel.Visibility = visibility;
         }
 
         private void RaiseLiveRegionEvents()
@@ -142,7 +149,7 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Chooser_ColorPickerClicked(object sender, SourceArgs e)
+        private void Chooser_ColorPickerClicked(object sender, ColorChangedEventArgs e)
         {
             SetAutoCCAState(false);
 
@@ -164,18 +171,12 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
             this.ContrastVM.Reset();
             this.firstChooser.Reset();
             this.secondChooser.Reset();
-            this.tbConfidence.Text = string.Empty;
+            SetConfidenceVisibility(Visibility.Hidden);
         }
 
-        public object getConfidence()
-        {
-            return this.tbConfidence.Text;
-        }
+        public object Confidence => this.tbConfidence.Text;
 
-        public object getRatio()
-        {
-            return this.output.Text;
-        }
+        public object Ratio => this.output.Text;
 
         /// <summary>
         /// App configuration
@@ -285,14 +286,7 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
                 CCAMode.HandleToggleStatusChanged(isEnabled);
             }
 
-            spConfidence.Children.Clear();
-            tbConfidence.Text = "";
-
-            if (isEnabled)
-            {
-                spConfidence.Children.Add(tbConfidenceLabel);
-                spConfidence.Children.Add(tbConfidence);
-            }
+            SetConfidenceVisibility(Visibility.Hidden);
         }
 
         public void SetAutoCCAState(bool state)
@@ -319,9 +313,9 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
             this.ctrlProgressRing.Deactivate();
         }
 
-        public new void Focus() 
+        public new void Focus()
         {
-            this.hlLearnMore.Focus();
+            this.tbInstructions.Focus();
         }
     }
 }
