@@ -3,17 +3,17 @@
 using AccessibilityInsights.SharedUx.Utilities;
 using System.Drawing;
 
-using Condition = MathNet.Numerics.LinearAlgebra.Matrix<double>;
+using ConditionMatrix = MathNet.Numerics.LinearAlgebra.Matrix<double>;
 
 namespace AccessibilityInsights.SharedUx.ColorBlindness
 {
     public static class VisionSimulator
     {
-        private readonly static Condition Protonopia;
-        private readonly static Condition Deuteranopia;
-        private readonly static Condition Tritanopia;
-        private readonly static Condition Achromatopsia;
-        private readonly static Condition TypicalVision;
+        private readonly static ConditionMatrix Protonopia;
+        private readonly static ConditionMatrix Deuteranopia;
+        private readonly static ConditionMatrix Tritanopia;
+        private readonly static ConditionMatrix Achromatopsia;
+        private readonly static ConditionMatrix TypicalVision;
 
 #pragma warning disable CA1810 // Initialize reference type static fields inline
         static VisionSimulator()
@@ -53,14 +53,14 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
             };
 #pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
 
-            Protonopia = Condition.Build.DenseOfArray(protonopia);
-            Deuteranopia = Condition.Build.DenseOfArray(deuteranopia);
-            Tritanopia = Condition.Build.DenseOfArray(tritanopia);
-            Achromatopsia = Condition.Build.DenseOfArray(achromatopsia);
-            TypicalVision = Condition.Build.DenseOfArray(typicalVision);
+            Protonopia = ConditionMatrix.Build.DenseOfArray(protonopia);
+            Deuteranopia = ConditionMatrix.Build.DenseOfArray(deuteranopia);
+            Tritanopia = ConditionMatrix.Build.DenseOfArray(tritanopia);
+            Achromatopsia = ConditionMatrix.Build.DenseOfArray(achromatopsia);
+            TypicalVision = ConditionMatrix.Build.DenseOfArray(typicalVision);
         }
 
-        private static Condition GetCondition(VisionCondition visionCondition)
+        private static ConditionMatrix GetConditionMatrix(VisionCondition visionCondition)
         {
             switch (visionCondition)
             {
@@ -74,35 +74,35 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 
         internal static void SimulateCondition(Bitmap image, VisionCondition visionCondition)
         {
-            image.UpdateBitmap(color => SimulateCondition(color, GetCondition(visionCondition)));
-        }
-
-        internal static void SimulateCondition(Bitmap image, Condition condition)
-        {
-            image.UpdateBitmap(color => SimulateCondition(color, condition));
+            image.UpdateBitmap(color => SimulateCondition(color, GetConditionMatrix(visionCondition)));
         }
 
         internal static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, VisionCondition visionCondition)
         {
-            return SimulateCondition(color, GetCondition(visionCondition));
+            return SimulateCondition(color, GetConditionMatrix(visionCondition));
         }
 
         internal static Color SimulateCondition(Color color, VisionCondition visionCondition)
         {
-            return SimulateCondition(color, GetCondition(visionCondition));
+            return SimulateCondition(color, GetConditionMatrix(visionCondition));
         }
 
-        internal static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, Condition condition)
+        private static void SimulateCondition(Bitmap image, ConditionMatrix conditionMatrix)
+        {
+            image.UpdateBitmap(color => SimulateCondition(color, conditionMatrix));
+        }
+
+        private static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, ConditionMatrix conditionMatrix)
         {
             Color convertedColor = Color.FromArgb(color.A, color.R, color.G, color.B);
-            Color simulatedColor = SimulateCondition(convertedColor, condition);
+            Color simulatedColor = SimulateCondition(convertedColor, conditionMatrix);
             return System.Windows.Media.Color.FromArgb(simulatedColor.A, simulatedColor.R, simulatedColor.G, simulatedColor.B);
         }
 
-        internal static Color SimulateCondition(Color inputColor, Condition condition)
+        private static Color SimulateCondition(Color inputColor, ConditionMatrix conditionMatrix)
         {
             LMSColor lms = new LMSColor(inputColor);
-            lms.ApplyTransform(condition);
+            lms.ApplyTransform(conditionMatrix);
             return lms.RgbColor;
         }
     }
