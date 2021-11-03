@@ -25,10 +25,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public ColorContrastViewModel()
-        {
-            _currentVisionCondition = VisionCondition.Achromatopsia;
-        }
+        public ColorContrastViewModel() {}
 
         /// <summary>
         /// Reset fields to initial state

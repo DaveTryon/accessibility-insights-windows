@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
+using AccessibilityInsights.SharedUx.ColorBlindness;
 using AccessibilityInsights.SharedUx.Dialogs;
 using AccessibilityInsights.SharedUx.Interfaces;
 using AccessibilityInsights.SharedUx.Settings;
@@ -171,6 +172,7 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
             this.ContrastVM.Reset();
             this.firstChooser.Reset();
             this.secondChooser.Reset();
+            visionSimulationCbx.SelectedIndex = 0;
             SetConfidenceVisibility(Visibility.Hidden);
         }
 
@@ -316,6 +318,33 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
         public new void Focus()
         {
             this.tbInstructions.Focus();
+        }
+
+        private void visionSimulationCbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ContrastVM != null)
+            {
+                SetVisionCondition();
+            }
+        }
+
+        private void SetVisionCondition()
+        {
+            VisionCondition[] indexMapping = new VisionCondition[]
+            {
+                    VisionCondition.TypicalVision,
+                    VisionCondition.Deuteranopia,
+                    VisionCondition.Protonopia,
+                    VisionCondition.Tritanopia,
+                    VisionCondition.Achromatopsia,
+            };
+
+            int index = visionSimulationCbx.SelectedIndex;
+
+            if (index >= 0 && index < indexMapping.Length)
+            {
+                ContrastVM.CurrentVisionCondition = indexMapping[index];
+            }
         }
     }
 }

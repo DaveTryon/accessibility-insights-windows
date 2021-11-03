@@ -37,6 +37,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="{x:Static Properties:Resources.ColorContrastAutomationPropertiesName}"
                 FontSize="{DynamicResource ConstXXLTextSize}"
@@ -62,7 +63,22 @@
                 <TextBlock Grid.Row="3" FontSize="{DynamicResource StandardTextSize}" Margin="0,0,0,0" TextWrapping="Wrap" Grid.ColumnSpan="2" VerticalAlignment="Center" Focusable="True" Style="{StaticResource TbFocusable}">
                     <Run FontSize="{DynamicResource StandardTextSize}" Foreground="{DynamicResource ResourceKey=SecondaryFGBrush}" Text="{x:Static Properties:Resources.ColorContrast_AutoDetectGuidance}" />
                 </TextBlock>
-                <Grid Grid.Row="4" Grid.Column="0" Margin="0,16,0,0">
+                <Grid Grid.Row="4" Grid.ColumnSpan="2" Height="24" Margin="0,16,0,0" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Color Blindness Simulation" Grid.Column="0" VerticalAlignment="Center" Style="{StaticResource lblDark}"/>
+                    <ComboBox Name="visionSimulationCbx" Grid.Column="2" Width="300" SelectionChanged="visionSimulationCbx_SelectionChanged">
+                        <ComboBoxItem IsSelected="True">None (typical vision)</ComboBoxItem>
+                        <ComboBoxItem>Deuteranopia (greens look more like red)</ComboBoxItem>
+                        <ComboBoxItem>Protanopia (reds look more like green)</ComboBoxItem>
+                        <ComboBoxItem>Tritanopia (blues and greens look similar)</ComboBoxItem>
+                        <ComboBoxItem>Achromatopsia (all colors are grayscale)</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="0" Margin="0,16,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" MinWidth="240"/>
                         <ColumnDefinition Width="1*"/>
@@ -98,7 +114,7 @@
                                />
                     </StackPanel>
                 </Grid>
-                <Border Margin="20,43,20,0" Grid.Row="4" Grid.Column="1" BorderThickness="2" BorderBrush="{DynamicResource ResourceKey=CCABorderBrush}"
+                <Border Margin="20,43,20,0" Grid.Row="5" Grid.Column="1" BorderThickness="2" BorderBrush="{DynamicResource ResourceKey=CCABorderBrush}"
                         VerticalAlignment="Top" Height="110" Width="200">
                     <StackPanel Background="{DynamicResource ResourceKey=CCABackgroundBrush}">
                         <StackPanel Orientation="Vertical" Margin="10,6,0,0" MinWidth="132">
@@ -119,7 +135,7 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Grid Grid.Row="5" Margin="0,12,115,0" Grid.ColumnSpan="2">
+                <Grid Grid.Row="6" Margin="0,12,115,0" Grid.ColumnSpan="2">
                     <Grid.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="FontSize" Value="12"/>

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Utilities;
+using System;
 using System.Drawing;
 
 using ConditionMatrix = MathNet.Numerics.LinearAlgebra.Matrix<double>;
@@ -68,8 +69,10 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
                 case VisionCondition.Deuteranopia: return Deuteranopia;
                 case VisionCondition.Protonopia: return Protonopia;
                 case VisionCondition.Tritanopia: return Tritanopia;
-                default: return TypicalVision;
+                case VisionCondition.TypicalVision: return TypicalVision;
             }
+
+            throw new ArgumentException("Unknown condition type", nameof(visionCondition));
         }
 
         internal static void SimulateCondition(Bitmap image, VisionCondition visionCondition)
