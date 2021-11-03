@@ -14,7 +14,6 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
         private readonly static ConditionMatrix Deuteranopia;
         private readonly static ConditionMatrix Tritanopia;
         private readonly static ConditionMatrix Achromatopsia;
-        private readonly static ConditionMatrix TypicalVision;
 
 #pragma warning disable CA1810 // Initialize reference type static fields inline
         static VisionSimulator()
@@ -46,19 +45,12 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
                 { 0.212656, 0.715158, 0.072186 },
                 { 0.212656, 0.715158, 0.072186 },
             };
-            double[,] typicalVision =
-            {
-                { 1.0, 0.0, 0.0 },
-                { 0.0, 1.0, 0.0 },
-                { 0.0, 0.0, 1.0 },
-            };
 #pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
 
             Protonopia = ConditionMatrix.Build.DenseOfArray(protonopia);
             Deuteranopia = ConditionMatrix.Build.DenseOfArray(deuteranopia);
             Tritanopia = ConditionMatrix.Build.DenseOfArray(tritanopia);
             Achromatopsia = ConditionMatrix.Build.DenseOfArray(achromatopsia);
-            TypicalVision = ConditionMatrix.Build.DenseOfArray(typicalVision);
         }
 
         private static ConditionMatrix GetConditionMatrix(VisionCondition visionCondition)
@@ -69,7 +61,7 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
                 case VisionCondition.Deuteranopia: return Deuteranopia;
                 case VisionCondition.Protonopia: return Protonopia;
                 case VisionCondition.Tritanopia: return Tritanopia;
-                case VisionCondition.TypicalVision: return TypicalVision;
+                case VisionCondition.TypicalVision: return null;
             }
 
             throw new ArgumentException("Unknown condition type", nameof(visionCondition));
@@ -77,7 +69,12 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 
         internal static void SimulateCondition(Bitmap image, VisionCondition visionCondition)
         {
-            image.UpdateBitmap(color => SimulateCondition(color, GetConditionMatrix(visionCondition)));
+            ConditionMatrix conditionMatrix = GetConditionMatrix(visionCondition);
+
+            if (conditionMatrix == null) // Perf optimization for typical vision
+                return;
+
+            image.UpdateBitmap(color => SimulateCondition(color, conditionMatrix));
         }
 
         internal static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, VisionCondition visionCondition)
@@ -92,6 +89,9 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 
         private static System.Windows.Media.Color SimulateCondition(System.Windows.Media.Color color, ConditionMatrix conditionMatrix)
         {
+            if (conditionMatrix == null) // Perf optimization for typical vision
+                return color;
+
             Color convertedColor = Color.FromArgb(color.A, color.R, color.G, color.B);
             Color simulatedColor = SimulateCondition(convertedColor, conditionMatrix);
             return System.Windows.Media.Color.FromArgb(simulatedColor.A, simulatedColor.R, simulatedColor.G, simulatedColor.B);
@@ -99,6 +99,9 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 
         private static Color SimulateCondition(Color inputColor, ConditionMatrix conditionMatrix)
         {
+            if (conditionMatrix == null) // Perf optimization for typical vision
+                return inputColor;
+
             LMSColor lms = new LMSColor(inputColor);
             lms.ApplyTransform(conditionMatrix);
             return lms.RgbColor;
