@@ -74,6 +74,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
               <File Source="..\AccessibilityInsights\bin\Release\net472\Axe.Windows.Win32.dll" />
               <File Source="..\AccessibilityInsights\bin\Release\net472\Ben.Demystifier.dll" />
               <File Source="..\AccessibilityInsights\bin\Release\net472\CommandLine.dll" />
+              <File Source="..\AccessibilityInsights\bin\Release\net472\MathNet.Numerics.dll" />
               <File Source="..\AccessibilityInsights\bin\Release\net472\Microsoft.ApplicationInsights.dll" />
               <File Source="..\AccessibilityInsights\bin\Release\net472\Microsoft.Deployment.WindowsInstaller.dll" />
               <File Source="..\AccessibilityInsights\bin\Release\net472\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
