@@ -152,169 +152,169 @@ namespace AccessibilityInsights.Extensions.AzureDevOpsTests.FileIssue
         }
 
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateString_OriginalStringIsNull_ReturnsNull()
-        {
-            const string originalString = null;
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("TruncateString", originalString, 3, "!!!") as string;
-            Assert.IsNull(result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateString_OriginalStringIsNull_ReturnsNull()
+        //{
+        //    const string originalString = null;
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("TruncateString", originalString, 3, "!!!") as string;
+        //    Assert.IsNull(result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateString_OriginalStringIsWithinLimit_ReturnsOriginalString()
-        {
-            const string originalString = "abc";
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("TruncateString", originalString, 3, "!!!") as string;
-            Assert.AreEqual(originalString, result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateString_OriginalStringIsWithinLimit_ReturnsOriginalString()
+        //{
+        //    const string originalString = "abc";
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("TruncateString", originalString, 3, "!!!") as string;
+        //    Assert.AreEqual(originalString, result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateString_OriginalStringExceedsLimit_ReturnsTruncatedOriginalStringbWithSuffix()
-        {
-            const string originalString = "abcd";
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("TruncateString", originalString, 3, "!!!") as string;
-            Assert.AreEqual("abc!!!", result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateString_OriginalStringExceedsLimit_ReturnsTruncatedOriginalStringbWithSuffix()
+        //{
+        //    const string originalString = "abcd";
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("TruncateString", originalString, 3, "!!!") as string;
+        //    Assert.AreEqual("abc!!!", result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void RemoveSurroundingBrackets_OriginalStringIsNull_ReturnsNull()
-        {
-            const string originalString = null;
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
-            Assert.IsNull(result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void RemoveSurroundingBrackets_OriginalStringIsNull_ReturnsNull()
+        //{
+        //    const string originalString = null;
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
+        //    Assert.IsNull(result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void RemoveSurroundingBrackets_OriginalStringHasNoLeadingBracket_ReturnsOriginalString()
-        {
-            const string originalString = "abc]";
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
-            Assert.AreEqual(originalString, result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void RemoveSurroundingBrackets_OriginalStringHasNoLeadingBracket_ReturnsOriginalString()
+        //{
+        //    const string originalString = "abc]";
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
+        //    Assert.AreEqual(originalString, result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void RemoveSurroundingBrackets_OriginalStringHasNoTrailingBracket_ReturnsOriginalString()
-        {
-            const string originalString = "[abc";
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
-            Assert.AreEqual(originalString, result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void RemoveSurroundingBrackets_OriginalStringHasNoTrailingBracket_ReturnsOriginalString()
+        //{
+        //    const string originalString = "[abc";
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
+        //    Assert.AreEqual(originalString, result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void RemoveSurroundingBrackets_OriginalStringHasLeadingAndTrailingBrackets_ReturnsSubstring()
-        {
-            const string originalString = "[abc]";
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
-            Assert.AreEqual("abc", result);
-        }
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void RemoveSurroundingBrackets_OriginalStringHasLeadingAndTrailingBrackets_ReturnsSubstring()
+        //{
+        //    const string originalString = "[abc]";
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    string result = privateFileIssueHelpers.InvokeStatic("RemoveSurroundingBrackets", originalString) as string;
+        //    Assert.AreEqual("abc", result);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateSelectedFields_AllFieldsNull_AddsNullValues()
-        {
-            Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
-            IssueInformation issueInfo = new IssueInformation();
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateSelectedFields_AllFieldsNull_AddsNullValues()
+        //{
+        //    Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
+        //    IssueInformation issueInfo = new IssueInformation();
 
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
 
-            Assert.AreEqual(4, issueFieldPairs.Count);
-            Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
-            Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
-            Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
-            Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
-        }
+        //    Assert.AreEqual(4, issueFieldPairs.Count);
+        //    Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateSelectedFields_ProcessNameIsSpecified_AddsProcessNameValue()
-        {
-            string originalProcessName = new string('x', 60);
-            Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
-            IssueInformation issueInfo = new IssueInformation(processName: originalProcessName);
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateSelectedFields_ProcessNameIsSpecified_AddsProcessNameValue()
+        //{
+        //    string originalProcessName = new string('x', 60);
+        //    Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
+        //    IssueInformation issueInfo = new IssueInformation(processName: originalProcessName);
 
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
 
-            Assert.AreEqual(4, issueFieldPairs.Count);
-            string modifiedProcessName = issueFieldPairs[IssueField.ProcessName];
-            Assert.AreEqual(new string('x', 50) + ".exe", modifiedProcessName);
-            Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
-            Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
-            Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
-        }
+        //    Assert.AreEqual(4, issueFieldPairs.Count);
+        //    string modifiedProcessName = issueFieldPairs[IssueField.ProcessName];
+        //    Assert.AreEqual(new string('x', 50) + ".exe", modifiedProcessName);
+        //    Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateSelectedFields_GlimpseIsSpecified_AddsGlimpseValue()
-        {
-            string originalGlimpse = new string('y', 60);
-            Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
-            IssueInformation issueInfo = new IssueInformation(glimpse: originalGlimpse);
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateSelectedFields_GlimpseIsSpecified_AddsGlimpseValue()
+        //{
+        //    string originalGlimpse = new string('y', 60);
+        //    Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
+        //    IssueInformation issueInfo = new IssueInformation(glimpse: originalGlimpse);
 
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
 
-            Assert.AreEqual(4, issueFieldPairs.Count);
-            string modifiedGlimpse = issueFieldPairs[IssueField.Glimpse];
-            Assert.AreEqual(new string('y', 50) + "...", modifiedGlimpse);
-            Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
-            Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
-            Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
-        }
+        //    Assert.AreEqual(4, issueFieldPairs.Count);
+        //    string modifiedGlimpse = issueFieldPairs[IssueField.Glimpse];
+        //    Assert.AreEqual(new string('y', 50) + "...", modifiedGlimpse);
+        //    Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateSelectedFields_TestMessagesIsSpecified_AddsTestMessagesValue()
-        {
-            string originalTestMessages = new string('z', 200);
-            Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
-            IssueInformation issueInfo = new IssueInformation(testMessages: originalTestMessages);
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateSelectedFields_TestMessagesIsSpecified_AddsTestMessagesValue()
+        //{
+        //    string originalTestMessages = new string('z', 200);
+        //    Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
+        //    IssueInformation issueInfo = new IssueInformation(testMessages: originalTestMessages);
 
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
 
-            Assert.AreEqual(4, issueFieldPairs.Count);
-            string modifiedTestMessages = issueFieldPairs[IssueField.TestMessages];
-            Assert.AreEqual(new string('z', 150) + "...open attached", modifiedTestMessages.Substring(0, 166));
-            Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
-            Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
-            Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
-        }
+        //    Assert.AreEqual(4, issueFieldPairs.Count);
+        //    string modifiedTestMessages = issueFieldPairs[IssueField.TestMessages];
+        //    Assert.AreEqual(new string('z', 150) + "...open attached", modifiedTestMessages.Substring(0, 166));
+        //    Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.RuleSource]);
+        //}
 
-        [TestMethod]
-        [Timeout(1000)]
-        public void TruncateSelectedFields_RuleSourceIsSpecified_AddsRuleSourceValue()
-        {
-            const string ruleSourceContent = "weather: cold and clear";
+        //[TestMethod]
+        //[Timeout(1000)]
+        //public void TruncateSelectedFields_RuleSourceIsSpecified_AddsRuleSourceValue()
+        //{
+        //    const string ruleSourceContent = "weather: cold and clear";
 
-            string originalRuleSource = '[' + ruleSourceContent + ']';
-            Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
-            IssueInformation issueInfo = new IssueInformation(ruleSource: originalRuleSource);
+        //    string originalRuleSource = '[' + ruleSourceContent + ']';
+        //    Dictionary<IssueField, string> issueFieldPairs = new Dictionary<IssueField, string>();
+        //    IssueInformation issueInfo = new IssueInformation(ruleSource: originalRuleSource);
 
-            PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
-            privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
+        //    PrivateType privateFileIssueHelpers = new PrivateType(typeof(FileIssueHelpers));
+        //    privateFileIssueHelpers.InvokeStatic("TruncateSelectedFields", issueInfo, issueFieldPairs);
 
-            Assert.AreEqual(4, issueFieldPairs.Count);
-            string modifiedRuleSource = issueFieldPairs[IssueField.RuleSource];
-            Assert.AreEqual(ruleSourceContent, modifiedRuleSource);
-            Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
-            Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
-            Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
-        }
+        //    Assert.AreEqual(4, issueFieldPairs.Count);
+        //    string modifiedRuleSource = issueFieldPairs[IssueField.RuleSource];
+        //    Assert.AreEqual(ruleSourceContent, modifiedRuleSource);
+        //    Assert.IsNull(issueFieldPairs[IssueField.ProcessName]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.Glimpse]);
+        //    Assert.IsNull(issueFieldPairs[IssueField.TestMessages]);
+        //}
     }
 }
