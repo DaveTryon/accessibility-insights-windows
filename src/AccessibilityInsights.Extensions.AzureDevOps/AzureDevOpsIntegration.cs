@@ -465,7 +465,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
             //  of the issue description, which will be interpreted as a space in the browser. This saves us characters, so we
             //  replace all the %20 with "+"
 
-            var finalUrl = GetTeamProjectUri(projectName, teamName) + "/_workItems/create/Bug?" + String.Join("&", escaped).Replace("%20", "+");
+            var finalUrl = GetTeamProjectUri(projectName, teamName) + "/_workItems/create/Bug?" + String.Join("&", escaped).Replace("%20", "+", StringComparison.InvariantCultureIgnoreCase);
             Uri.TryCreate(finalUrl, UriKind.Absolute, out Uri result);
             return result;
         }

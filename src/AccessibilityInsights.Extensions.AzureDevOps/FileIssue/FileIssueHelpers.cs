@@ -276,8 +276,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         /// <returns></returns>
         private static bool GuidsMatchInReproSteps(string targetGuid, string reproSteps)
         {
-            int filedIssueIdIndex = reproSteps.IndexOf(targetGuid, StringComparison.Ordinal);
-            return filedIssueIdIndex >= 0;
+            return reproSteps.Contains(targetGuid, StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -448,7 +447,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
             {
                 var name = Enum.GetName(typeof(IssueField), pair.Key);
                 var value = pair.Value ?? Properties.Resources.UnknownValue;
-                inputTemplate = inputTemplate.Replace($"@[{name}]@", value);
+                inputTemplate = inputTemplate.Replace($"@[{name}]@", value, StringComparison.InvariantCultureIgnoreCase);
             }
             return inputTemplate;
         }
@@ -488,7 +487,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
                 return null;
 
             if (originalString.Length > limit)
-                return originalString.Substring(0, limit) + suffix;
+                return string.Concat(originalString.AsSpan(0, limit), suffix);
 
             return originalString;
         }

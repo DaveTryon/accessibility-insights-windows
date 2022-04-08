@@ -130,7 +130,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
             {
                 var url = fileIssueBrowser.Source.PathAndQuery;
                 var savedUrlSubstrings = new List<String>() { "_queries/edit/", "_workitems/edit/", "_workitems?id=" };
-                int urlIndex = savedUrlSubstrings.FindIndex(str => url.Contains(str));
+                int urlIndex = savedUrlSubstrings.FindIndex(str => url.Contains(str, StringComparison.InvariantCultureIgnoreCase));
                 if (urlIndex >= 0)
                 {
                     var matched = savedUrlSubstrings[urlIndex];

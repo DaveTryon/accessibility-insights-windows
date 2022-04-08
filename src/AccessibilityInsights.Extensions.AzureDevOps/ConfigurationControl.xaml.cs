@@ -520,8 +520,8 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                 ModifyVisibility(vm, (inputVM) =>
                 {
                     return
-                        (inputVM.Project != null && inputVM.Project.Name.ToUpperInvariant().Contains(searchText.ToUpperInvariant()) ||
-                        (inputVM.Team != null && inputVM.Team.Name.ToUpperInvariant().Contains(searchText.ToUpperInvariant())));
+                        (inputVM.Project != null && inputVM.Project.Name.ToUpperInvariant().Contains(searchText.ToUpperInvariant(), StringComparison.InvariantCultureIgnoreCase) ||
+                        (inputVM.Team != null && inputVM.Team.Name.ToUpperInvariant().Contains(searchText.ToUpperInvariant(), StringComparison.InvariantCultureIgnoreCase)));
                 });
             }
         }
