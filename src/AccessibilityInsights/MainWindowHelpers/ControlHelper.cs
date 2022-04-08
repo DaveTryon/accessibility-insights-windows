@@ -218,7 +218,7 @@ namespace AccessibilityInsights
             foreach (var elem in visibleCommands)
             {
                 string name = elem.GetValue(AutomationProperties.NameProperty) as string;
-                var len = name.IndexOf(':') == -1 ? name.Length : name.IndexOf(':');
+                var len = name.Contains(':', StringComparison.InvariantCultureIgnoreCase) ? name.IndexOf(':', StringComparison.InvariantCultureIgnoreCase) : name.Length;
                 elem.SetValue(AutomationProperties.NameProperty, string.Format(CultureInfo.InvariantCulture, Properties.Resources.MainWindow_UpdateMainCommandButtons_0_1_of_2, name.Substring(0, len), count, visibleCommands.Count));
                 count++;
             }
