@@ -19,6 +19,15 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+    <COMReference Include="MSHTML">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>4</VersionMajor>
+      <Guid>3050f1c5-98b5-11cf-bb82-00aa00bdce0b</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +44,6 @@
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="Unofficial.Microsoft.mshtml" Version="7.0.3300" />
     <ProjectReference Include="..\AccessibilityInsights.CommonUxComponents\CommonUxComponents.csproj" />
     <ProjectReference Include="..\AccessibilityInsights.Extensions\Extensions.csproj" />
   </ItemGroup>

@@ -4,7 +4,7 @@ using AccessibilityInsights.Extensions.AzureDevOps.Enums;
 using AccessibilityInsights.Extensions.Helpers;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
 using Microsoft.Web.WebView2.Core;
-using mshtml;
+using MSHTML;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -235,7 +235,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
                     foreach (IHTMLDOMNode child in GetChildren(divnode))
                     {
                         string nodevalue = child.nodeValue?.ToString();
-                        if (nodevalue != null && nodevalue.Contains(keyText) == true)
+                        if (nodevalue != null && nodevalue.Contains(keyText, StringComparison.InvariantCultureIgnoreCase) == true)
                         {
                             node = divnode;
                             break;
