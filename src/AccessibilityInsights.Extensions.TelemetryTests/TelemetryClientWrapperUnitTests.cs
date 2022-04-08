@@ -23,14 +23,18 @@ namespace AccessibilityInsights.Extensions.TelemetryTests
         [Timeout(1000)]
         public void Ctor_ClientIsNotNull_DoesNotThrow()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             new TelemetryClientWrapper(new TelemetryClient());
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [TestMethod]
         [Timeout(1000)]
         public void TrackEvent_DoesNotThrow()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             ITelemetryClientWrapper wrapper = new TelemetryClientWrapper(new TelemetryClient());
+#pragma warning restore CS0618 // Type or member is obsolete
 
             wrapper.TrackEvent(new EventTelemetry());
         }
@@ -39,7 +43,9 @@ namespace AccessibilityInsights.Extensions.TelemetryTests
         [Timeout(1000)]
         public void TrackException_DoesNotThrow()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             ITelemetryClientWrapper wrapper = new TelemetryClientWrapper(new TelemetryClient());
+#pragma warning restore CS0618 // Type or member is obsolete
 
             wrapper.TrackException(new InvalidOperationException(), new Dictionary<string, string>());
         }
