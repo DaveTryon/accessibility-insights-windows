@@ -91,7 +91,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                 // reset connection state
                 Disconnect();
                 var credentials = new VssClientCredentials(false);
-                credentials.Storage = new VssClientCredentialStorage();
+                credentials.Storage = new VssClientCredentialStorage(null, null);  // TODO: Arguments?
                 credentials.PromptType = prompt;
                 _baseServerConnection = new VssConnection(url, credentials);
                 return _baseServerConnection.ConnectAsync();
