@@ -85,7 +85,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             if (ModKey == ModifierKeys.None)
                 return string.Empty;
 
-            return ModKey.ToString().Replace(" ", "");
+            return ModKey.ToString().Replace(" ", "", System.StringComparison.InvariantCultureIgnoreCase);
         }
 
         private string GetCleanKeyString()

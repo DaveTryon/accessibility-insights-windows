@@ -286,7 +286,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             else
             {
                 string name = (string)item.GetType().GetProperty("Name").GetValue(item);
-                return (name.IndexOf(textboxSearch.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+                return name.Contains(textboxSearch.Text, StringComparison.OrdinalIgnoreCase);
             }
         }
 

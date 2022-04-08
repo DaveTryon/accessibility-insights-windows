@@ -119,7 +119,7 @@ namespace AccessibilityInsights.SharedUx.Controls.CustomControls
 
         private void UpdateColumn(CustomGridViewColumn customCol)
         {
-            var gridName = $"Column_{Guid.NewGuid().ToString().Replace("-", "")}";
+            var gridName = $"Column_{Guid.NewGuid().ToString().Replace("-", "", StringComparison.InvariantCultureIgnoreCase)}";
 
             RegisterName(gridName, customCol);
             customCol.RegisteredName = gridName;

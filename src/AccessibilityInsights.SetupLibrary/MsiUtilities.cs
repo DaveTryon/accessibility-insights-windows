@@ -82,7 +82,7 @@ namespace AccessibilityInsights.SetupLibrary
                 RegistryKey commandKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Classes\A11y.Test\shell\open\command");
                 {
                     string command = (string)commandKey.GetValue("");
-                    return command.Substring(0, command.Length - 5).Replace("\"", "");
+                    return command.Substring(0, command.Length - 5).Replace("\"", "", StringComparison.InvariantCultureIgnoreCase);
                 }
             }
 #pragma warning disable CA1031 // Do not catch general exception types

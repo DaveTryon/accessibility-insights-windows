@@ -19,7 +19,7 @@ namespace AccessibilityInsights.Extensions.GitHub
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
 
-            link = link.Replace(@"\", "/").Trim(' ').TrimEnd('/');
+            link = link.Replace(@"\", "/", StringComparison.InvariantCultureIgnoreCase).Trim(' ').TrimEnd('/');
             string userNamePattern = string.Format(CultureInfo.InvariantCulture, Properties.Resources.UserNamePattern, AlphaNumericPattern);
             string repoNamePattern = string.Format(CultureInfo.InvariantCulture, Properties.Resources.RepoNamePattern, AlphaNumericPattern);
             string linkPattern = string.Format(CultureInfo.InvariantCulture, Properties.Resources.LinkPatttern, GitHubLink, userNamePattern, repoNamePattern);

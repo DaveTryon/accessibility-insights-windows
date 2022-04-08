@@ -125,7 +125,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
                 {
                     if (value.Length > Max_Text_Length)
                     {
-                        this.text = value.Substring(0, Max_Text_Length) + "...";
+                        this.text = string.Concat(value.AsSpan(0, Max_Text_Length), "...");
                     }
 
 #pragma warning disable CA2245 // Do not assign a property to itself.

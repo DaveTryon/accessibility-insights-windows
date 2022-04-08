@@ -204,7 +204,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             /// Trim node text if it contains a newline and append ...
             /// Full value will be available via tooltip
             int idx = p.NodeValue.IndexOfAny(new char[] { '\r', '\n' });
-            this.NodeValue = idx == -1 ? p.NodeValue : p.NodeValue.Substring(0, idx) + "...\"";
+            this.NodeValue = idx == -1 ? p.NodeValue : string.Concat(p.NodeValue.AsSpan(0, idx), "...\"");
 
             this.ToolTip = p.NodeValue;
 

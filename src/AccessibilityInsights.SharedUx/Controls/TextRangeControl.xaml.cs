@@ -159,7 +159,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             {
 
                 string name = (string)((TextAttributeViewModel)item).Name;
-                return (name.IndexOf(textboxSearch.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+                return name.Contains(textboxSearch.Text, StringComparison.OrdinalIgnoreCase);
             }
         }
 
