@@ -40,6 +40,8 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
 
         private Action<int> UpdateZoomLevel;
 
+        private readonly string _userDataFolder;
+
         /// <summary>
         /// Value to zoom the embedded web browser by
         /// </summary>
@@ -62,10 +64,10 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         public IssueFileForm(Uri url, bool topmost, int zoomLevel, Action<int> updateZoom, string configurationPath)
         {
             InitializeComponent();
+            _userDataFolder = Path.Combine(configurationPath, "WebView2");
             this.fileIssueBrowser.CreationProperties = new CoreWebView2CreationProperties
             {
-                // TODO: Pass this folder in from the main app!
-                UserDataFolder = Path.Combine(configurationPath, "WebView2")
+                UserDataFolder = _userDataFolder,
             };
             this.UpdateZoomLevel = updateZoom;
             this.makeTopMost = topmost;
@@ -168,7 +170,13 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
 
         private async void IssueFileForm_Load(object sender, EventArgs e)
         {
-            await this.fileIssueBrowser.EnsureCoreWebView2Async(null).ConfigureAwait(true);
+            CoreWebView2EnvironmentOptions options = new CoreWebView2EnvironmentOptions()
+            {
+                AllowSingleSignOnUsingOSPrimaryAccount = true,
+            };
+            CoreWebView2Environment environment = await CoreWebView2Environment.CreateAsync(null, _userDataFolder, options).ConfigureAwait(true);
+
+            await this.fileIssueBrowser.EnsureCoreWebView2Async(environment).ConfigureAwait(true);
             this.fileIssueBrowser.NavigationCompleted += NavigationComplete;
 
             this.TopMost = makeTopMost;
