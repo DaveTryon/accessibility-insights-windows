@@ -3,7 +3,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
-using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -72,7 +71,7 @@ namespace UITests
             _process = Process.Start(exePath, configPathArgument);
 
             const int attempts = 10; // this number should give us enough retries for the build to work
-            bool attached = WaitFor(() => !string.IsNullOrEmpty(_session?.Title), new TimeSpan(0,0,3), attempts, StartNewSession);
+            bool attached = WaitFor(() => !string.IsNullOrEmpty(_session?.Title), new TimeSpan(0, 0, 3), attempts, StartNewSession);
             driver = new AIWinDriver(_session, _process.Id);
 
             return attached;
@@ -132,15 +131,17 @@ namespace UITests
             var logPath = Path.Combine(testDir, "events.txt");
             using (StreamWriter w = File.AppendText(logPath))
             {
-                foreach (var e in Events)
+                // We sometimes see a race condition here, so use an index instead of an iterator
+                for (int index = 0; index < Events.Count; index++)
                 {
+                    var e = Events[index];
                     w.WriteLine($"{e.TimeGenerated},{e.Source},{e.Message}");
                 }
             }
             return logPath;
         }
 
-        protected bool WaitFor(Func<bool> checkSuccess, TimeSpan interval, int attempts, Action doUntilSuccess=null)
+        protected bool WaitFor(Func<bool> checkSuccess, TimeSpan interval, int attempts, Action doUntilSuccess = null)
         {
             while (attempts > 0 && !checkSuccess())
             {

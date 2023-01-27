@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Enums;
 using AccessibilityInsights.Win32;
@@ -11,8 +11,8 @@ using System.Windows.Media;
 namespace AccessibilityInsights.SharedUx.Highlighting
 {
     /// <summary>
-    /// Class Hilighter
-    /// hilight bounding rectangle and show tooltip
+    /// Class Highlighter
+    /// Highlight bounding rectangle and show tooltip
     /// </summary>
     public class Highlighter : IDisposable
     {
@@ -26,7 +26,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         private readonly string WndClassNameBase;
 
         /// <summary>
-        /// Hilighter constructor
+        /// Highlighter constructor
         /// </summary>
         /// <param name="color">RGB in int value</param>
         public Highlighter(HighlighterColor color = HighlighterColor.DefaultBrush, bool hasSnapshot = false)
@@ -78,8 +78,6 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         private bool isBorderVisible;
         private bool IsBorderVisible
         {
-            get => this.isBorderVisible;
-
             set
             {
                 if (this.isBorderVisible != value)
@@ -231,7 +229,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
             {
                 if (disposing)
                 {
-                    if(this.Border.Count != 0)
+                    if (this.Border.Count != 0)
                     {
                         this.Border.ForEach(b => b.Dispose());
                         this.Border.Clear();

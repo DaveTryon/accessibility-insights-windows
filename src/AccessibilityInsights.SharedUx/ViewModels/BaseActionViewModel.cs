@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.SharedUx.Telemetry;
@@ -19,7 +19,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// Base class for ActionViewModels
     /// ActionViewModel is to drive Action(method)s in a control
     /// </summary>
-    abstract public class BaseActionViewModel: ViewModelBase
+    public abstract class BaseActionViewModel : ViewModelBase
     {
         internal A11yPattern pattern;
         internal MethodInfo methodinfo;
@@ -41,7 +41,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// <summary>
         /// Execution status: succeeded or not
         /// </summary>
-        public bool IsSucceeded { get; private set;  }
+        public bool IsSucceeded { get; private set; }
 
         /// <summary>
         /// Parameters
@@ -78,7 +78,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         protected object[] GetParametersArray()
         {
             return (from p in this.Parameters
-                    select Convert.ChangeType(p.ParamValue, p.ParamType,CultureInfo.InvariantCulture)).ToArray();
+                    select Convert.ChangeType(p.ParamValue, p.ParamType, CultureInfo.InvariantCulture)).ToArray();
         }
 
         #region Command invoke
@@ -118,11 +118,11 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         }
 
         /// <summary>
-        /// overriden method to invoke method. it should be implemented by inherited method.
+        /// overridden method to invoke method. it should be implemented by inherited method.
         /// </summary>
         protected virtual void InvokeMethod()
         {
-            var ret = ControlPatternAction.RunAction(this.pattern.Element.UniqueId,this.pattern.Id, this.methodinfo.Name ,GetParametersArray());
+            var ret = ControlPatternAction.RunAction(this.pattern.Element.UniqueId, this.pattern.Id, this.methodinfo.Name, GetParametersArray());
 
             if (this.ReturnType != typeof(void))
             {
@@ -144,19 +144,19 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             {
                 return new ReturnA11yElementsViewModel(p, m);
             }
-            else if(m.ReturnType.Name != "IAccessible")
+            else if (m.ReturnType.Name != "IAccessible")
             {
                 if (m.ReturnType != typeof(TextRange) && m.ReturnType != typeof(IList<TextRange>))
                 {
                     return new GeneralActionViewModel(p, m);
                 }
-                else if(m.ReturnType == typeof(TextRange))
+                else if (m.ReturnType == typeof(TextRange))
                 {
                     return new TextRangeActionViewModel(p, m);
                 }
             }
 
-            return new NotSupportedActionViewModel(p,m);
+            return new NotSupportedActionViewModel(p, m);
         }
     }
 

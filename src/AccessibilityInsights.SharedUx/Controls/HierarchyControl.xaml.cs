@@ -1,10 +1,9 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
 using AccessibilityInsights.SharedUx.Enums;
-using AccessibilityInsights.SharedUx.FileIssue;
 using AccessibilityInsights.SharedUx.Interfaces;
 using AccessibilityInsights.SharedUx.Settings;
 using AccessibilityInsights.SharedUx.Telemetry;
@@ -20,7 +19,6 @@ using Axe.Windows.Desktop.UIAutomation;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
@@ -66,7 +64,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         const int TreeButtonVerticalSpacing = 36;
 
         /// <summary>
-        /// App configation
+        /// App configuration
         /// </summary>
         public static ConfigurationModel Configuration
         {
@@ -115,6 +113,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         public HierarchyControl()
         {
             InitializeComponent();
+            btnMenu.DataContext = this;
         }
 
         /// <summary>
@@ -142,14 +141,14 @@ namespace AccessibilityInsights.SharedUx.Controls
                 }
                 else
                 {
-                    UpdateTreeView(ec.DataContext.GetRootNodeHierarchyViewModel(Configuration.ShowAncestry,Configuration.ShowUncertain, this.IsLiveMode), expandall);
+                    UpdateTreeView(ec.DataContext.GetRootNodeHierarchyViewModel(Configuration.ShowAncestry, Configuration.ShowUncertain, this.IsLiveMode), expandall);
                     this._selectedElement = ec.Element;
                 }
 
                 UpdateButtonVisibility();
 
                 // We remove and re-add the "show uncertain" item from the visual tree
-                // in order to ensure n-of-m information is read correctly
+                // to ensure n-of-m information is read correctly
                 // by screen readers via the SizeOfSet and PositionInSet properties.
                 if (cmHierarchySettings.Items.Contains(mniShowUncertain))
                 {
@@ -259,20 +258,19 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// </summary>
         /// <param name="ec"></param>
         /// <param name="expandall"></param>
-        private void PopulateHierarchyTree(ElementContext ec , bool expandall)
+        private void PopulateHierarchyTree(ElementContext ec, bool expandall)
         {
+#if POPULATE_HIERARCHY_TREE_DIAGNOSTICS
             var begin = DateTime.Now;
-            HierarchyNodeViewModel rnvm = null;
-
             var tm = Configuration.TreeViewMode;
             var showa = Configuration.ShowAncestry;
-
+#endif
             /// in the case that UIElement is not alive any more, it will fail.
             /// we need to handle it properly
-            rnvm = ec.DataContext.GetRootNodeHierarchyViewModel(Configuration.ShowAncestry, Configuration.ShowUncertain, this.IsLiveMode);
+            HierarchyNodeViewModel rnvm = ec.DataContext.GetRootNodeHierarchyViewModel(Configuration.ShowAncestry, Configuration.ShowUncertain, IsLiveMode);
 
             // send exception to mode control.
-            if(rnvm == null)
+            if (rnvm == null)
             {
                 throw new ApplicationException(Properties.Resources.HierarchyControl_PopulateHierarchyTree_No_data_to_populate_hierarchy);
             }
@@ -280,8 +278,9 @@ namespace AccessibilityInsights.SharedUx.Controls
             UpdateTreeView(rnvm, expandall);
 
             this._selectedElement = ec.Element;
+#if POPULATE_HIERARCHY_TREE_DIAGNOSTICS
             var span = DateTime.Now - begin;
-
+#endif
             this.tbTimeSpan.Visibility = Visibility.Collapsed;
         }
 
@@ -302,7 +301,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             this.HierarchyActions.SelectedElementChanged();
 
             // expand all if it is required.
-            if(expandall)
+            if (expandall)
             {
                 rnvm.Expand(true);
             }
@@ -333,10 +332,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             if (AutomationPeer.ListenerExists(AutomationEvents.AsyncContentLoaded))
             {
                 TreeViewAutomationPeer peer = UIElementAutomationPeer.FromElement(this.treeviewHierarchy) as TreeViewAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(AsyncContentLoadedState.Completed, 100));
-                }
+                peer?.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(AsyncContentLoadedState.Completed, 100));
             }
         }
 
@@ -363,7 +359,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// </summary>
         public void CleanUpTreeView()
         {
-            if(this.treeviewHierarchy.ItemsSource != null)
+            if (this.treeviewHierarchy.ItemsSource != null)
             {
                 try
                 {
@@ -414,9 +410,9 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// <param name="e"></param>
         private void treeviewHierarchy_GotFocus(object sender, RoutedEventArgs e)
         {
-            if(this.treeviewHierarchy.SelectedItem == null)
+            if (this.treeviewHierarchy.SelectedItem == null)
             {
-                if(this._rootNode != null)
+                if (this._rootNode != null)
                 {
                     this._rootNode.IsSelected = true;
                 }
@@ -441,7 +437,6 @@ namespace AccessibilityInsights.SharedUx.Controls
             Configuration.ShowAncestry = this.mniShowAncestry.IsChecked;
             if (this._selectedElement != null)
             {
-                var dic = new Dictionary<string, string>();
                 this.HierarchyActions.RefreshHierarchy(false);
             }
         }
@@ -470,7 +465,6 @@ namespace AccessibilityInsights.SharedUx.Controls
             Configuration.ShowUncertain = this.mniShowUncertain.IsChecked;
             if (this._selectedElement != null)
             {
-                var dic = new Dictionary<string, string>();
                 this.HierarchyActions.RefreshHierarchy(false);
             }
         }
@@ -514,11 +508,6 @@ namespace AccessibilityInsights.SharedUx.Controls
                 this.mniRaw.IsEnabled = false;
                 this.rbRaw.IsChecked = this.ElementContext.Element.TreeWalkerMode == TreeViewMode.Raw;
             }
-            bool isChecked = this.rbRaw.IsChecked.HasValue && this.rbRaw.IsChecked.Value;
-            this.mniRaw.SetValue(AutomationProperties.NameProperty,
-                isChecked ?
-                    Properties.Resources.HierarchyControl_RawView_Checked :
-                    Properties.Resources.HierarchyControl_RawView_Unchecked);
         }
 
         /// <summary>
@@ -538,11 +527,6 @@ namespace AccessibilityInsights.SharedUx.Controls
                 this.mniContent.IsEnabled = false;
                 this.rbContent.IsChecked = this.ElementContext.Element.TreeWalkerMode == TreeViewMode.Content;
             }
-            bool isChecked = this.rbContent.IsChecked.HasValue && this.rbContent.IsChecked.Value;
-            this.mniContent.SetValue(AutomationProperties.NameProperty,
-                isChecked ?
-                    Properties.Resources.HierarchyControl_ContentView_Checked :
-                    Properties.Resources.HierarchyControl_ContentView_Unchecked);
         }
 
         /// <summary>
@@ -562,11 +546,6 @@ namespace AccessibilityInsights.SharedUx.Controls
                 this.mniControl.IsEnabled = false;
                 this.rbControl.IsChecked = this.ElementContext.Element.TreeWalkerMode == TreeViewMode.Control;
             }
-            bool isChecked = this.rbControl.IsChecked.HasValue && this.rbControl.IsChecked.Value;
-            this.mniControl.SetValue(AutomationProperties.NameProperty,
-                isChecked ?
-                    Properties.Resources.HierarchyControl_ControlView_Checked :
-                    Properties.Resources.HierarchyControl_ControlView_Unchecked);
         }
 
         /// <summary>
@@ -719,7 +698,7 @@ namespace AccessibilityInsights.SharedUx.Controls
                 {
                     btnMenu.Visibility = Visibility.Visible;
                     btnTestElement.Visibility = Visibility.Visible;
-                    var hlptxt = string.Format(CultureInfo.InvariantCulture, 
+                    var hlptxt = string.Format(CultureInfo.InvariantCulture,
                         Properties.Resources.HierarchyControl_LiveMode_InvokeToTestFormat,
                         vm.Element.Glimpse);
                     AutomationProperties.SetHelpText(btnTestElement, hlptxt);
@@ -791,7 +770,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         }
 
         /// <summary>
-        /// Keep event butotn inside of scrollview
+        /// Keep event button inside of scrollview
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -809,7 +788,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             else
             {
                 right = 4;
-                treeviewHierarchy.Margin = new Thickness(0,0,2,0);
+                treeviewHierarchy.Margin = new Thickness(0, 0, 2, 0);
             }
 
             /// set button locations too.
@@ -846,51 +825,13 @@ namespace AccessibilityInsights.SharedUx.Controls
                 return;
             }
 
-            if (vm.IssueLink != null)
-            {
-                // Bug already filed, open it in a new window
-                try
-                {
-                    System.Diagnostics.Process.Start(vm.IssueLink.OriginalString);
-                }
-#pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception ex)
-                {
-                    ex.ReportException();
-                    // Happens when bug is deleted, message describes that work item doesn't exist / possible permission issue
-                    MessageDialog.Show(ex.InnerException?.Message);
-                    vm.IssueDisplayText = null;
-                }
-#pragma warning restore CA1031 // Do not catch general exception types
-            }
-            else
-            {
-                // File a new bug
-                var telemetryEvent = TelemetryEventFactory.ForIssueFilingRequest(FileBugRequestSource.Hierarchy);
-                Logger.PublishTelemetryEvent(telemetryEvent);
-
-                if (IssueReporter.IsConnected)
-                {
-                    IssueInformation issueInformation = this._selectedElement.GetIssueInformation(IssueType.NoFailure);
-                    FileIssueAction.AttachIssueData(issueInformation, this.ElementContext.Id, this._selectedElement.BoundingRectangle,
-                                this._selectedElement.UniqueId);
-                    IIssueResult issueResult = FileIssueAction.FileIssueAsync(issueInformation);
-                    if (issueResult != null)
-                    {
-                        vm.IssueDisplayText = issueResult.DisplayText;
-                        vm.IssueLink = issueResult.IssueLink;
-                    }
-                    File.Delete(issueInformation.TestFileName);
-                }
-                else
-                {
-                    bool? accepted = MessageDialog.Show(Properties.Resources.HierarchyControl_FileIssue_Configure);
-                    if (accepted.HasValue && accepted.Value)
-                    {
-                        this.HierarchyActions.SwitchToServerLogin();
-                    }
-                }
-            }
+            var input = new FileIssueWrapperInput(
+                vm,
+                this.ElementContext.Id,
+                this.HierarchyActions.SwitchToServerLogin,
+                () => this._selectedElement.GetIssueInformation(IssueType.NoFailure),
+                FileBugRequestSource.Hierarchy);
+            FileIssueWrapper.FileIssueFromControl(input);
         }
 
         /// <summary>

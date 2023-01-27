@@ -1,5 +1,6 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using AccessibilityInsights.SetupLibrary;
 using AccessibilityInsights.SharedUx.Enums;
 using AccessibilityInsights.SharedUx.Misc;
@@ -108,8 +109,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string Version
         {
-            get => GetDataValue<string>(keyVersion);
-            set => SetDataValue<string>(keyVersion, value);
+            get => GetDataValue<string>(KeyVersion);
+            set => SetDataValue<string>(KeyVersion, value);
         }
 
         /// <summary>
@@ -117,27 +118,27 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string AppVersion
         {
-            get => GetDataValue<string>(keyAppVersion);
-            set => SetDataValue<string>(keyAppVersion, value);
+            get => GetDataValue<string>(KeyAppVersion);
+            set => SetDataValue<string>(KeyAppVersion, value);
         }
 
         public Guid SelectedIssueReporter
         {
             get
             {
-                if (Guid.TryParse(GetDataValue<string>(keySelectedIssueReporter), out Guid result))
+                if (Guid.TryParse(GetDataValue<string>(KeySelectedIssueReporter), out Guid result))
                 {
                     return result;
                 }
                 return Guid.Empty;
             }
-            set => SetDataValue<string>(keySelectedIssueReporter, value.ToString());
+            set => SetDataValue<string>(KeySelectedIssueReporter, value.ToString());
         }
 
         public string IssueReporterSerializedConfigs
         {
-            get => GetDataValue<string>(keyIssueReporterSerializedConfigs);
-            set => SetDataValue<string>(keyIssueReporterSerializedConfigs, value);
+            get => GetDataValue<string>(KeyIssueReporterSerializedConfigs);
+            set => SetDataValue<string>(KeyIssueReporterSerializedConfigs, value);
         }
 
         /// <summary>
@@ -145,8 +146,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string TestReportPath
         {
-            get => GetDataValue<string>(keyTestReportPath);
-            set => SetDataValue<string>(keyTestReportPath, value);
+            get => GetDataValue<string>(KeyTestReportPath);
+            set => SetDataValue<string>(KeyTestReportPath, value);
         }
 
         /// <summary>
@@ -154,8 +155,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string EventRecordPath
         {
-            get => GetDataValue<string>(keyEventRecordPath);
-            set => SetDataValue<string>(keyEventRecordPath, value);
+            get => GetDataValue<string>(KeyEventRecordPath);
+            set => SetDataValue<string>(KeyEventRecordPath, value);
         }
 
         /// <summary>
@@ -164,8 +165,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForRecord
         {
-            get => GetDataValue<string>(keyHotKeyForRecord);
-            set => SetDataValue<string>(keyHotKeyForRecord, value);
+            get => GetDataValue<string>(KeyHotKeyForRecord);
+            set => SetDataValue<string>(KeyHotKeyForRecord, value);
         }
 
         /// <summary>
@@ -174,8 +175,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForPause
         {
-            get => GetDataValue<string>(keyHotKeyForPause);
-            set => SetDataValue<string>(keyHotKeyForPause, value);
+            get => GetDataValue<string>(KeyHotKeyForPause);
+            set => SetDataValue<string>(KeyHotKeyForPause, value);
         }
 
         /// <summary>
@@ -184,8 +185,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForSnap
         {
-            get => GetDataValue<string>(keyHotKeyForSnap);
-            set => SetDataValue<string>(keyHotKeyForSnap, value);
+            get => GetDataValue<string>(KeyHotKeyForSnap);
+            set => SetDataValue<string>(KeyHotKeyForSnap, value);
         }
 
         /// <summary>
@@ -194,8 +195,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForActivatingMainWindow
         {
-            get => GetDataValue<string>(keyHotKeyForActivatingMainWindow);
-            set => SetDataValue<string>(keyHotKeyForActivatingMainWindow, value);
+            get => GetDataValue<string>(KeyHotKeyForActivatingMainWindow);
+            set => SetDataValue<string>(KeyHotKeyForActivatingMainWindow, value);
         }
 
         /// <summary>
@@ -203,8 +204,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForMoveToParent
         {
-            get => GetDataValue<string>(keyHotKeyForMoveToParent);
-            set => SetDataValue<string>(keyHotKeyForMoveToParent, value);
+            get => GetDataValue<string>(KeyHotKeyForMoveToParent);
+            set => SetDataValue<string>(KeyHotKeyForMoveToParent, value);
         }
 
         /// <summary>
@@ -212,8 +213,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForMoveToFirstChild
         {
-            get => GetDataValue<string>(keyHotKeyForMoveToFirstChild);
-            set => SetDataValue<string>(keyHotKeyForMoveToFirstChild, value);
+            get => GetDataValue<string>(KeyHotKeyForMoveToFirstChild);
+            set => SetDataValue<string>(KeyHotKeyForMoveToFirstChild, value);
         }
 
         /// <summary>
@@ -221,8 +222,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForMoveToLastChild
         {
-            get => GetDataValue<string>(keyHotKeyForMoveToLastChild);
-            set => SetDataValue<string>(keyHotKeyForMoveToLastChild, value);
+            get => GetDataValue<string>(KeyHotKeyForMoveToLastChild);
+            set => SetDataValue<string>(KeyHotKeyForMoveToLastChild, value);
         }
 
         /// <summary>
@@ -230,8 +231,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForMoveToNextSibling
         {
-            get => GetDataValue<string>(keyHotKeyForMoveToNextSibling);
-            set => SetDataValue<string>(keyHotKeyForMoveToNextSibling, value);
+            get => GetDataValue<string>(KeyHotKeyForMoveToNextSibling);
+            set => SetDataValue<string>(KeyHotKeyForMoveToNextSibling, value);
         }
 
         /// <summary>
@@ -239,8 +240,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public string HotKeyForMoveToPreviousSibling
         {
-            get => GetDataValue<string>(keyHotKeyForMoveToPreviousSibling);
-            set => SetDataValue<string>(keyHotKeyForMoveToPreviousSibling, value);
+            get => GetDataValue<string>(KeyHotKeyForMoveToPreviousSibling);
+            set => SetDataValue<string>(KeyHotKeyForMoveToPreviousSibling, value);
         }
 
         /// <summary>
@@ -248,8 +249,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public IEnumerable<int> CoreProperties
         {
-            get => GetDataValue<int[]>(keyCoreProperties);
-            set => SetDataValue<int[]>(keyCoreProperties, value.ToArray());
+            get => GetDataValue<int[]>(KeyCoreProperties);
+            set => SetDataValue<int[]>(KeyCoreProperties, value.ToArray());
         }
 
         /// <summary>
@@ -257,8 +258,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public IEnumerable<int> CoreTPAttributes
         {
-            get => GetDataValue<int[]>(keyCoreTPAttributes);
-            set => SetDataValue<int[]>(keyCoreTPAttributes, value.ToArray());
+            get => GetDataValue<int[]>(KeyCoreTPAttributes);
+            set => SetDataValue<int[]>(KeyCoreTPAttributes, value.ToArray());
         }
 
         /// <summary>
@@ -266,8 +267,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public int MouseSelectionDelayMilliSeconds
         {
-            get => GetDataValue<int>(keyMouseSelectionDelayMilliSeconds);
-            set => SetDataValue<int>(keyMouseSelectionDelayMilliSeconds, value);
+            get => GetDataValue<int>(KeyMouseSelectionDelayMilliSeconds);
+            set => SetDataValue<int>(KeyMouseSelectionDelayMilliSeconds, value);
         }
 
         /// <summary>
@@ -275,8 +276,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool ShowWelcomeScreenOnLaunch
         {
-            get => GetDataValue<bool>(keyShowWelcomeScreenOnLaunch);
-            set => SetDataValue<bool>(keyShowWelcomeScreenOnLaunch, value);
+            get => GetDataValue<bool>(KeyShowWelcomeScreenOnLaunch);
+            set => SetDataValue<bool>(KeyShowWelcomeScreenOnLaunch, value);
         }
 
         /// <summary>
@@ -284,8 +285,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool SelectionByFocus
         {
-            get => GetDataValue<bool>(keySelectionByFocus);
-            set => SetDataValue<bool>(keySelectionByFocus, value);
+            get => GetDataValue<bool>(KeySelectionByFocus);
+            set => SetDataValue<bool>(KeySelectionByFocus, value);
         }
 
         /// <summary>
@@ -293,8 +294,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool SelectionByMouse
         {
-            get => GetDataValue<bool>(keySelectionByMouse);
-            set => SetDataValue<bool>(keySelectionByMouse, value);
+            get => GetDataValue<bool>(KeySelectionByMouse);
+            set => SetDataValue<bool>(KeySelectionByMouse, value);
         }
 
         /// <summary>
@@ -302,8 +303,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool AlwaysOnTop
         {
-            get => GetDataValue<bool>(keyAlwaysOnTop);
-            set => SetDataValue<bool>(keyAlwaysOnTop, value);
+            get => GetDataValue<bool>(KeyAlwaysOnTop);
+            set => SetDataValue<bool>(KeyAlwaysOnTop, value);
         }
 
         /// <summary>
@@ -311,26 +312,26 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public FontSize FontSize
         {
-            get => GetEnumDataValueWithDefault<FontSize>(keyFontSize, FontSize.Standard);
-            set => SetEnumDataValue<FontSize>(keyFontSize, value);
+            get => GetEnumDataValueWithDefault<FontSize>(KeyFontSize, FontSize.Standard);
+            set => SetEnumDataValue<FontSize>(KeyFontSize, value);
         }
 
         /// <summary>
-        /// Indicate which hightlighter mode to use
+        /// Indicate which highlighter mode to use
         /// </summary>
         public HighlighterMode HighlighterMode
         {
-            get => GetEnumDataValue<HighlighterMode>(keyHighlighterMode);
-            set => SetEnumDataValue<HighlighterMode>(keyHighlighterMode, value);
+            get => GetEnumDataValue<HighlighterMode>(KeyHighlighterMode);
+            set => SetEnumDataValue<HighlighterMode>(KeyHighlighterMode, value);
         }
 
         /// <summary>
-        /// If true, sound will be played while scanning is running with ATs
+        /// Whether to provide feedback with sound: Auto (if screen reader flag is set), Always, or Never.
         /// </summary>
-        public bool PlayScanningSound
+        public SoundFeedbackMode SoundFeedback
         {
-            get => GetDataValue<bool>(keyPlayScanningSound);
-            set => SetDataValue<bool>(keyPlayScanningSound, value);
+            get => GetEnumDataValue<SoundFeedbackMode>(KeySoundFeedback);
+            set => SetEnumDataValue<SoundFeedbackMode>(KeySoundFeedback, value);
         }
 
         /// <summary>
@@ -338,17 +339,17 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool DisableTestsInSnapMode
         {
-            get => GetDataValue<bool>(keyDisableTestsInSnapMode);
-            set => SetDataValue<bool>(keyDisableTestsInSnapMode, value);
+            get => GetDataValue<bool>(KeyDisableTestsInSnapMode);
+            set => SetDataValue<bool>(KeyDisableTestsInSnapMode, value);
         }
 
         /// <summary>
-        /// if it is true, show the full list of ancesters up to desktop in snap mode.
+        /// if it is true, show the full list of ancestors up to desktop in snap mode.
         /// </summary>
         public bool ShowAncestry
         {
-            get => GetDataValue<bool>(keyShowAncestry);
-            set => SetDataValue<bool>(keyShowAncestry, value);
+            get => GetDataValue<bool>(KeyShowAncestry);
+            set => SetDataValue<bool>(KeyShowAncestry, value);
         }
 
         /// <summary>
@@ -356,8 +357,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool ShowAllProperties
         {
-            get => GetDataValue<bool>(keyShowAllProperties);
-            set => SetDataValue<bool>(keyShowAllProperties, value);
+            get => GetDataValue<bool>(KeyShowAllProperties);
+            set => SetDataValue<bool>(KeyShowAllProperties, value);
         }
 
         /// <summary>
@@ -370,8 +371,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool ShowUncertain
         {
-            get => GetDataValue<bool>(keyShowUncertain);
-            set => SetDataValue<bool>(keyShowUncertain, value);
+            get => GetDataValue<bool>(KeyShowUncertain);
+            set => SetDataValue<bool>(KeyShowUncertain, value);
         }
 
         /// <summary>
@@ -379,8 +380,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool ShowWhitespaceInTextPatternViewer
         {
-            get => GetDataValue<bool>(keyShowWhitespaceInTextPatternViewer);
-            set => SetDataValue<bool>(keyShowWhitespaceInTextPatternViewer, value);
+            get => GetDataValue<bool>(KeyShowWhitespaceInTextPatternViewer);
+            set => SetDataValue<bool>(KeyShowWhitespaceInTextPatternViewer, value);
         }
 
         /// <summary>
@@ -389,8 +390,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public TreeViewMode TreeViewMode
         {
-            get => GetEnumDataValue<TreeViewMode>(keyTreeViewMode);
-            set => SetEnumDataValue<TreeViewMode>(keyTreeViewMode, value);
+            get => GetEnumDataValue<TreeViewMode>(KeyTreeViewMode);
+            set => SetEnumDataValue<TreeViewMode>(KeyTreeViewMode, value);
         }
 
         /// <summary>
@@ -399,8 +400,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool IsUnderElementScope
         {
-            get => GetDataValue<bool>(keyIsUnderElementScope);
-            set => SetDataValue<bool>(keyIsUnderElementScope, value);
+            get => GetDataValue<bool>(KeyIsUnderElementScope);
+            set => SetDataValue<bool>(KeyIsUnderElementScope, value);
         }
 
         /// <summary>
@@ -408,8 +409,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public ReleaseChannel ReleaseChannel
         {
-            get => GetEnumDataValue<ReleaseChannel>(keyReleaseChannel);
-            set => SetEnumDataValue<ReleaseChannel>(keyReleaseChannel, value);
+            get => GetEnumDataValue<ReleaseChannel>(KeyReleaseChannel);
+            set => SetEnumDataValue<ReleaseChannel>(KeyReleaseChannel, value);
         }
 
         /// <summary>
@@ -417,17 +418,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool EnableTelemetry
         {
-            get => GetDataValue<bool>(keyEnableTelemetry);
-            set => SetDataValue<bool>(keyEnableTelemetry, value);
-        }
-
-        /// <summary>
-        /// If true, dark mode will be disabled
-        /// </summary>
-        public bool DisableDarkMode
-        {
-            get => GetDataValue<bool>(keyDisableDarkMode);
-            set => SetDataValue<bool>(keyDisableDarkMode, value);
+            get => GetDataValue<bool>(KeyEnableTelemetry);
+            set => SetDataValue<bool>(KeyEnableTelemetry, value);
         }
 
         /// <summary>
@@ -435,8 +427,8 @@ namespace AccessibilityInsights.SharedUx.Settings
         /// </summary>
         public bool ShowTelemetryDialog
         {
-            get => GetDataValue<bool>(keyShowTelemetryDialog);
-            set => SetDataValue<bool>(keyShowTelemetryDialog, value);
+            get => GetDataValue<bool>(KeyShowTelemetryDialog);
+            set => SetDataValue<bool>(KeyShowTelemetryDialog, value);
         }
 
         /// <summary>
@@ -447,7 +439,7 @@ namespace AccessibilityInsights.SharedUx.Settings
         {
             if (ShowWelcomeScreenOnLaunch == false)
             {
-                if (this.AppVersion !=VersionTools.GetAppVersion())
+                if (this.AppVersion != VersionTools.GetAppVersion())
                 {
                     this.AppVersion = VersionTools.GetAppVersion();
                     this.ShowWelcomeScreenOnLaunch = true;
@@ -472,7 +464,7 @@ namespace AccessibilityInsights.SharedUx.Settings
         }
 
         /// <summary>
-        /// ctor from DiskConfigurationModel
+        /// constructor from DiskConfigurationModel
         /// </summary>
         private ConfigurationModel(SettingsDictionary source)
         {
@@ -482,7 +474,7 @@ namespace AccessibilityInsights.SharedUx.Settings
         }
 
         /// <summary>
-        /// Copy ctor
+        /// Copy constructor
         /// </summary>
         /// <param name="source"></param>
         private ConfigurationModel(ConfigurationModel source)
@@ -534,8 +526,8 @@ namespace AccessibilityInsights.SharedUx.Settings
 
                 config = GetDefaultConfigurationModel(provider);
 
-                config.HotKeyForRecord = hkrecord != null ? hkrecord : config.HotKeyForRecord;
-                config.HotKeyForPause = hkpause != null ? hkpause : config.HotKeyForPause;
+                config.HotKeyForRecord = hkrecord ?? config.HotKeyForRecord;
+                config.HotKeyForPause = hkpause ?? config.HotKeyForPause;
                 config.HotKeyForSnap = hksnapshot;
                 config.HotKeyForActivatingMainWindow = hkactivate;
             }
@@ -560,14 +552,20 @@ namespace AccessibilityInsights.SharedUx.Settings
             if (config != null && config.Any())
             {
                 // Fix misspelled keys from legacy schema
-                config.RemapSetting(keyHotKeyLegacyForMoveToNextSibling, keyHotKeyForMoveToNextSibling);
-                config.RemapSetting(keyHotKeyLegacyForMoveToPreviousSibling, keyHotKeyForMoveToPreviousSibling);
+                config.RemapSetting(KeyHotKeyLegacyForMoveToNextSibling, KeyHotKeyForMoveToNextSibling);
+                config.RemapSetting(KeyHotKeyLegacyForMoveToPreviousSibling, KeyHotKeyForMoveToPreviousSibling);
 
                 // Convert legacy values that are stored as numbers instead of enum names
-                config.RemapIntToEnumName<TreeViewMode>(keyTreeViewMode);
-                config.RemapIntToEnumName<HighlighterMode>(keyHighlighterMode);
-                config.RemapIntToEnumName<FontSize>(keyFontSize);
+                config.RemapIntToEnumName<TreeViewMode>(KeyTreeViewMode);
+                config.RemapIntToEnumName<HighlighterMode>(KeyHighlighterMode);
+                config.RemapIntToEnumName<FontSize>(KeyFontSize);
 
+                // Remap old soundFeedback boolean setting
+                if (!config.TryGetValue(KeySoundFeedback, out Object _) && config.TryGetValue(KeyLegacySoundFeedback, out Object value) && (bool)value)
+                {
+                    config.Add(KeySoundFeedback, SoundFeedbackMode.Always.ToString());
+                    // TODO: In a future compatibility-breaking release, remove the PlayScanningSound key from config
+                }
                 return new ConfigurationModel(config);
             }
 
@@ -623,7 +621,7 @@ namespace AccessibilityInsights.SharedUx.Settings
                 SelectionByMouse = true,
                 ShowWelcomeScreenOnLaunch = true,
                 AlwaysOnTop = true,
-                PlayScanningSound = false,
+                SoundFeedback = SoundFeedbackMode.Auto,
                 DisableTestsInSnapMode = false,
                 IsHighlighterOn = true,
                 ShowUncertain = false,

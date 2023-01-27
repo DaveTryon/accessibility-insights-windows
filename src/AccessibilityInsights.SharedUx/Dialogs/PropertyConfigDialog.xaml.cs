@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Settings;
 using Axe.Windows.Core.Types;
@@ -21,7 +21,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
         /// <summary>
         /// Original selected properties list
         /// </summary>
-        List<RecordEntitySetting> CoreProperties;
+        readonly List<RecordEntitySetting> CoreProperties;
 
         /// <summary>
         /// Constructor for dialog
@@ -42,13 +42,14 @@ namespace AccessibilityInsights.SharedUx.Dialogs
                 Properties.Resources.PropertyConfigDialog_SelectedItemsFormat, title);
 
             var list = (from kv in source.GetKeyValuePairList()
-                       where !DesktopElement.IsExcludedProperty(kv.Key,kv.Value)
-                       select new RecordEntitySetting {
-                           Id = kv.Key,
-                           Name = kv.Value,
-                           IsRecorded = coreProps.Contains(kv.Key),
-                           Type = RecordEntityType.Property
-                       }).ToList();
+                        where !DesktopElement.IsExcludedProperty(kv.Key, kv.Value)
+                        select new RecordEntitySetting
+                        {
+                            Id = kv.Key,
+                            Name = kv.Value,
+                            IsRecorded = coreProps.Contains(kv.Key),
+                            Type = RecordEntityType.Property
+                        }).ToList();
 
             var selList = coreProps.Select(l => list.Where(r => r.Id == l).FirstOrDefault()).ToList();
             CoreProperties = selList.ToList();// generate base list here.
@@ -68,7 +69,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
         }
 
         /// <summary>
-        /// Ok button click
+        /// OK button click
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

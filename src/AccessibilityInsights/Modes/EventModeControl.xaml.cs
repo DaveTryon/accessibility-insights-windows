@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
@@ -28,7 +28,9 @@ namespace AccessibilityInsights.Modes
     /// </summary>
     public partial class EventModeControl : UserControlWithPanes, IModeControl
     {
+#pragma warning disable IDE0052 // TODO: Is this really unused?
         private ElementContext ElementContext;
+#pragma warning restore IDE0052
 
         /// <summary>
         /// MainWindow to access shared methods
@@ -42,7 +44,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// App configation
+        /// App configuration
         /// </summary>
         public static ConfigurationModel Configuration
         {
@@ -164,7 +166,7 @@ namespace AccessibilityInsights.Modes
                 this.ctrlTabs.CurrentMode = InspectTabMode.Events;
                 try
                 {
-                    // the element context is special one for Event. so it doen't have any data yet.
+                    // the element context is a special one for Event, so it doesn't have any data yet.
                     // need to populate data with selected element.
                     var e = GetDataAction.GetA11yElementWithLiveData(ecId, 0);
                     this.ElementContext = ec;
@@ -195,7 +197,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Hide control and hilighter
+        /// Hide control and highlighter
         /// </summary>
         public void HideControl()
         {
@@ -205,7 +207,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Show control and hilighter
+        /// Show control and highlighter
         /// </summary>
         public void ShowControl()
         {
@@ -301,14 +303,11 @@ namespace AccessibilityInsights.Modes
             return enabled;
         }
 
+#pragma warning disable IDE0051 // This is referenced in the XAML file
         /// <summary>
         /// Set focus when visible
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-#pragma warning disable CA1801
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-#pragma warning restore CA1801
+        private void UserControl_IsVisibleChanged(object _, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue)
             {
@@ -318,6 +317,7 @@ namespace AccessibilityInsights.Modes
                 }, DispatcherPriority.Render);
             }
         }
+#pragma warning restore IDE0051 // This is referenced in the XAML file
 
         /// <summary>
         /// Set focus on default control for mode

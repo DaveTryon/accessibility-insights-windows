@@ -9,6 +9,7 @@
              xmlns:controls="clr-namespace:AccessibilityInsights.CommonUxComponents.Controls;assembly=AccessibilityInsights.CommonUxComponents"
              xmlns:behaviors="clr-namespace:AccessibilityInsights.SharedUx.Behaviors"
              xmlns:local="clr-namespace:AccessibilityInsights.SharedUx.Controls"
+             xmlns:cc="clr-namespace:AccessibilityInsights.SharedUx.Controls.CustomControls"
              xmlns:converters="clr-namespace:AccessibilityInsights.SharedUx.Converters"
              xmlns:Properties="clr-namespace:AccessibilityInsights.SharedUx.Properties"
              mc:Ignorable="d"
@@ -63,8 +64,8 @@
                         </MenuItem>
                     </ContextMenu>
                     <ContextMenu x:Key="cmLive" FlowDirection="LeftToRight" Style="{StaticResource menuPlainWhite}">
-                        <MenuItem Tag="LightningBolt" IsCheckable="False" Header="{x:Static Properties:Resources.MenuItemHeaderListenToEvents}" Click="mniEvents_Click" Style="{StaticResource miFabIcon}"/>
-                        <MenuItem Tag="LadybugSolid" Visibility ="{Binding FileBugVisibility}" IsCheckable="False" Header="{x:Static Properties:Resources.MenuItemHeaderNewIssue}" Click="mniFileBugLive_Click" Style="{StaticResource miFabIcon}"/>
+                        <MenuItem Tag="LightningBolt" IsCheckable="False" Header="{x:Static Properties:Resources.MenuItemHeaderListenToEvents}" Click="mniEvents_Click"/>
+                        <MenuItem Tag="LadybugSolid" Visibility ="{Binding FileBugVisibility}" IsCheckable="False" Header="{x:Static Properties:Resources.MenuItemHeaderNewIssue}" Click="mniFileBugLive_Click"/>
                     </ContextMenu>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
@@ -121,7 +122,7 @@
                   BorderThickness="0"  HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
                   Height="28" Width="35" 
                   Style="{StaticResource BtnStandard}"
-                  AutomationProperties.Name="{x:Static Properties:Resources.btnSettingsAutomationPropertiesName1}">
+                  AutomationProperties.Name="{x:Static Properties:Resources.btnHierarchyTreeSettingsAutomationPropertiesName}">
                 <i:Interaction.Behaviors>
                     <behaviors:KeyboardToolTipButtonBehavior/>
                     <behaviors:DropDownButtonBehavior/>
@@ -131,30 +132,30 @@
                 </Button.ToolTip>
                 <controls:FabricIconControl GlyphName="Settings" GlyphSize="Custom" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource hoverAwareFabricIconOnButtonParent}"/>
                 <Button.ContextMenu>
-                    <ContextMenu FlowDirection="LeftToRight" x:Name="cmHierarchySettings">
-                        <MenuItem Header="Tree view">
-                            <MenuItem x:Name="mniRaw" IsCheckable="False" Click="mniRaw_Click"
+                    <ContextMenu FlowDirection="LeftToRight" x:Name="cmHierarchySettings" Style="{StaticResource ctxMenuDefault}">
+                        <MenuItem Header="{x:Static Properties:Resources.HierarchyControl_Menu_TreeView}">
+                            <cc:ToggleMenuItem x:Name="mniRaw" IsCheckable="False" Click="mniRaw_Click" Style="{StaticResource miBoldOnSelection}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.mniRawAutomationPropertiesName1}">
                                 <MenuItem.Header>
                                     <RadioButton x:Name="rbRaw" Content="{x:Static Properties:Resources.HierarchyControl_Raw}" Loaded="mniRaw_Loaded" Click="rbRaw_Click" Focusable="False" />
                                 </MenuItem.Header>
-                            </MenuItem>
-                            <MenuItem x:Name="mniControl" IsCheckable="False" Click="mniControl_Click" 
+                            </cc:ToggleMenuItem>
+                            <cc:ToggleMenuItem x:Name="mniControl" IsCheckable="False" Click="mniControl_Click" Style="{StaticResource miBoldOnSelection}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.mniControlAutomationPropertiesName}">
                                 <MenuItem.Header>
                                     <RadioButton x:Name="rbControl" Content="{x:Static Properties:Resources.HierarchyControl_Control}" Loaded="mniControl_Loaded" Click="rbControl_Click" Focusable="False" />
                                 </MenuItem.Header>
-                            </MenuItem>
-                            <MenuItem x:Name="mniContent" IsCheckable="False" Click="mniContent_Click"
+                            </cc:ToggleMenuItem>
+                            <cc:ToggleMenuItem x:Name="mniContent" IsCheckable="False" Click="mniContent_Click" Style="{StaticResource miBoldOnSelection}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.mniContentAutomationPropertiesName1}">
                                 <MenuItem.Header>
                                     <RadioButton x:Name="rbContent" Content="{x:Static Properties:Resources.HierarchyControl_Content}" Loaded="mniContent_Loaded" Click="rbContent_Click" Focusable="False" />
                                 </MenuItem.Header>
-                            </MenuItem>
+                            </cc:ToggleMenuItem>
                         </MenuItem>
-                        <MenuItem Header="Show _Ancestry" x:Name="mniShowAncestry" IsCheckable="True" 
+                        <MenuItem Header="{x:Static Properties:Resources.HierarchyControl_Menu_ShowAncestry}" x:Name="mniShowAncestry" IsCheckable="True" 
                                   Loaded="mniShowAncestry_Loaded" Click="mniShowAncestry_Click"/>
-                        <MenuItem Header="Show _Uncertain results" x:Name="mniShowUncertain" IsCheckable="True" 
+                        <MenuItem Header="{x:Static Properties:Resources.HierarchyControl_Menu_ShowUncertainResults}" x:Name="mniShowUncertain" IsCheckable="True" 
                                   Click="mniShowUncertain_Click" Loaded="mniShowUncertain_Loaded"/>
                     </ContextMenu>
                 </Button.ContextMenu>

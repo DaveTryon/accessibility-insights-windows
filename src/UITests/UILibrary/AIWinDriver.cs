@@ -5,25 +5,26 @@ using Axe.Windows.Automation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium.Windows;
 using System.IO;
+using System.Linq;
 using static System.FormattableString;
 
 namespace UITests.UILibrary
 {
     public class AIWinDriver
     {
-        WindowsDriver<WindowsElement> Session;
+        readonly WindowsDriver<WindowsElement> Session;
         public GettingStarted GettingStarted { get; }
         public EventsMode EventsMode { get; }
         public Settings Settings { get; }
         public LiveMode LiveMode { get; }
         public TestMode TestMode { get; }
 
-        int PID;
+        readonly int PID;
 
         public AIWinDriver(WindowsDriver<WindowsElement> session, int pid)
         {
-            EventsMode = new EventsMode(session);
-            Settings = new Settings(session);
+            EventsMode = new EventsMode();
+            Settings = new Settings();
             LiveMode = new LiveMode(session);
             TestMode = new TestMode(session);
             GettingStarted = new GettingStarted(session);
@@ -48,7 +49,7 @@ namespace UITests.UILibrary
 
             var scanner = ScannerFactory.CreateScanner(config);
 
-            var result = scanner.Scan();
+            var result = scanner.Scan(null).WindowScanOutputs.First();
             if (result.ErrorCount > 0)
             {
                 var newPath = Path.Combine(outputPath, Invariant($"{fileName}.a11ytest"));

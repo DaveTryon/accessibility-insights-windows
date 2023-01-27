@@ -1,7 +1,6 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Dialogs;
-using AccessibilityInsights.SharedUx.Dialogs;
 using AccessibilityInsights.SharedUx.Utilities;
 using AccessibilityInsights.SharedUx.ViewModels;
 using System;
@@ -15,7 +14,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
 {
 #pragma warning disable CA1001 // Types that own disposable fields should be disposable
     /// <summary>
-    /// Interaction logic for TextRange ations
+    /// Interaction logic for TextRange actions
     /// handle cases with any number of parameters and any type of returns except A11yElement
     /// </summary>
     public partial class TextRangeActionView : UserControl
@@ -23,7 +22,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
     {
         public TextRangeActionViewModel ActionViewModel { get; private set; }
         int Counter;
-        System.Timers.Timer timerInvoke;
+        readonly System.Timers.Timer timerInvoke;
         private readonly object _lockObject = new object();
 
         public TextRangeActionView(TextRangeActionViewModel a)
@@ -32,7 +31,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             this.Counter = 0;
             InitializeComponent();
 
-            if(this.ActionViewModel.Parameters == null || this.ActionViewModel.Parameters.Count == 0)
+            if (this.ActionViewModel.Parameters == null || this.ActionViewModel.Parameters.Count == 0)
             {
                 this.dgParams.Visibility = Visibility.Collapsed;
             }
@@ -43,9 +42,11 @@ namespace AccessibilityInsights.SharedUx.ActionViews
 
             this.ctrlTextRange.Visibility = Visibility.Collapsed;
             this.tbResult.Visibility = Visibility.Collapsed;
-            this.timerInvoke = new System.Timers.Timer(1000);
-            this.timerInvoke.Enabled = false;
-            this.timerInvoke.AutoReset = false;
+            this.timerInvoke = new System.Timers.Timer(1000)
+            {
+                Enabled = false,
+                AutoReset = false
+            };
             this.timerInvoke.Elapsed += new ElapsedEventHandler(this.ontimerElapsed);
         }
 
@@ -78,8 +79,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int delay;
-            if (Int32.TryParse(this.tbDelay.Text, out delay))
+            if (Int32.TryParse(this.tbDelay.Text, out int delay))
             {
                 if (delay >= 1)
                 {
@@ -149,13 +149,11 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             e.Handled = e.Text.IsTextAllowed();
         }
 
-#pragma warning disable CA1801 // unused parameter
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-#pragma warning restore CA1801 // unused parameter
+        private void UserControl_IsVisibleChanged(object _, DependencyPropertyChangedEventArgs _1)
         {
             lock (_lockObject)
             {
-                if(Counter != 0 && this.IsVisible == false)
+                if (Counter != 0 && this.IsVisible == false)
                 {
                     this.timerInvoke.Enabled = false;
                     this.btnAction.IsEnabled = true;

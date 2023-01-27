@@ -5,7 +5,9 @@ namespace AccessibilityInsights.SharedUx.Properties
     public static class AutomationIDs
     {
         public static string AutomatedChecksExpandAllButton { get; } = nameof(AutomatedChecksExpandAllButton);
+        public static string AutomatedChecksFrameworkExpandAllButton { get; } = nameof(AutomatedChecksFrameworkExpandAllButton);
         public static string AutomatedChecksResultsListView { get; } = nameof(AutomatedChecksResultsListView);
+        public static string AutomatedChecksFrameworkResultsListView { get; } = nameof(AutomatedChecksFrameworkResultsListView);
         public static string AutomatedChecksResultsTextBlock { get; } = nameof(AutomatedChecksResultsTextBlock);
         public static string AutomatedChecksUIATreeButton { get; } = nameof(AutomatedChecksUIATreeButton);
         public static string ConnectionControl { get; } = nameof(ConnectionControl);
@@ -21,7 +23,8 @@ namespace AccessibilityInsights.SharedUx.Properties
         public static string MainWinPauseButton { get; } = nameof(MainWinPauseButton);
         public static string MainWinSettingsButton { get; } = nameof(MainWinSettingsButton);
         public static string MainWindow { get; } = nameof(MainWindow);
-        public static string ScannerResultsDetailsListView { get; } = nameof(ScannerResultsDetailsListView);
+        public static string ScannerResultsListView { get; } = nameof(ScannerResultsListView);
+        public static string ScannerResultsFrameworkResultsListView { get; } = nameof(ScannerResultsFrameworkResultsListView);
         public static string ScannerResultsFixFollowingTextBox { get; } = nameof(ScannerResultsFixFollowingTextBox);
         public static string ScannerResultsShowAllButton { get; } = nameof(ScannerResultsShowAllButton);
         public static string SettingsAboutTabItem { get; } = nameof(SettingsAboutTabItem);

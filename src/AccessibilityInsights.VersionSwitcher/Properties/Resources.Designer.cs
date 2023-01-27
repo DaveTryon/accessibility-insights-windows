@@ -19,7 +19,7 @@ namespace AccessibilityInsights.VersionSwitcher.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -61,6 +61,42 @@ namespace AccessibilityInsights.VersionSwitcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid command line: {0}.
+        /// </summary>
+        public static string BadCommandLineMessageFormat {
+            get {
+                return ResourceManager.GetString("BadCommandLineMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The installer file does not match the expected checksum and may have been corrupted. Please try again..
+        /// </summary>
+        public static string InstallerFileHasWrongHash {
+            get {
+                return ResourceManager.GetString("InstallerFileHasWrongHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The installer file lacks a trusted signature and may have been corrupted. Please try again..
+        /// </summary>
+        public static string InstallerFileIsNotTrusted {
+            get {
+                return ResourceManager.GetString("InstallerFileIsNotTrusted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The installer file does not match the expected size and may have been corrupted. Please try again..
+        /// </summary>
+        public static string InstallerFileIsWrongSize {
+            get {
+                return ResourceManager.GetString("InstallerFileIsWrongSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred during install.
         /// </summary>
         public static string InstallError {
@@ -79,11 +115,20 @@ namespace AccessibilityInsights.VersionSwitcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Untrusted File!.
+        ///   Looks up a localized string similar to Unable to complete the installation. Please restart your computer and try again. If that does not resolve the issue, try removing Accessibility Insights for Windows via the control panel and install it from www.accessibilityinsights.io..
         /// </summary>
-        public static string UntrustedFile {
+        public static string UnableToCompleteInstallation {
             get {
-                return ResourceManager.GetString("UntrustedFile", resourceCulture);
+                return ResourceManager.GetString("UnableToCompleteInstallation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to download the installer file. Please check your internet connection and try again..
+        /// </summary>
+        public static string UnableToDownloadInstallerFile {
+            get {
+                return ResourceManager.GetString("UnableToDownloadInstallerFile", resourceCulture);
             }
         }
     }

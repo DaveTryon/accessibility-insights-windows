@@ -1,5 +1,6 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using AccessibilityInsights.SetupLibrary;
 using AccessibilityInsights.SharedUx.Enums;
 using AccessibilityInsights.SharedUx.Settings;
@@ -91,7 +92,6 @@ namespace AccessibilityInsights.SharedUxTests.Settings
                 config.CoreProperties.ToArray());
             ConfirmEnumerablesMatchExpectations(new int[] { }, config.CoreTPAttributes.ToArray());
             Assert.IsFalse(config.DisableTestsInSnapMode);
-            Assert.IsFalse(config.DisableDarkMode);
             Assert.IsFalse(config.EnableTelemetry);
             Assert.IsTrue(config.EventRecordPath.Equals(testProvider.UserDataFolderPath));
             Assert.AreEqual(FontSize.Standard, config.FontSize);
@@ -109,7 +109,7 @@ namespace AccessibilityInsights.SharedUxTests.Settings
             Assert.IsNull(config.IssueReporterSerializedConfigs);
             Assert.IsTrue(config.IsUnderElementScope);
             Assert.AreEqual(100, config.MouseSelectionDelayMilliSeconds);
-            Assert.IsFalse(config.PlayScanningSound);
+            Assert.AreEqual(SoundFeedbackMode.Auto, config.SoundFeedback);
             Assert.AreEqual(ReleaseChannel.Production, config.ReleaseChannel);
             Assert.AreEqual(Guid.Empty, config.SelectedIssueReporter);
             Assert.IsTrue(config.SelectionByFocus);
@@ -124,7 +124,7 @@ namespace AccessibilityInsights.SharedUxTests.Settings
             Assert.AreEqual(TreeViewMode.Control, config.TreeViewMode);
             Assert.AreEqual(ReleaseChannel.Production, config.ReleaseChannel);
             Assert.AreEqual("1.1.10", config.Version);
-            Assert.AreEqual(37, typeof(ConfigurationModel).GetProperties().Length, "Count of ConfigurationModel properties has changed! Please ensure that you are testing the default value for all properties, then update the expected value");
+            Assert.AreEqual(36, typeof(ConfigurationModel).GetProperties().Length, "Count of ConfigurationModel properties has changed! Please ensure that you are testing the default value for all properties, then update the expected value");
         }
 
         [TestMethod]
@@ -141,11 +141,11 @@ namespace AccessibilityInsights.SharedUxTests.Settings
             ConfigurationModel config = ConfigurationModel.LoadFromJSON(@".\Resources\ConfigSettings.json", testProvider);
 
             ConfirmOverrideConfigMatchesExpectation(config,
-                disableDarkMode: true,
                 issueReporterSerializedConfigs: @"{""27f21dff-2fb3-4833-be55-25787fce3e17"":""hello world""}",
                 selectedIssueReporter: new Guid("{27f21dff-2fb3-4833-be55-25787fce3e17}"),
-                releaseChannel: ReleaseChannel.Canary
-                );
+                releaseChannel: ReleaseChannel.Canary,
+                soundMode: SoundFeedbackMode.Always // Verify that a true PlayScanningSound (legacy key) maps to Always
+            );
         }
 
         private static ConfigurationModel GetDefaultConfig()
@@ -155,7 +155,7 @@ namespace AccessibilityInsights.SharedUxTests.Settings
 
         private static void ConfirmOverrideConfigMatchesExpectation(ConfigurationModel config,
             Guid? selectedIssueReporter = null, string issueReporterSerializedConfigs = null,
-            ReleaseChannel? releaseChannel = null, bool disableDarkMode = false)
+            ReleaseChannel? releaseChannel = null, SoundFeedbackMode soundMode=SoundFeedbackMode.Auto)
         {
             Assert.IsFalse(config.AlwaysOnTop);
             Assert.AreEqual("1.1.", config.AppVersion.Substring(0, 4));
@@ -164,9 +164,8 @@ namespace AccessibilityInsights.SharedUxTests.Settings
             ConfirmEnumerablesMatchExpectations(
                 new int[] { 30005, 30003, 30004, 30009, 30001, 30007, 30006, 30013, 30102, 30101 },
                 config.CoreProperties.ToArray());
-            ConfirmEnumerablesMatchExpectations( new int[] { }, config.CoreTPAttributes.ToArray());
+            ConfirmEnumerablesMatchExpectations(new int[] { }, config.CoreTPAttributes.ToArray());
             Assert.IsFalse(config.DisableTestsInSnapMode);
-            Assert.AreEqual(config.DisableDarkMode, disableDarkMode);
             Assert.IsFalse(config.EnableTelemetry);
             Assert.AreEqual(@"C:\blah\AccessibilityInsightsEventFiles", config.EventRecordPath);
             Assert.AreEqual(FontSize.Small, config.FontSize);
@@ -184,7 +183,7 @@ namespace AccessibilityInsights.SharedUxTests.Settings
             Assert.AreEqual(issueReporterSerializedConfigs, config.IssueReporterSerializedConfigs);
             Assert.IsTrue(config.IsUnderElementScope);
             Assert.AreEqual(200, config.MouseSelectionDelayMilliSeconds);
-            Assert.IsFalse(config.PlayScanningSound);
+            Assert.AreEqual(soundMode, config.SoundFeedback);
             Assert.AreEqual(releaseChannel ?? ReleaseChannel.Production, config.ReleaseChannel);
             Assert.AreEqual(selectedIssueReporter ?? Guid.Empty, config.SelectedIssueReporter);
             Assert.IsTrue(config.SelectionByFocus);

@@ -52,7 +52,7 @@
                     <Button.ToolTip>
                         <ToolTip Content="{x:Static Properties:Resources.btnRefreshAutomationPropertiesNameUpdateRange}"/>
                     </Button.ToolTip>
-                    <fabric:FabricIconControl GlyphName="Refresh" FontSize="16" Foreground="{DynamicResource ResourceKey=IconBrush}"/>
+                    <fabric:FabricIconControl GlyphName="Refresh" FontSize="16" Style="{StaticResource hoverAwareFabricIconOnUnthemedButtonParent}"/>
                 </Button>
             </StackPanel>
             <ListBox x:Name="ltbRanges" Grid.Row="1"
@@ -68,7 +68,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Header}" />
-                            <Menu x:Name="mnTRControl" Grid.Column="1" Visibility="{Binding Path=MenuVisibility, Mode=OneWay}" Margin="10,0,0,0" >
+                            <Menu x:Name="mnTRControl" Grid.Column="1" Visibility="{Binding Path=MenuVisibility, Mode=OneWay}" Margin="10,0,0,0" Style="{StaticResource menuDefault}">
                                 <MenuItem IsCheckable="False" Padding="0" AutomationProperties.Name="{x:Static Properties:Resources.MenuItemAutomationPropertiesNameControlSelectedTextRange}">
                                     <MenuItem.Icon>
                                         <fabric:FabricIconControl GlyphName="More" Foreground="{DynamicResource ResourceKey=TextPatternExplorerFGBrush}" GlyphSize="Default"/>

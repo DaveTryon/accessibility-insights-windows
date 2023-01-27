@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.Extensions.Helpers;
 using AccessibilityInsights.Extensions.Interfaces.Upgrades;
@@ -24,7 +24,7 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
     /// set of information (each ChannelInfo object holds the data for one channel). The
     /// code defaults to the "default" channel, but this can be overridden by the caller.
     ///
-    /// A note about timing: Due to the way that extensions get loaded, our ctor may get
+    /// A note about timing: Due to the way that extensions get loaded, our constructor may get
     /// called some time before the app requests the upgrade status. Since we need to make
     /// a web call to get the data, we take advantage of that extra time to fetch the data
     /// from the web. We do that in a separate Task to prevent blocking the app. That means,
@@ -43,10 +43,14 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
         private Version _minimumChannelVersion;
         private Uri _releaseNotesUri;
         private Uri _installerUri;
+        private int _msiSizeInBytes;
+        private string _msiSha512;
         private readonly Stopwatch _initializationStopwatch = new Stopwatch();
         private readonly Stopwatch _updateStopwatch = new Stopwatch();
         private readonly ReleaseChannel _strongReleaseChannel;
-
+        private Uri _manifestRequestUri;
+        private Uri _manifestResponseUri;
+        private int _manifestSizeInBytes;
         private static readonly IExceptionReporter ExceptionReporter = new ExceptionReporter();
 
         /// <summary>
@@ -103,6 +107,42 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
         }
 
         /// <summary>
+        /// Implements <see cref="IAutoUpdate.ManifestRequestUri"/>
+        /// </summary>
+        public Uri ManifestRequestUri
+        {
+            get
+            {
+                WaitForInitializationToComplete();
+                return _manifestRequestUri;
+            }
+        }
+
+        /// <summary>
+        /// Implements <see cref="IAutoUpdate.ManifestResponseUri"/>
+        /// </summary>
+        public Uri ManifestResponseUri
+        {
+            get
+            {
+                WaitForInitializationToComplete();
+                return _manifestResponseUri;
+            }
+        }
+
+        /// <summary>
+        /// Implements <see cref="IAutoUpdate.ManifestSizeInBytes"/>
+        /// </summary>
+        public int ManifestSizeInBytes
+        {
+            get
+            {
+                WaitForInitializationToComplete();
+                return _manifestSizeInBytes;
+            }
+        }
+
+        /// <summary>
         /// Implements <see cref="IAutoUpdate.UpdateAsync"/>
         /// </summary>
         public Task<UpdateResult> UpdateAsync()
@@ -130,7 +170,7 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
                     return UpdateResult.NoUpdateAvailable;
                 }
 
-                VersionSwitcherWrapper.InstallUpgrade(_installerUri);
+                VersionSwitcherWrapper.InstallUpgrade(_installerUri, _msiSizeInBytes, _msiSha512);
                 return UpdateResult.Success;
             }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -169,7 +209,7 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
         }
 
         /// <summary>
-        /// Production ctor - MUST be a default ctor or extensions will break
+        /// Production constructor - MUST be a default constructor or extensions will break
         /// </summary>
 #pragma warning disable RS0034 // Exported parts should have [ImportingConstructor]
         public AutoUpdate() :
@@ -180,7 +220,7 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
 #pragma warning restore RS0034 // Exported parts should have [ImportingConstructor]
 
         /// <summary>
-        /// Unit testable ctor - allows dependency injection for testing
+        /// Unit testable constructor - allows dependency injection for testing
         /// </summary>
         /// <param name="releaseChannelProvider">Provides the client's current release channel</param>
         /// <param name="installedVersionProvider">Method that provides the installed version string</param>
@@ -228,13 +268,18 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
             {
                 if (Version.TryParse(_installedVersionProvider(), out _installedVersion))
                 {
-                    if (_channelInfoProvider.TryGetChannelInfo(_strongReleaseChannel, out ChannelInfo channelInfo) &&
-                        channelInfo.IsValid)
+                    if (_channelInfoProvider.TryGetChannelInfo(_strongReleaseChannel, out EnrichedChannelInfo enrichedChannelInfo) &&
+                        enrichedChannelInfo.IsValid)
                     {
-                        _currentChannelVersion = channelInfo.CurrentVersion;
-                        _minimumChannelVersion = channelInfo.MinimumVersion;
-                        _releaseNotesUri = new Uri(channelInfo.ReleaseNotesAsset, UriKind.Absolute);
-                        _installerUri = new Uri(channelInfo.InstallAsset, UriKind.Absolute);
+                        _manifestRequestUri = enrichedChannelInfo.Metadata.RequestUri;
+                        _manifestResponseUri = enrichedChannelInfo.Metadata.ResponseUri;
+                        _manifestSizeInBytes = enrichedChannelInfo.Metadata.DataByteCount;
+                        _msiSizeInBytes = enrichedChannelInfo.MsiSizeInBytes;
+                        _msiSha512 = enrichedChannelInfo.MsiSha512;
+                        _currentChannelVersion = enrichedChannelInfo.CurrentVersion;
+                        _minimumChannelVersion = enrichedChannelInfo.MinimumVersion;
+                        _releaseNotesUri = new Uri(enrichedChannelInfo.ReleaseNotesAsset, UriKind.Absolute);
+                        _installerUri = new Uri(enrichedChannelInfo.InstallAsset, UriKind.Absolute);
 
                         if (_installedVersion < _minimumChannelVersion)
                         {

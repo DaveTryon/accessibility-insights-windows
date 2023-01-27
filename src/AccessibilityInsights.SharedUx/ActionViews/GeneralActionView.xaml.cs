@@ -1,7 +1,6 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Dialogs;
-using AccessibilityInsights.SharedUx.Dialogs;
 using AccessibilityInsights.SharedUx.ViewModels;
 using System;
 using System.Globalization;
@@ -16,7 +15,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
 {
 #pragma warning disable CA1001 // Types that own disposable fields should be disposable
     /// <summary>
-    /// Interaction logic for General ations
+    /// Interaction logic for General actions
     /// handle cases with any number of parameters and any type of returns except A11yElement
     /// </summary>
     public partial class GeneralActionView : UserControl
@@ -24,22 +23,19 @@ namespace AccessibilityInsights.SharedUx.ActionViews
     {
         public GeneralActionViewModel ActionViewModel { get; private set; }
         int Counter;
-        Timer timerInvoke;
+        readonly Timer timerInvoke;
         private readonly object _lockObject = new object();
 
-        // Keep track of comboxbox dropdown state
+        // Keep track of combobox dropdown state
         bool isDropDownOpen;
 
         public GeneralActionView(GeneralActionViewModel a)
         {
-            if (a == null)
-                throw new ArgumentNullException(nameof(a));
-
-            this.ActionViewModel = a;
+            this.ActionViewModel = a ?? throw new ArgumentNullException(nameof(a));
             this.Counter = 0;
             InitializeComponent();
 
-            if(this.ActionViewModel.Parameters == null || this.ActionViewModel.Parameters.Count == 0)
+            if (this.ActionViewModel.Parameters == null || this.ActionViewModel.Parameters.Count == 0)
             {
                 this.dgParams.Visibility = Visibility.Collapsed;
             }
@@ -153,13 +149,11 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             return !regex.IsMatch(text);
         }
 
-#pragma warning disable CA1801 // unused parameter
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-#pragma warning restore CA1801 // unused parameter
+        private void UserControl_IsVisibleChanged(object _, DependencyPropertyChangedEventArgs _1)
         {
             lock (_lockObject)
             {
-                if(Counter != 0 && this.IsVisible == false)
+                if (Counter != 0 && this.IsVisible == false)
                 {
                     this.timerInvoke.Enabled = false;
                     this.btnAction.IsEnabled = true;
@@ -203,7 +197,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
 
             if (e.Key == Key.Escape)
             {
-                e.Handled = this.isDropDownOpen; // if the combobox dropdown was open, don't let esc close the dialog
+                e.Handled = this.isDropDownOpen; // if the combobox dropdown was open, don't let Esc close the dialog
                 this.isDropDownOpen = cmbx.IsDropDownOpen = false;
             }
         }

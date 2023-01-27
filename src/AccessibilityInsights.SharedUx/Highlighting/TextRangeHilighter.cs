@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Enums;
 using AccessibilityInsights.SharedUx.Utilities;
@@ -11,16 +11,16 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 {
     /// <summary>
     /// class TextRangeHilighter
-    /// Hiligt all bounding rectangles from a Text Range
+    /// Highlight all bounding rectangles from a Text Range
     /// </summary>
-    public class TextRangeHilighter: IDisposable
+    public class TextRangeHilighter : IDisposable
     {
         /// <summary>
-        /// Hilighter color
+        /// Highlighter color
         /// </summary>
-        private HighlighterColor Color;
+        private readonly HighlighterColor Color;
 
-        private List<Highlighter> Hilighters;
+        private readonly List<Highlighter> Hilighters;
 
         /// <summary>
         /// constructor
@@ -33,7 +33,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         }
 
         /// <summary>
-        /// Set the boundingrectangles to hilight
+        /// Set the bounding rectangles to highlight
         /// </summary>
         public void SetBoundingRectangles(IList<Rectangle> rects)
         {
@@ -56,9 +56,9 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         }
 
         /// <summary>
-        /// Hilight BoundingRectangles
+        /// Highlight BoundingRectangles
         /// </summary>
-        /// <param name="isVisible">hlight when it is true</param>
+        /// <param name="isVisible">Highlight is displayed if true</param>
         public void HilightBoundingRectangles(bool isVisible)
         {
             this.Hilighters?.ForEach(hl => hl.IsVisible = isVisible);

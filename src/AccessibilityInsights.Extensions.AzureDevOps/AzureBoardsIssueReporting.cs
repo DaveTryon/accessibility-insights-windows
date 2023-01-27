@@ -28,7 +28,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         internal static IDevOpsIntegration DevOpsIntegration { get; private set; }
 
         /// <summary>
-        /// Production ctor
+        /// Production constructor
         /// </summary>
 #pragma warning disable RS0034 // Exported parts should have [ImportingConstructor]
         public AzureBoardsIssueReporting()
@@ -37,7 +37,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         }
 
         /// <summary>
-        /// "Intermediate" production ctor
+        /// "Intermediate" production constructor
         /// </summary>
         private AzureBoardsIssueReporting(IDevOpsIntegration devOpsIntegration)
             : this(devOpsIntegration, new FileIssueHelpers(devOpsIntegration))
@@ -45,7 +45,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         }
 
         /// <summary>
-        /// Unit testable ctor
+        /// Unit testable constructor
         /// </summary>
         internal AzureBoardsIssueReporting(IDevOpsIntegration devOpsIntegration, FileIssueHelpers fileIssueHelpers)
         {
@@ -63,7 +63,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
 
         public Guid StableIdentifier { get; } = new Guid("73D8F6EB-E98A-4285-9BA3-B532A7601CC4");
 
-        public bool IsConfigured => _devOpsIntegration.ConnectedToAzureDevOps 
+        public bool IsConfigured => _devOpsIntegration.ConnectedToAzureDevOps
             && Configuration?.SavedConnection?.IsPopulated == true
             && _devOpsIntegration.CheckIfAbleToGetProjects().Result;
 
@@ -110,7 +110,8 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                         {
                             DisplayText = null,
                             IssueLink = null,
-                            PostAction = () => {
+                            PostAction = () =>
+                            {
                                 MessageDialog.Show(Properties.Resources.There_was_an_error_identifying_the_created_issue_This_may_occur_if_the_ID_used_to_create_the_issue_is_removed_from_its_Azure_DevOps_description_Attachments_have_not_been_uploaded);
                             },
                         };

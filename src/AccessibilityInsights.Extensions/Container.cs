@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
 using AccessibilityInsights.Extensions.Interfaces.Telemetry;
@@ -23,12 +23,12 @@ namespace AccessibilityInsights.Extensions
         internal static EventHandler<ReportExceptionEventArgs> ReportedExceptionEvent;
 
         /// <summary>
-        /// Production ctor
+        /// Production constructor
         /// </summary>
         private Container() : this(null) { }
 
         /// <summary>
-        /// Testable ctor
+        /// Testable constructor
         /// </summary>
         /// <param name="searchPatternOverride">Allows override of search pattern for testing</param>
         internal Container(string searchPatternOverride)
@@ -62,8 +62,8 @@ namespace AccessibilityInsights.Extensions
         [Import(typeof(IAutoUpdate), AllowDefault = true)]
         public IAutoUpdate AutoUpdate { get; set; }
 
-        [Import(typeof(ITelemetry), AllowDefault = true)]
-        public ITelemetry Telemetry { get; set; }
+        [ImportMany(typeof(ITelemetry))]
+        public IEnumerable<ITelemetry> TelemetryClasses { get; set; }
 
         [ImportMany(typeof(IIssueReporting))]
         public IEnumerable<IIssueReporting> IssueReportingOptions { get; set; }
@@ -71,7 +71,7 @@ namespace AccessibilityInsights.Extensions
         #endregion
 
         #region static members
-        readonly static object _lockObject = new object();
+        static readonly object _lockObject = new object();
         static Container _defaultInstance;
 
         /// <summary>
@@ -83,17 +83,19 @@ namespace AccessibilityInsights.Extensions
         {
             if (e != null && ReportedExceptionEvent != null)
             {
-                ReportExceptionEventArgs args = new ReportExceptionEventArgs();
-                args.ReportedException = e;
+                ReportExceptionEventArgs args = new ReportExceptionEventArgs
+                {
+                    ReportedException = e
+                };
                 ReportedExceptionEvent(sender, args);
             }
         }
 
         public static Container GetDefaultInstance()
         {
-            if(_defaultInstance == null)
+            if (_defaultInstance == null)
             {
-                lock(_lockObject)
+                lock (_lockObject)
                 {
 #pragma warning disable CA1508 // Analyzer doesn't understand threading
                     if (_defaultInstance == null)

@@ -13,14 +13,26 @@ variables:
 jobs:
 - job: ComplianceRelease
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
   variables:
     PublicRelease: 'false'
   steps:
+  - task: PowerShell@2
+    displayName: 'License Header Check'
+    inputs:
+      targetType: "filePath"
+      filePath: tools\scripts\verification.scripts\LicenseHeaderVerification.ps1
+      arguments: '-target  $(Build.Repository.LocalPath) -licenseHeaderPath tools\scripts\verification.scripts\LicenseHeader.txt -extensions *.xaml,*.xml,*.cs,*.ps1 -addIfAbsent $false'
+
   - task: NuGetToolInstaller@1
     displayName: 'Use NuGet 5.x'
     inputs:
       versionSpec: '5.x'
+
+  - task: CmdLine@2
+    displayName: 'Show environment variables'
+    inputs:
+      script: set
 
   - task: NuGetCommand@2
     displayName: 'NuGet restore'
@@ -33,17 +45,10 @@ jobs:
         **\*.csproj
         !**\CustomActions.Package.csproj
 
-  - task: PowerShell@2
-    displayName: 'License Header Check'
-    inputs:
-      targetType: "filePath"
-      filePath: tools\scripts\verification.scripts\LicenseHeaderVerification.ps1
-      arguments: '-target  $(Build.Repository.LocalPath) -licenseHeaderPath tools\scripts\verification.scripts\LicenseHeader.txt -extensions *.xaml,*.xml,*.cs,*.ps1 -addIfAbsent $false'
-
   - task: VSBuild@1
     displayName: 'Build Solution **\*.sln'
     inputs:
-      vsVersion: 16.0
+      vsVersion: 17.0
       platform: '$(BuildPlatform)'
       configuration: release
 
@@ -69,7 +74,6 @@ jobs:
       testAssemblyVer2: |
         **\*test*.dll
         !**\obj\**
-      vsTestVersion: 16.0
       codeCoverageEnabled: false
       platform: '$(BuildPlatform)'
       configuration: release
@@ -80,7 +84,7 @@ jobs:
 
 - job: ComplianceDebug
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
   variables:
     PublicRelease: 'false'
   steps:
@@ -88,6 +92,11 @@ jobs:
     displayName: 'Use NuGet 5.x'
     inputs:
       versionSpec: '5.x'
+
+  - task: CmdLine@2
+    displayName: 'Show environment variables'
+    inputs:
+      script: set
 
   - task: NuGetCommand@2
     displayName: 'NuGet restore'
@@ -103,7 +112,7 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build Solution **\*.sln'
     inputs:
-      vsVersion: 16.0
+      vsVersion: 17.0
       platform: '$(BuildPlatform)'
       configuration: debug
 
@@ -134,7 +143,7 @@ jobs:
         userProvideBuildInfo: msBuildInfo
         msbuildVersion: 16.0
         msBuildArchitecture: '$(BuildPlatform)'
-        msBuildCommandline: '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" "$(Build.SourcesDirectory)\src\AccessibilityInsights.sln" /p:platform="$(BuildPlatform)" /p:configuration="debug" /p:VisualStudioVersion="16.0"'
+        msBuildCommandline: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\msbuild.exe" "$(Build.SourcesDirectory)\src\AccessibilityInsights.sln" /p:platform="$(BuildPlatform)" /p:configuration="debug" /p:VisualStudioVersion="16.0"'
         rulesetName: recommended
         internalAnalyzersVersion: Latest
         microsoftAnalyzersVersion: Latest
@@ -189,7 +198,6 @@ jobs:
         **\*test*.dll
         !**\obj\**
       testFiltercriteria: 'TestCategory!=RequiresNetwork'
-      vsTestVersion: 16.0
       codeCoverageEnabled: false
       platform: '$(BuildPlatform)'
       configuration: debug
@@ -200,14 +208,15 @@ jobs:
   - ComplianceRelease
   - ComplianceDebug
   condition: and(succeeded(), succeeded())
-  pool: MSEngSS-MicroBuild2019-1ES
+  pool: MSEngSS-MicroBuild2022-1ES
   variables:
     runCodesignValidationInjection: 'true'
     SignAppForRelease: 'true'
     GDN_CODESIGN_TARGETDIRECTORY: '$(Build.ArtifactStagingDirectory)\SigningValidation'
+    Codeql.Enabled: 'true'
 
   steps:
-  - task: ms-vseng.MicroBuildTasks.30666190-6959-11e5-9f96-f56098202fef.MicroBuildSigningPlugin@2
+  - task: ms-vseng.MicroBuildTasks.30666190-6959-11e5-9f96-f56098202fef.MicroBuildSigningPlugin@4
     displayName: 'Install Signing Plugin'
     inputs:
       signType: real
@@ -217,6 +226,11 @@ jobs:
     displayName: 'Use NuGet 5.x'
     inputs:
       versionSpec: '5.x'
+
+  - task: CmdLine@2
+    displayName: 'Show environment variables'
+    inputs:
+      script: set
 
   - task: NuGetCommand@2
     displayName: 'NuGet restore'
@@ -241,7 +255,7 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build Solution **\AccessibilityInsights.sln'
     inputs:
-      vsVersion: 16.0
+      vsVersion: 17.0
       platform: '$(BuildPlatform)'
       configuration: SignedRelease
       solution: '**/AccessibilityInsights.sln'  # we only want to build AccessibilityInsights for signing
@@ -261,15 +275,22 @@ jobs:
       PathtoPublish: 'src\MSI\bin\Release\msi'
       ArtifactName: 'msi'
 
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: manifest'
+    inputs:
+      PathtoPublish: 'src\Manifest\bin\Release\net48'
+      ArtifactName: 'manifest'
+
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
     displayName: 'Run BinSkim'
     inputs:
       InputType: Basic
       # Double-quote syntax with trailing backslash on each line concatenates lines without spaces
-      AnalyzeTarget: "src\\AccessibilityInsights\\bin\\Release\\net472\\*.exe;\
-                      src\\AccessibilityInsights\\bin\\Release\\net472\\AccessibilityInsights.*.dll;\
-                      src\\AccessibilityInsights.VersionSwitcher\\bin\\Release\\net472\\*.exe;\
-                      src\\AccessibilityInsights.VersionSwitcher\\bin\\Release\\net472\\AccessibilityInsights.*.dll;"
+      AnalyzeTarget: "src\\AccessibilityInsights\\bin\\Release\\net48\\*.exe;\
+                      src\\AccessibilityInsights\\bin\\Release\\net48\\AccessibilityInsights.*.dll;\
+                      src\\AccessibilityInsights.VersionSwitcher\\bin\\Release\\net48\\*.exe;\
+                      src\\AccessibilityInsights.VersionSwitcher\\bin\\Release\\net48\\AccessibilityInsights.*.dll;\
+                      src\\Manifest\\bin\\Release\\net48\\AccessibilityInsights.*.dll;"
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-report.SdtReport@1
     displayName: 'Create Security Analysis Report (BinSkim)'
@@ -290,7 +311,6 @@ jobs:
       testAssemblyVer2: |
         **\*test*.dll
         !**\obj\**
-      vsTestVersion: 16.0
       codeCoverageEnabled: false
       platform: '$(BuildPlatform)'
       configuration: release
@@ -324,10 +344,11 @@ jobs:
     inputs:
       SourceFolder: '$(Build.SourcesDirectory)\src'
       Contents: |
-       AccessibilityInsights\bin\Release\net472\**\?(*.exe|*.dll)
-       AccessibilityInsights.VersionSwitcher\bin\Release\net472\**\?(*.exe|*.dll)
-       !AccessibilityInsights.VersionSwitcher\bin\Release\net472\**\?(Microsoft.Deployment.WindowsInstaller.dll|Newtonsoft.Json.dll)
+       AccessibilityInsights\bin\Release\net48\**\?(*.exe|*.dll)
+       AccessibilityInsights.VersionSwitcher\bin\Release\net48\**\?(*.exe|*.dll)
+       !AccessibilityInsights.VersionSwitcher\bin\Release\net48\**\?(Microsoft.Deployment.WindowsInstaller.dll|Newtonsoft.Json.dll)
        MSI\bin\Release\msi\**\AccessibilityInsights.msi
+       Manifest\bin\Release\net48\AccessibilityInsights.Manifest.dll
       TargetFolder: '$(Build.ArtifactStagingDirectory)\SigningValidation'
 
   - task: ms-vseng.MicroBuildTasks.521a94ea-9e68-468a-8167-6dcf361ea776.MicroBuildCleanup@1

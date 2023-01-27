@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using AccessibilityInsights.Extensions.Interfaces.Upgrades;
 using AccessibilityInsights.SetupLibrary;
 using AccessibilityInsights.SharedUx.Telemetry;
 using AccessibilityInsights.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Windows.Forms.Design;
 
 namespace AccessibilityInsights.Misc
 {
@@ -71,12 +71,15 @@ namespace AccessibilityInsights.Misc
                 });
         }
 
-        public static TelemetryEvent ForGetUpgradeOption(TimeSpan? initializationTime, TimeSpan? optionWaitTime, string updateOption, bool timedOut)
+        internal static TelemetryEvent ForGetUpgradeOption(IAutoUpdate autoUpdate, TimeSpan? optionWaitTime, string updateOption, bool timedOut)
         {
             return new TelemetryEvent(TelemetryAction.Upgrade_GetUpgradeOption,
                 new Dictionary<TelemetryProperty, string>
                 {
-                    { TelemetryProperty.UpdateInitializationTime, GetTimeSpanTelemetryString(initializationTime) },
+                    { TelemetryProperty.UpdateInitializationTime, GetTimeSpanTelemetryString(autoUpdate.GetInitializationTime()) },
+                    { TelemetryProperty.UpdateManifestRequestUri, autoUpdate.ManifestRequestUri.ToString() },
+                    { TelemetryProperty.UpdateManifestResponseUri, autoUpdate.ManifestResponseUri.ToString() },
+                    { TelemetryProperty.UpdateManifestSizeInBytes, autoUpdate.ManifestSizeInBytes.ToString(CultureInfo.InvariantCulture) },
                     { TelemetryProperty.UpdateOptionWaitTime, GetTimeSpanTelemetryString(optionWaitTime) },
                     { TelemetryProperty.UpdateOption, updateOption },
                     { TelemetryProperty.UpdateTimedOut, timedOut.ToString(CultureInfo.InvariantCulture) },
@@ -112,6 +115,7 @@ namespace AccessibilityInsights.Misc
                 new Dictionary<TelemetryProperty, string>
                 {
                     { TelemetryProperty.UIAccessEnabled, NativeMethods.IsRunningWithUIAccess().ToString(CultureInfo.InvariantCulture) },
+                    { TelemetryProperty.OsArchitecture, Environment.Is64BitOperatingSystem ? "x64" : "x86" },
                     { TelemetryProperty.InstalledDotNetFrameworkVersion, formattedDotNetFrameworkVersion }
                 });
         }

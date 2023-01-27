@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Enums;
 using AccessibilityInsights.SharedUx.Properties;
@@ -175,7 +175,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         }
 
         /// <summary>
-        /// Is button visibile
+        /// Is button visible
         /// </summary>
         public Visibility ButtonVisibility { get; private set; }
 
@@ -216,7 +216,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// Add a single child to node
         /// </summary>
         /// <param name="child"></param>
-        public void AddChild(EventConfigNodeViewModel child, bool isChecked=false)
+        public void AddChild(EventConfigNodeViewModel child, bool isChecked = false)
         {
             if (child == null)
                 throw new ArgumentNullException(nameof(child));
@@ -293,7 +293,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             var l = _children.OrderBy(e => e.Header).ToList();
             this._children.Clear();
-            foreach(var c in l)
+            foreach (var c in l)
             {
                 this._children.Add(c);
             }
@@ -374,7 +374,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// <param name="name">Name to display (checkbox only)</param>
         /// <param name="vis">Initial Visibility State</param>
         /// <param name="txt">Text to display (buttons only)</param>
-        /// <param name="isThreeState">true to enable ThreeState behavior (chechboxes only)</param>
+        /// <param name="isThreeState">true to enable ThreeState behavior (checkboxes only)</param>
         public EventConfigNodeViewModel(string name, Visibility vis = Visibility.Collapsed, string txt = "", bool isThreeState = false)
         {
             this.Type = EventConfigNodeType.Group;
@@ -401,9 +401,9 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             this.IsExpanded = true;
 
-            if(expandchildren && this._children.Count != 0)
+            if (expandchildren && this._children.Count != 0)
             {
-                foreach(var c in this._children)
+                foreach (var c in this._children)
                 {
                     c.Expand(true);
                 }
@@ -434,10 +434,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             if (this.TextVisibility == Visibility.Visible)
             {
-                var check = (this.IsChecked.HasValue && this.IsChecked.Value)
-                    ? Resources.EventConfigNodeViewModel_ToString_checked
-                    : Resources.EventConfigNodeViewModel_ToString_unchecked;
-                return this.Header + check;
+                return this.Header;
             }
             else
             {

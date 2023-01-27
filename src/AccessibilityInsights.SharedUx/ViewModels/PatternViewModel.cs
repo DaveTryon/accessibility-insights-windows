@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Dialogs;
 using AccessibilityInsights.SharedUx.Interfaces;
@@ -20,9 +20,9 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// <summary>
     /// UI wrapper for Pattern
     /// </summary>
-    public class PatternViewModel:ViewModelBase
+    public class PatternViewModel : ViewModelBase
     {
-        public PatternViewModel(A11yElement e,A11yPattern pattern, bool isActionAllowed, bool isExpanded)
+        public PatternViewModel(A11yElement e, A11yPattern pattern, bool isActionAllowed, bool isExpanded)
         {
             this.IsExpanded = isExpanded;
             this.Pattern = pattern ?? throw new ArgumentNullException(nameof(pattern));
@@ -123,8 +123,8 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         public Visibility ActionVisibility { get; private set; }
 
         private ICommand _clickCommand;
-        private ActionType ActionType;
-        private A11yElement Element;
+        private readonly ActionType ActionType;
+        private readonly A11yElement Element;
 
         public ICommand ClickCommand
         {
@@ -142,7 +142,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             {
                 ShowActionDialog();
             }
-            else if(this.ActionType == ActionType.TextExplorer)
+            else if (this.ActionType == ActionType.TextExplorer)
             {
                 ShowTextExplorerDialog();
             }
@@ -172,17 +172,20 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             var tp2 = this.Element.Patterns.ById(PatternType.UIA_TextPattern2Id);
 
-            var dlg = new TextPatternExplorerDialog((TextPattern)this.Pattern,tp2 == null ? null : (TextPattern2)tp2);
-
-            dlg.Owner = Application.Current.MainWindow;
+            var dlg = new TextPatternExplorerDialog((TextPattern)this.Pattern, tp2 == null ? null : (TextPattern2)tp2)
+            {
+                Owner = Application.Current.MainWindow
+            };
 
             dlg.ShowDialog();
         }
 
         private void ShowActionDialog()
         {
-            ControlPatternDialog dlg = new ControlPatternDialog(this);
-            dlg.Owner = Application.Current.MainWindow;
+            ControlPatternDialog dlg = new ControlPatternDialog(this)
+            {
+                Owner = Application.Current.MainWindow
+            };
 
             dlg.ShowDialog();
         }

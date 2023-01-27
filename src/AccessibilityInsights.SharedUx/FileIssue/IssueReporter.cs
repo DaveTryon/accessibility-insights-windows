@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
-using AccessibilityInsights.SharedUx.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace AccessibilityInsights.SharedUx.FileIssue
     /// <summary>
     /// Adapter between the core app and the issue reporting extension
     /// </summary>
-    static public class IssueReporter
+    public static class IssueReporter
     {
         #region Unit test overrides
         internal static bool? TestControlledIsEnabled;
@@ -35,9 +34,9 @@ namespace AccessibilityInsights.SharedUx.FileIssue
             }
         }
 
-        public static bool IsConnected => IsEnabled && (IssueReporting == null ? false : IssueReporting.IsConfigured);
+        public static bool IsConnected => IsEnabled && (IssueReporting != null && IssueReporting.IsConfigured);
 
-        public static ReporterFabricIcon Logo => (IsEnabled && IssueReporting != null )? IssueReporting.Logo : ReporterFabricIcon.PlugDisconnected ;
+        public static ReporterFabricIcon Logo => (IsEnabled && IssueReporting != null) ? IssueReporting.Logo : ReporterFabricIcon.PlugDisconnected;
 
         public static string DisplayName
         {
@@ -89,7 +88,7 @@ namespace AccessibilityInsights.SharedUx.FileIssue
                 // so keeping it as is till we have a discussion. Check for blocking behavior at that link.
                 // https://github.com/Microsoft/accessibility-insights-windows/blob/main/src/AccessibilityInsights.SharedUx/Controls/HierarchyControl.xaml.cs#L858
                 IIssueResultWithPostAction result = IssueReporting.FileIssueAsync(issueInformation).Result;
-                result.PostAction?.Invoke();
+                result?.PostAction?.Invoke();
                 IssueReporterManager.GetInstance().UpdateIssueReporterSettings(IssueReporting);
                 return result;
             }

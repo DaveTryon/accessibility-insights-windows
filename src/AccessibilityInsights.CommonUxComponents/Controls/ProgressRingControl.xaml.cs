@@ -1,7 +1,6 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using AccessibilityInsights.Win32;
-using Microsoft.Win32;
+
 using System;
 using System.IO;
 using System.Media;
@@ -45,7 +44,7 @@ namespace AccessibilityInsights.CommonUxComponents.Controls
             var control = d as ProgressRingControl;
             if (control != null)
             {
-                control.IsActive = (bool) e.NewValue;
+                control.IsActive = (bool)e.NewValue;
             }
         }
 
@@ -66,47 +65,49 @@ namespace AccessibilityInsights.CommonUxComponents.Controls
         /// <summary>
         /// Private variables used
         /// </summary>
-        private SoundPlayer player;
+        private readonly SoundPlayer player;
         private Timer timer;
         private bool isPlayingSound;
         private bool withSound;
+        private SelectedSound _selectedSound;
 
-        /// <summary>
-        /// Check if Narrator is running
-        /// </summary>
-        public static bool IsInternalScreenReaderActive()
+        public SelectedSound SelectedSound
         {
-            try
+            get => _selectedSound;
+            set
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(Properties.Resources.ProgressRingControl_IsInternalScreenReaderActive_Software_Microsoft_Windows_NT_CurrentVersion_AccessibilityTemp))
+                if (value == _selectedSound) return;
+
+                // Enforce that we only allow the property to be changed once
+                if (_selectedSound != SelectedSound.NoSound)
                 {
-                    return key?.GetValue("narrator")?.ToString().Equals("1", StringComparison.Ordinal) == true;
+                    throw new ArgumentException("SelectedSound can only be changed once", nameof(value));
                 }
+
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + GetResourceForSound(value));
+                player.Stream = stream;
+
+                _selectedSound = value;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
-            catch
-            {
-                // TODO : Report this?
-                // fail silently and we might end up not playing sound
-                return false;
-            }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
-        /// <summary>
-        /// Check if any Screen Reader is running
-        /// </summary>
-        public static bool IsScreenReaderActive()
+        private static string GetResourceForSound(SelectedSound selectedSound)
         {
-            return (IsInternalScreenReaderActive() || NativeMethods.IsExternalScreenReaderActive()) && AutomationPeer.ListenerExists(AutomationEvents.LiveRegionChanged);
+            switch (selectedSound)
+            {
+                case SelectedSound.Scanner:
+                    return ".Resources.Sound.scanner_sound.wav";
+                default:
+                    // Please refer to comments in https://github.com/microsoft/accessibility-insights-windows/pull/1523 if this is thrown
+                    throw new ArgumentException($"No sound loaded for {selectedSound}", nameof(selectedSound));
+            }
         }
 
         /// <summary>
-        /// Check if we need to play scanning sound, play sound while meet both conditions below:
-        ///    1. "play sound while scanning" option in settings pannel is on
-        ///    2. At least one AT tool is running
+        /// Check whether to play sound feedback while scanning
         /// </summary>
-        public bool ShouldPlayScannerSound() => WithSound && IsScreenReaderActive();
+        public bool ShouldPlayScannerSound() => WithSound;
 
         /// <summary>
         /// Overriding LocalizedControlType
@@ -226,29 +227,8 @@ namespace AccessibilityInsights.CommonUxComponents.Controls
             }
             get
             {
-                return (int) (ell1.RenderTransformOrigin.Y * ell1.Height * -2);
+                return (int)(ell1.RenderTransformOrigin.Y * ell1.Height * -2);
             }
-        }
-
-        private void LoadDefaultScanningSound()
-        {
-            // load default scanning sound file
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            // no sound by default
-            withSound = false;
-            isPlayingSound = false;
-            try
-            {
-                Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".Resources.Sound.scanner_sound.wav");
-                player = new SoundPlayer(stream);
-            }
-#pragma warning disable CA1031 // Do not catch general exception types
-            catch
-            {
-                // TODO : Report this Exception?
-                player = new SoundPlayer();
-            }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
         /// <summary>
@@ -257,7 +237,7 @@ namespace AccessibilityInsights.CommonUxComponents.Controls
         public ProgressRingControl()
         {
             InitializeComponent();
-            LoadDefaultScanningSound();
+            player = new SoundPlayer();
         }
     }
 }

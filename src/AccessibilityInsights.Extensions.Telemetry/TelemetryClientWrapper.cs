@@ -14,10 +14,7 @@ namespace AccessibilityInsights.Extensions.Telemetry
 
         internal TelemetryClientWrapper(TelemetryClient client)
         {
-            if (client == null)
-                throw new ArgumentNullException(nameof(client));
-
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         async void ITelemetryClientWrapper.TrackEvent(EventTelemetry data)
@@ -28,6 +25,11 @@ namespace AccessibilityInsights.Extensions.Telemetry
         async void ITelemetryClientWrapper.TrackException(Exception e, Dictionary<string, string> contextProperties)
         {
             await Task.Run(new Action(() => _client.TrackException(e, contextProperties))).ConfigureAwait(false);
+        }
+
+        public void FlushAndShutDown()
+        {
+            _client.Flush();
         }
     }
 }

@@ -14,8 +14,9 @@
     <OutputType>Library</OutputType>
     <RootNamespace>AccessibilityInsights.CustomActions.Package</RootNamespace>
     <AssemblyName>AccessibilityInsights.CustomActions</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,9 +50,9 @@
   <Target Name="OverwriteWithSignedAssemblies">
     <!-- Manually overwrite assemblies with signed versions before packing everything up -->
     <ItemGroup>
-      <SignedOverwriteFiles Include="$(SolutionDir)AccessibilityInsights.CustomActions\bin\$(Configuration)\net472\AccessibilityInsights.CustomActions.*" />
-      <SignedOverwriteFiles Include="$(SolutionDir)AccessibilityInsights\bin\$(Configuration)\net472\Microsoft.Deployment.WindowsInstaller.dll" />
-      <SignedOverwriteFiles Include="$(SolutionDir)AccessibilityInsights\bin\$(Configuration)\net472\Newtonsoft.Json.dll" />
+      <SignedOverwriteFiles Include="$(SolutionDir)AccessibilityInsights.CustomActions\bin\$(Configuration)\net48\AccessibilityInsights.CustomActions.*" />
+      <SignedOverwriteFiles Include="$(SolutionDir)AccessibilityInsights\bin\$(Configuration)\net48\Microsoft.Deployment.WindowsInstaller.dll" />
+      <SignedOverwriteFiles Include="$(SolutionDir)AccessibilityInsights\bin\$(Configuration)\net48\Newtonsoft.Json.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(SignedOverwriteFiles)" DestinationFolder="$(IntermediateOutputPath)" />
     <PropertyGroup>
@@ -59,6 +60,11 @@
     </PropertyGroup>
   </Target>
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core">
+      <Version>1.0.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="WiX" Version="3.11.2" />
   </ItemGroup>
   <ItemGroup>
@@ -76,8 +82,6 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.VisualStudioEng.MicroBuild.Core.0.4.1\build\Microsoft.VisualStudioEng.MicroBuild.Core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudioEng.MicroBuild.Core.0.4.1\build\Microsoft.VisualStudioEng.MicroBuild.Core.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.VisualStudioEng.MicroBuild.Core.0.4.1\build\Microsoft.VisualStudioEng.MicroBuild.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudioEng.MicroBuild.Core.0.4.1\build\Microsoft.VisualStudioEng.MicroBuild.Core.targets'))" />
     <Error Condition="!Exists('..\packages\WiX.3.11.2\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.2\build\wix.props'))" />
   </Target>
 </Project>

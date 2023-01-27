@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using AccessibilityInsights.CommonUxComponents.Dialogs;
@@ -74,8 +74,10 @@ namespace AccessibilityInsights
             }
 
             // chrome height is set to make sure system menu is shown over title bar area.
-            var chrome = new WindowChrome();
-            chrome.CaptionHeight = 35;
+            var chrome = new WindowChrome
+            {
+                CaptionHeight = 35
+            };
             WindowChrome.SetWindowChrome(this, chrome);
 
             UpdateTabSelection();
@@ -430,7 +432,7 @@ namespace AccessibilityInsights
         /// </summary>
         private static double GetFirstDefinedNumber(double[] potentialNumbers)
         {
-            foreach(double potentialNumber in potentialNumbers)
+            foreach (double potentialNumber in potentialNumbers)
             {
                 if (!double.IsNaN(potentialNumber))
                 {
@@ -459,7 +461,7 @@ namespace AccessibilityInsights
                 double right = left + layout.Width;
                 double bottom = top + layout.Height;
 
-                // If the window is completely offscreen, open it in default location
+                // If the window is completely off-screen, open it in default location
                 if ((right <= virtualLeft) ||
                     (bottom <= virtualTop) ||
                     (left >= virtualRight) ||

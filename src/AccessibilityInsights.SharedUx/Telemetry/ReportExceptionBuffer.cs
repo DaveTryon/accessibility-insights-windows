@@ -15,12 +15,12 @@ namespace AccessibilityInsights.SharedUx.Telemetry
     {
         private const int MaxBufferLength = 10;
 
-        private ConcurrentQueue<Exception> _bufferedExceptions = new ConcurrentQueue<Exception>();
+        private readonly ConcurrentQueue<Exception> _bufferedExceptions = new ConcurrentQueue<Exception>();
         private bool _forwardExceptions;
         private readonly Action<Exception> _target;
 
         /// <summary>
-        /// Ctor
+        /// Constructor
         /// </summary>
         /// <param name="target">The target to receive exceptions</param>
         internal ReportExceptionBuffer(Action<Exception> target)

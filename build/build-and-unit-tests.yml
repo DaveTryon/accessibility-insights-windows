@@ -10,7 +10,7 @@ jobs:
   displayName: Build and run unit tests - ${{ parameters.configuration }}
   condition: succeeded()
   pool:
-    vmImage: windows-2019
+    vmImage: windows-2022
   steps:
   - ${{ if eq(parameters.checkLicenseHeaders, 'true') }}:
     - task: PowerShell@2
@@ -24,6 +24,11 @@ jobs:
     displayName: 'Use NuGet 5.x'
     inputs:
       versionSpec: '5.x'
+
+  - task: CmdLine@2
+    displayName: 'Show environment variables'
+    inputs:
+      script: set
 
   - task: NuGetCommand@2
     displayName: 'NuGet restore'
@@ -39,7 +44,7 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build Solution **\*.sln'
     inputs:
-      vsVersion: 16.0
+      vsVersion: 17.0
       platform: '$(BuildPlatform)'
       configuration: ${{ parameters.configuration }}
 
@@ -53,15 +58,14 @@ jobs:
     displayName: 'Publish Artifact: drop'
 
   - task: VSTest@2
-    displayName: 'Test Assemblies **\release\*test*.dll;-:**\obj\**'
+    displayName: 'Test Assemblies **\*test*.dll;-:**\obj\**'
     inputs:
       testAssemblyVer2: |
         **\*test*.dll
         !**\obj\**
-      vsTestVersion: 16.0
       codeCoverageEnabled: true
       platform: '$(BuildPlatform)'
-      configuration: release
+      configuration: ${{ parameters.configuration }}
       rerunFailedTests: true
       runSettingsFile: $(Build.SourcesDirectory)/src/UITests//UITests.runsettings
       testFiltercriteria: 'TestCategory!=UITest'

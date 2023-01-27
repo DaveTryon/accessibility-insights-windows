@@ -10,7 +10,7 @@
   <Import Project="..\..\build\NetFrameworkRelease.targets" />
 
   <ItemGroup>
-    <PackageReference Include="Axe.Windows" Version="1.1.1" />
+    <PackageReference Include="Axe.Windows" Version="2.1.0" />
     <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
@@ -86,4 +86,13 @@
     </Page>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Sound\start_event_recording.wav" />
+    <EmbeddedResource Include="Resources\Sound\start_event_recording.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Sound\stop_event_recording.wav" />
+    <EmbeddedResource Include="Resources\Sound\stop_event_recording.wav" />
+  </ItemGroup>
 </Project>

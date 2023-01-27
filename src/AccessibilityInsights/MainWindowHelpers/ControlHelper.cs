@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.Enums;
 using AccessibilityInsights.Extensions.Interfaces.Upgrades;
@@ -20,7 +20,7 @@ namespace AccessibilityInsights
     /// <summary>
     /// MainWindow partial class for Helping flow control
     /// </summary>
-    public partial class MainWindow: ICCAMode
+    public partial class MainWindow : ICCAMode
     {
         /// <summary>
         /// flag to allow any further action
@@ -30,7 +30,7 @@ namespace AccessibilityInsights
         /// <summary>
         /// Enable appropriate Tracker in SelectAction based on configuration
         /// Keyboard focus vs. Mouse
-        /// allow enable only in selection is feasibile based on mode.
+        /// allow enable only if selection is feasible based on mode.
         /// </summary>
         internal void EnableElementSelector()
         {
@@ -38,7 +38,7 @@ namespace AccessibilityInsights
             if (!sa.IsPaused &&
                 ((CurrentPage == AppPage.Inspect && (InspectView)CurrentView == InspectView.Live)
                 ||
-                (CurrentPage == AppPage.CCA&& (CCAView)CurrentView == CCAView.Automatic)
+                (CurrentPage == AppPage.CCA && (CCAView)CurrentView == CCAView.Automatic)
                 ))
             {
                 this.AllowFurtherAction = true;
@@ -110,8 +110,10 @@ namespace AccessibilityInsights
         private void UpdateBreadcrumbs()
         {
             var sa = SelectAction.GetDefaultInstance();
-            var rd = new ResourceDictionary();
-            rd.Source = new Uri(@"pack://application:,,,/AccessibilityInsights.SharedUx;component/Resources/Styles.xaml", UriKind.Absolute);
+            _ = new ResourceDictionary
+            {
+                Source = new Uri(@"pack://application:,,,/AccessibilityInsights.SharedUx;component/Resources/Styles.xaml", UriKind.Absolute)
+            };
 
             CollapseAllCrumbs();
 
@@ -217,9 +219,8 @@ namespace AccessibilityInsights
             int count = 1;
             foreach (var elem in visibleCommands)
             {
-                string name = elem.GetValue(AutomationProperties.NameProperty) as string;
-                var len = name.IndexOf(':') == -1 ? name.Length : name.IndexOf(':');
-                elem.SetValue(AutomationProperties.NameProperty, string.Format(CultureInfo.InvariantCulture, Properties.Resources.MainWindow_UpdateMainCommandButtons_0_1_of_2, name.Substring(0, len), count, visibleCommands.Count));
+                elem.SetValue(AutomationProperties.PositionInSetProperty, count);
+                elem.SetValue(AutomationProperties.SizeOfSetProperty, visibleCommands.Count);
                 count++;
             }
         }

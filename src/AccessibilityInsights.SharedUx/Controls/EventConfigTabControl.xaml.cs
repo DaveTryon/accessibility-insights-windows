@@ -1,6 +1,7 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
+using AccessibilityInsights.SharedUx.Controls.CustomControls;
 using AccessibilityInsights.SharedUx.Dialogs;
 using AccessibilityInsights.SharedUx.Enums;
 using AccessibilityInsights.SharedUx.Settings;
@@ -83,7 +84,8 @@ namespace AccessibilityInsights.SharedUx.Controls
             }
 
             var properties = new EventConfigNodeViewModel(
-                Properties.Resources.EventConfigTabControl_Properties, isThreeState: true) { Depth = 1 };
+                Properties.Resources.EventConfigTabControl_Properties, isThreeState: true)
+            { Depth = 1 };
             properties.AddChildren(el.Properties.Values);
 
             if (properties.Children.Any())
@@ -101,7 +103,8 @@ namespace AccessibilityInsights.SharedUx.Controls
                 Properties.Resources.EventConfigTabControl_MyEvents, isThreeState: true);
 
             CustomPropertiesNode = new EventConfigNodeViewModel(
-                Properties.Resources.EventConfigTabControl_Properties, isThreeState: true) { Depth = 1 };
+                Properties.Resources.EventConfigTabControl_Properties, isThreeState: true)
+            { Depth = 1 };
             EditBtnNode = new EventConfigNodeViewModel("", Visibility.Visible, Properties.Resources.EventConfigTabControl_SetElement_Edit_My_Events) { Depth = 1, TextVisibility = Visibility.Collapsed };
 
             UpdateCustomNode();
@@ -139,8 +142,8 @@ namespace AccessibilityInsights.SharedUx.Controls
             CustomNode.InsertChildAtIndex(0, EditBtnNode);
 
             custom = (from e in ConfigurationManager.GetDefaultInstance().EventConfig.Properties
-                          where e.IsRecorded
-                          select e.Id).ToList();
+                      where e.IsRecorded
+                      select e.Id).ToList();
 
             CustomPropertiesNode.Children.Where(c => c.Type != EventConfigNodeType.Group && !custom.Contains(c.Id)).ToList().ForEach(c => CustomPropertiesNode.RemoveChild(c));
 
@@ -181,8 +184,10 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// </summary>
         private void OpenConfigDialog()
         {
-            var window = new EventConfigWindow();
-            window.Owner = Application.Current.MainWindow;
+            var window = new EventConfigWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
 
             window.ShowDialog();
 
@@ -197,41 +202,6 @@ namespace AccessibilityInsights.SharedUx.Controls
             {
                 ConfigurationManager.GetDefaultInstance().PopulateEventConfiguration();
             }
-        }
-
-        /// <summary>
-        /// Create a property bag based on RecorderSetting changes.
-        /// </summary>
-        /// <param name="cfg"></param>
-        /// <returns></returns>
-        private static IDictionary<string, string> GetPropertyBag(RecorderSetting cfg)
-        {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            dic.Add("Scope", cfg.ListenScope.ToString());
-
-            if (cfg.IsListeningFocusChangedEvent)
-            {
-                dic.Add(EventType.UIA_AutomationFocusChangedEventId.ToString(CultureInfo.InvariantCulture), EventType.GetInstance().GetNameById(EventType.UIA_AutomationFocusChangedEventId));
-            }
-
-            foreach (var e in cfg.Events)
-            {
-                if (e.IsRecorded)
-                {
-                    dic.Add(e.Id.ToString(CultureInfo.InvariantCulture), e.Name);
-                }
-            }
-
-            foreach (var p in cfg.Properties)
-            {
-                if (p.IsRecorded)
-                {
-                    dic.Add(p.Id.ToString(CultureInfo.InvariantCulture), p.Name);
-                }
-            }
-
-            return dic;
         }
 
         /// <summary>
@@ -256,7 +226,11 @@ namespace AccessibilityInsights.SharedUx.Controls
             {
                 if (evm.IsEditEnabled)
                 {
-                    evm.IsChecked = !evm.IsChecked;
+                    CheckableTreeViewItemAutomationPeer peer = UIElementAutomationPeer.FromElement(sender as TreeViewItem) as CheckableTreeViewItemAutomationPeer;
+                    if (peer != null && peer.EventsSource is CheckableTreeViewDataItemAutomationPeer)
+                    {
+                        (peer.EventsSource as CheckableTreeViewDataItemAutomationPeer).Toggle();
+                    }
                 }
                 e.Handled = true;
             }

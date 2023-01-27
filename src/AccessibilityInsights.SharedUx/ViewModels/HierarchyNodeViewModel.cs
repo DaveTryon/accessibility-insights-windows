@@ -1,6 +1,7 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
+using AccessibilityInsights.SharedUx.Interfaces;
 using AccessibilityInsights.SharedUx.Properties;
 using AccessibilityInsights.SharedUx.Utilities;
 using Axe.Windows.Core.Bases;
@@ -19,7 +20,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// HierarchyTreeItem class
     /// ViewModel for A11yElement in Hierarchy tree
     /// </summary>
-    public class HierarchyNodeViewModel: ViewModelBase
+    public class HierarchyNodeViewModel : ViewModelBase, IIssueFilingSource
     {
         const int NormalIconSizeBack = 14; // size for non composite icon
         const int TreeIconSizeBack = 16;   // size for tree in composite icon
@@ -43,7 +44,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
 #pragma warning disable CA1819 // Properties should not return arrays
         /// <summary>
         /// Counts of aggregate scan statuses
-        ///     result[ScanStatusEnum] -> number of descendents with that scan status (including this element)
+        ///     result[ScanStatusEnum] -> number of descendants with that scan status (including this element)
         /// </summary>
         public int[] AggregateStatusCounts { get; private set; }
 #pragma warning restore CA1819 // Properties should not return arrays
@@ -150,7 +151,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         }
 
         /// <summary>
-        /// to indicate whether the node should be hilighted or not
+        /// to indicate whether the node should be highlighted or not
         /// </summary>
         private bool _ishilighted;
         public bool IsHilighted
@@ -217,7 +218,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// These are searchable string properties
         /// Not all string properties are included to improve performance
         /// </summary>
-        private static int[] CommonStringProperties =
+        private static readonly int[] CommonStringProperties =
         {
             PropertyType.UIA_LocalizedControlTypePropertyId,
             PropertyType.UIA_NamePropertyId,
@@ -313,7 +314,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
                     this.IconVisibility = Visibility.Visible;
                     automationNameFormat = Resources.HierarchyNodeViewModel_AutomationNameFailedResultsFormat;
                 }
-                else if(this.Element.TestStatus == ScanStatus.ScanNotSupported)
+                else if (this.Element.TestStatus == ScanStatus.ScanNotSupported)
                 {
                     this.IconBack = FabricIcon.MapDirections;
                     this.IconSizeBack = NormalIconSizeBack;
@@ -381,7 +382,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
                 this.IsHilighted = true;
             }
 
-            if(isfiltered)
+            if (isfiltered)
             {
                 this.Visibility = Visibility.Collapsed;
             }
@@ -436,9 +437,9 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         {
             this.IsExpanded = true;
 
-            if(expandchildren && this.Children.Count != 0)
+            if (expandchildren && this.Children.Count != 0)
             {
-                foreach(var c in this.Children)
+                foreach (var c in this.Children)
                 {
                     c.Expand(true);
                 }

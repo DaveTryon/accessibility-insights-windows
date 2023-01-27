@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
@@ -17,6 +17,7 @@ using Axe.Windows.Actions.Misc;
 using Axe.Windows.Core.Bases;
 using Axe.Windows.Desktop.Settings;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// App configation
+        /// App configuration
         /// </summary>
         public static ConfigurationModel Configuration
         {
@@ -135,6 +136,7 @@ namespace AccessibilityInsights.Modes
                 ElementContext ec = null;
                 await Task.Run(() =>
                 {
+                    Stopwatch stopwatch = Stopwatch.StartNew();
                     bool contextChanged = CaptureAction.SetTestModeDataContext(ecId,
                         this.DataContextMode, Configuration.TreeViewMode);
                     ec = GetDataAction.GetElementContext(ecId);
@@ -143,7 +145,7 @@ namespace AccessibilityInsights.Modes
                     {
                         // send telemetry of scan results.
                         var dc = GetDataAction.GetElementDataContext(ecId);
-                        dc.PublishScanResults();
+                        dc.PublishScanResults(stopwatch.ElapsedMilliseconds);
                     }
                 }).ConfigureAwait(false);
 
@@ -272,10 +274,7 @@ namespace AccessibilityInsights.Modes
             if (AutomationPeer.ListenerExists(AutomationEvents.AsyncContentLoaded))
             {
                 UserControlAutomationPeer peer = UIElementAutomationPeer.FromElement(this) as UserControlAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(state, state == AsyncContentLoadedState.Beginning ? 0 : 100));
-                }
+                peer?.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(state, state == AsyncContentLoadedState.Beginning ? 0 : 100));
             }
         }
 
@@ -291,7 +290,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Hide control and hilighter
+        /// Hide control and highlighter
         /// </summary>
         public void HideControl()
         {
@@ -301,7 +300,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Show control and hilighter
+        /// Show control and highlighter
         /// </summary>
         public void ShowControl()
         {
@@ -318,22 +317,6 @@ namespace AccessibilityInsights.Modes
             , System.Windows.Threading.DispatcherPriority.Input);
 
             this.ctrlTabs.CurrentMode = (TestView)(MainWin.CurrentView) == TestView.ElementHowToFix ? InspectTabMode.TestHowToFix : InspectTabMode.TestProperties;
-        }
-
-        /// <summary>
-        /// Update current view based on tab selection
-        /// </summary>
-        /// <param name="mode"></param>
-        private static void UpdateMainWinView(InspectTabType type)
-        {
-            if (type == InspectTabType.HowToFix)
-            {
-                MainWin.SetCurrentViewAndUpdateUI(TestView.ElementHowToFix);
-            }
-            else if (type == InspectTabType.Details)
-            {
-                MainWin.SetCurrentViewAndUpdateUI(TestView.ElementDetails);
-            }
         }
 
         /// <summary>
@@ -373,8 +356,7 @@ namespace AccessibilityInsights.Modes
         public void CopyToClipboard()
         {
             StringBuilder sb = new StringBuilder();
-
-            if(Keyboard.FocusedElement is ListViewItem lvi && lvi.DataContext is ScanListViewItemViewModel stvi)
+            if (Keyboard.FocusedElement is ListViewItem lvi && lvi.DataContext is ScanListViewItemViewModel)
             {
                 ListView listView = ItemsControl.ItemsControlFromItemContainer(lvi) as ListView;
                 foreach (var item in listView.SelectedItems)
@@ -426,7 +408,7 @@ namespace AccessibilityInsights.Modes
         public bool IsRefreshEnabled { get; private set; }
 
         /// <summary>
-        /// Save button is neeeded on main command bar
+        /// Save button is needed on main command bar
         /// if it is load mode(PlatformObject is null), disable it.
         /// </summary>
         public bool IsSaveEnabled { get; private set; }

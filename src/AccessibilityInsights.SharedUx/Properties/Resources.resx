@@ -156,12 +156,6 @@
   <data name="GeneralActionView_ExecuteAction_Failed" xml:space="preserve">
     <value>Failed!!</value>
   </data>
-  <data name="ButtonContent" xml:space="preserve">
-    <value>I want this Action!!!</value>
-  </data>
-  <data name="TextBlockText" xml:space="preserve">
-    <value>The below Action is not supported yet. If you want this action to be provided in this tool. please click below button.</value>
-  </data>
   <data name="ReturnA11yElementsView_btnRun_Click_Input_should_be_int_value_greater_than_equal_to_0" xml:space="preserve">
     <value>Input should be int value greater than or equal to 0.</value>
   </data>
@@ -411,9 +405,6 @@
   <data name="AutomatedChecksControl_SetRuleResults_TitleURL" xml:space="preserve">
     <value>TitleURL</value>
   </data>
-  <data name="AutomatedChecksControl_btnFileBug_Click_File_Issue_Configure" xml:space="preserve">
-    <value>To file issues, select where you want to file issues.</value>
-  </data>
   <data name="ColorContrastAutomationPropertiesName" xml:space="preserve">
     <value>Color contrast analyzer</value>
   </data>
@@ -632,8 +623,8 @@
   <data name="SetterValueSearchByName" xml:space="preserve">
     <value>Search by name and control type</value>
   </data>
-  <data name="btnSettingsAutomationPropertiesName1" xml:space="preserve">
-    <value>Settings</value>
+  <data name="btnHierarchyTreeSettingsAutomationPropertiesName" xml:space="preserve">
+    <value>Hierarchy Tree Settings</value>
   </data>
   <data name="btnSettingToolTip1" xml:space="preserve">
     <value>UI Automation Tree Settings</value>
@@ -670,9 +661,6 @@
   </data>
   <data name="HierarchyControl_FileBug_Could_not_find_the_selected_item__the_bug_filing_is_canceled" xml:space="preserve">
     <value>Could not find the selected item, the bug filing is canceled.</value>
-  </data>
-  <data name="HierarchyControl_FileIssue_Configure" xml:space="preserve">
-    <value>To file issues, select where you want to file issues.</value>
   </data>
   <data name="TextBlockTextDetails" xml:space="preserve">
     <value>DETAILS</value>
@@ -801,9 +789,6 @@
   <data name="ScannerResultControl_UpdateTree_Passed_and_Uncertain_tests" xml:space="preserve">
     <value>Passed and Uncertain tests</value>
   </data>
-  <data name="ScannerResultControl_btnFileBug_Click_File_Issue_Configure" xml:space="preserve">
-    <value>To file issues, select where you want to file issues.</value>
-  </data>
   <data name="ScannerResultControl_Thumb_DragDelta_Rule" xml:space="preserve">
     <value>Rule</value>
   </data>
@@ -913,7 +898,7 @@
     <value>Settings for recording events</value>
   </data>
   <data name="tabEventsAutomationPropertiesName" xml:space="preserve">
-    <value>Events 2 of 3</value>
+    <value>Events</value>
   </data>
   <data name="tabEventsAutomationPropertiesHelpText" xml:space="preserve">
     <value>with this tab, select events to record</value>
@@ -922,7 +907,7 @@
     <value>Events configuration</value>
   </data>
   <data name="tabPropertiesAutomationPropertiesName" xml:space="preserve">
-    <value>Properties 3 of 3</value>
+    <value>Properties</value>
   </data>
   <data name="tabPropertiesAutomationPropertiesHelpText" xml:space="preserve">
     <value>With this tab, select properties to record changes.</value>
@@ -1143,12 +1128,6 @@
   <data name="ExtensionMethods_CopyStringToClipboard_Error_copying_to_clipboard" xml:space="preserve">
     <value>Error copying to clipboard: </value>
   </data>
-  <data name="EventConfigNodeViewModel_ToString_checked" xml:space="preserve">
-    <value> checked</value>
-  </data>
-  <data name="EventConfigNodeViewModel_ToString_unchecked" xml:space="preserve">
-    <value> unchecked</value>
-  </data>
   <data name="HierarchyNodeViewModel_AutomationNameFailedResultsInDescendentsFormat" xml:space="preserve">
     <value>{0} has failed test results in descendants.</value>
     <comment>{0} is the glimpse</comment>
@@ -1282,7 +1261,7 @@
     <value>Select the Events you want to listen to:</value>
   </data>
   <data name="btnOkContent" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="lblEnableTelemetryContent" xml:space="preserve">
     <value>Enable Telemetry</value>
@@ -1314,7 +1293,7 @@ We collect anonymized data to identify the top accessibility issues found by use
     <value>Auto detect contrast ratio</value>
   </data>
   <data name="ColorContrast_AutoDetectGuidance" xml:space="preserve">
-    <value>Auto-detection allows you to evaluate color contrast ratios by hovering over an element or setting the keyboard focus on it.</value>
+    <value>Auto-detection allows you to evaluate color contrast ratios by hovering over an element or setting the keyboard focus on it. The colors are detected heuristically. If incorrect colors are detected, please use the eyedroppers to improve the accuracy of the results.</value>
   </data>
   <data name="hlHelpName" xml:space="preserve">
     <value>Help</value>
@@ -1534,10 +1513,12 @@ Do you want to change the channel? </value>
     <value>An update is available</value>
   </data>
   <data name="ReleaseNotes_ClickLoadErrorMessage" xml:space="preserve">
-    <value>There was an error loading the URL.\nURL: {0}</value>
+    <value>There was an error loading the URL.
+URL: {0}</value>
   </data>
   <data name="ReleaseNotes_ClickURLErrorMessage" xml:space="preserve">
-    <value>The URL was not properly formatted.\nURL: {0}</value>
+    <value>The URL was not properly formatted.
+URL: {0}</value>
   </data>
   <data name="ReleaseNotesText" xml:space="preserve">
     <value>View the release notes here.</value>
@@ -1567,34 +1548,16 @@ Do you want to change the channel? </value>
     <value>Couldn't save the event record file: {0}</value>
     <comment>{0} is the error message of the Exception</comment>
   </data>
-  <data name="HierarchyControl_ContentView_Checked" xml:space="preserve">
-    <value>Content view Checked</value>
-  </data>
-  <data name="HierarchyControl_ContentView_Unchecked" xml:space="preserve">
-    <value>Content view</value>
-  </data>
-  <data name="HierarchyControl_ControlView_Checked" xml:space="preserve">
-    <value>Control view Checked</value>
-  </data>
-  <data name="HierarchyControl_ControlView_Unchecked" xml:space="preserve">
-    <value>Control view</value>
-  </data>
   <data name="HierarchyControl_LiveMode_InvokeToTestFormat" xml:space="preserve">
     <value>Invoke to test {0} and descendants</value>
     <comment>{0} is the glimpse of the current element</comment>
-  </data>
-  <data name="HierarchyControl_RawView_Checked" xml:space="preserve">
-    <value>Raw view Checked</value>
-  </data>
-  <data name="HierarchyControl_RawView_Unchecked" xml:space="preserve">
-    <value>Raw view</value>
   </data>
   <data name="PatternInfoControl_AvailablePatterns" xml:space="preserve">
     <value>Available Patterns:</value>
   </data>
   <data name="PatternInfoControl_PatternPropertyFormat" xml:space="preserve">
     <value>- {0}: {1}</value>
-    <comment>{0} is the propety name; {1} is the property value</comment>
+    <comment>{0} is the property name; {1} is the property value</comment>
   </data>
   <data name="PropertyInfoControl_Properties" xml:space="preserve">
     <value>Properties</value>
@@ -1625,7 +1588,7 @@ Do you want to change the channel? </value>
   </data>
   <data name="BaseActionViewModel_ExceptionMessage" xml:space="preserve">
     <value>Exception while invoking {0} : {1}</value>
-    <comment>{0} is the method; {1} is the Exception mesage</comment>
+    <comment>{0} is the method; {1} is the Exception message</comment>
   </data>
   <data name="ColorContrastViewModel_ContrastRatioFormat" xml:space="preserve">
     <value>{0}:1</value>
@@ -1683,5 +1646,113 @@ Do you want to change the channel? </value>
   </data>
   <data name="String" xml:space="preserve">
     <value>AutomationName</value>
+  </data>
+  <data name="AutomatedChecksControl_ExpandCollapseAll_AccessText" xml:space="preserve">
+    <value>_e</value>
+  </data>
+  <data name="EventConfigDialog_Events_Header" xml:space="preserve">
+    <value>_Events</value>
+  </data>
+  <data name="EventConfigDialog_Properties_Header" xml:space="preserve">
+    <value>_Properties</value>
+  </data>
+  <data name="EventRecordControl_Menu_RecordAutomationFocusChanged" xml:space="preserve">
+    <value>Record _AutomationFocusChanged Event</value>
+  </data>
+  <data name="HierarchyControl_Menu_ShowAncestry" xml:space="preserve">
+    <value>Show _Ancestry</value>
+  </data>
+  <data name="HierarchyControl_Menu_ShowUncertainResults" xml:space="preserve">
+    <value>Show _Uncertain results</value>
+  </data>
+  <data name="HierarchyControl_Menu_TreeView" xml:space="preserve">
+    <value>Tree view</value>
+  </data>
+  <data name="InspectTabsControl_Menu_ConfigurePropertiesToAlwaysShow" xml:space="preserve">
+    <value>_Configure properties to always show</value>
+  </data>
+  <data name="InspectTabsControl_Menu_ShowAllPropertiesWithValues" xml:space="preserve">
+    <value>_Include all properties that have values</value>
+  </data>
+  <data name="ReturnA11yElementsView_Menu_ConfigurePropertiesToAlwaysShow" xml:space="preserve">
+    <value>_Configure properties to always show</value>
+  </data>
+  <data name="ReturnA11yElementsView_Menu_ShowAllPropertiesWithValues" xml:space="preserve">
+    <value>_Include all properties that have values</value>
+  </data>
+  <data name="ReturnA11yElementsView_Value_Header" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="TabStopControl_Element_Header" xml:space="preserve">
+    <value>Element</value>
+  </data>
+  <data name="TabStopControl_Order_Header" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="TextRangeActionView_Value_Header" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="TextRangeControl_HighlightButton_AccessText" xml:space="preserve">
+    <value>_h</value>
+  </data>
+  <data name="TextRangeControl_Menu_CollapseAnnotationTypes" xml:space="preserve">
+    <value>_Collapse AnnotationTypes</value>
+  </data>
+  <data name="TextRangeControl_Menu_ConfigureAttributesToAlwaysShow" xml:space="preserve">
+    <value>_Configure attributes to always show</value>
+  </data>
+  <data name="TextRangeControl_Menu_ReplaceWhitespaceWithSymbols" xml:space="preserve">
+    <value>_Replace whitespace with formatting symbols</value>
+  </data>
+  <data name="TextRangeControl_Menu_ShowAllAttributesWithValues" xml:space="preserve">
+    <value>_Include all attributes that have values</value>
+  </data>
+  <data name="TextRangeControl_Value_Header" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="btnEventSettingsAutomationPropertiesName" xml:space="preserve">
+    <value>Event Settings</value>
+  </data>
+  <data name="AutomatedChecksControlFrameworkIssuesLabel" xml:space="preserve">
+    <value>Potential framework issues</value>
+  </data>
+  <data name="ScannerResultControl_FixTheFollowing" xml:space="preserve">
+    <value>Fix the following</value>
+  </data>
+  <data name="ScannerResultControl_FrameworkIssueBoilerplate" xml:space="preserve">
+    <value>Potential framework issue.
+This failure can be caused by a known framework issue. Click the link below to learn more about investigating this issue.
+</value>
+  </data>
+  <data name="ScannerResultControl_HowToInvestigate" xml:space="preserve">
+    <value>How to investigate</value>
+  </data>
+  <data name="ScannerResultControl_ViewCodeSample" xml:space="preserve">
+    <value>View Code Sample</value>
+  </data>
+  <data name="ScannerResultControlPotentialFrameworkIssues" xml:space="preserve">
+    <value>Potential framework issues</value>
+  </data>
+  <data name="FileIssuesChooseLocation" xml:space="preserve">
+    <value>To file issues, select where you want to file issues.</value>
+  </data>
+  <data name="UnsupportedActionMessageFormat" xml:space="preserve">
+    <value>Accessibility Insights for Windows does not yet support the {0} action. To request support for this action, please upvote an existing issue at {1}. If no issue already exists, you can open a new issue (feature request) to request support for this action.</value>
+    <comment>{0} is the programmatic ID of the action in question. {1} is a clickable hyperlink whose text is a URL where the user can file issues.</comment>
+  </data>
+  <data name="ApplicationSettingsControl_SoundFeedbackModeComboboxAutomationName" xml:space="preserve">
+    <value>Provide feedback with sound</value>
+  </data>
+  <data name="cbiSFAlwaysAutomationPropertiesName" xml:space="preserve">
+    <value>Always</value>
+  </data>
+  <data name="cbiSFAutoAutomationPropertiesName" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="cbiSFNeverAutomationPropertiesName" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="lblSoundFeedbackLabelContent" xml:space="preserve">
+    <value>Provide feedback with sound</value>
   </data>
 </root>

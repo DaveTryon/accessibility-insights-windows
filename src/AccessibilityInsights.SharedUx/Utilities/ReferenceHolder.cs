@@ -5,12 +5,12 @@ using System.Collections.Generic;
 namespace AccessibilityInsights.SharedUx.Utilities
 {
     /// <summary>
-    /// Wrapper to store the hwind as key and (BorderLine, TextTip or Win32SnapShotButton) as Value
+    /// Wrapper to store the hwnd as key and (BorderLine, TextTip or Win32SnapShotButton) as Value
     /// Since it all runs in the UI thread, we don't need to use a thread safe data structure like ConcurrentDictionary
     /// </summary>
     public class ReferenceHolder<TKey, TValue>
     {
-        private Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
+        private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
 
         public void Add(TKey key, TValue value)
         {

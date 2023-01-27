@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
@@ -13,6 +13,7 @@ using Axe.Windows.Actions.Contexts;
 using Axe.Windows.Desktop.ColorContrastAnalyzer;
 using Axe.Windows.Desktop.Utility;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -96,8 +97,8 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
         /// <summary>
         /// For convenience, describes whether we are currently recording the first color or second color
         /// </summary>
-        private bool SelectingFirstColor => currentChooser == firstChooser;
-        private bool SelectingSecondColor => currentChooser == secondChooser;
+        private bool SelectingFirstColor => CurrentChooser == firstChooser;
+        private bool SelectingSecondColor => CurrentChooser == secondChooser;
 
         /// <summary>
         /// Sets element context and updates UI
@@ -114,9 +115,18 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
 
         private void RunAutoCCA(Bitmap bitmap)
         {
-            var bmc = new BitmapCollection(bitmap, new DefaultColorContrastConfig());
+            var bmc = new BitmapCollection(bitmap, new ColorContrastConfigBuilder().Build());
             var result = bmc.RunColorContrastCalculation();
             var pair = result.MostLikelyColorPair;
+
+            Logger.PublishTelemetryEvent(
+                TelemetryAction.ColorContrast_AutoDetect,
+                new Dictionary<TelemetryProperty, string>
+                {
+                    { TelemetryProperty.BitmapSize, (bitmap.Width * bitmap.Height).ToString(CultureInfo.InvariantCulture) },
+                    { TelemetryProperty.Confidence, result.Confidence.ToString() }
+                }
+            );
 
             if (pair == null)
             {
@@ -126,21 +136,13 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
             SetConfidenceVisibility(Visibility.Visible);
             this.ContrastVM.FirstColor = pair.DarkerColor.DrawingColor.ToMediaColor();
             this.ContrastVM.SecondColor = pair.LighterColor.DrawingColor.ToMediaColor();
-            tbConfidence.Text = result.ConfidenceValue().ToString();
+            tbConfidence.Text = result.Confidence.ToString();
         }
 
         private void SetConfidenceVisibility(Visibility visibility)
         {
             tbConfidence.Visibility = visibility;
             tbConfidenceLabel.Visibility = visibility;
-        }
-
-        private void RaiseLiveRegionEvents()
-        {
-            var peer = FrameworkElementAutomationPeer.FromElement(output) ?? new FrameworkElementAutomationPeer(output);
-            peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
-            peer = FrameworkElementAutomationPeer.FromElement(tbConfidence) ?? new FrameworkElementAutomationPeer(tbConfidence);
-            peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
         }
 
         /// <summary>
@@ -286,6 +288,14 @@ namespace AccessibilityInsights.SharedUx.Controls.TestTabs
             if (CCAMode != null)
             {
                 CCAMode.HandleToggleStatusChanged(isEnabled);
+
+                Logger.PublishTelemetryEvent(
+                    TelemetryAction.ColorContrast_Click_Autodetect_Toggle,
+                    new Dictionary<TelemetryProperty, string>
+                    {
+                        { TelemetryProperty.IsNowEnabled, isEnabled.ToString(CultureInfo.InvariantCulture) }
+                    }
+                );
             }
 
             SetConfidenceVisibility(Visibility.Hidden);

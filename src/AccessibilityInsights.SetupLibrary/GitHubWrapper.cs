@@ -17,12 +17,12 @@ namespace AccessibilityInsights.SetupLibrary
         private readonly Uri _canaryConfigFileUri;
         private readonly TimeSpan _timeout;
 
-        private const string DefaultProductionConfigFileUrl = "https://www.github.com/Microsoft/accessibility-insights-windows/blob/Control/Channels/Production/release_info.json?raw=true";
-        private const string DefaultInsiderConfigFileUrl = "https://www.github.com/Microsoft/accessibility-insights-windows/blob/Control/Channels/Insider/release_info.json?raw=true";
-        private const string DefaultCanaryConfigFileUrl = "https://www.github.com/Microsoft/accessibility-insights-windows/blob/Canary/Channels/Canary/release_info.json?raw=true";
+        private const string DefaultProductionConfigFileUrl = "https://go.microsoft.com/fwlink/?linkid=2216117";
+        private const string DefaultInsiderConfigFileUrl = "https://go.microsoft.com/fwlink/?linkid=2216312";
+        private const string DefaultCanaryConfigFileUrl = "https://go.microsoft.com/fwlink/?linkid=2216313";
 
         /// <summary>
-        /// ctor
+        /// constructor
         /// </summary>
         /// <param name="exceptionReporter">Mechanism for reporting recoverable exceptions from the config</param>
         public GitHubWrapper(IExceptionReporter exceptionReporter)
@@ -44,9 +44,9 @@ namespace AccessibilityInsights.SetupLibrary
         /// <summary>
         /// Implements <see cref="IGitHubWrapper.LoadChannelInfoIntoStream(string, Stream)(Uri, Stream)"/>
         /// </summary>
-        public void LoadChannelInfoIntoStream(ReleaseChannel releaseChannel, Stream stream)
+        public StreamMetadata LoadChannelInfoIntoStream(ReleaseChannel releaseChannel, Stream stream)
         {
-            GitHubClient.LoadUriContentsIntoStream(GetChannelSpecificUri(releaseChannel), stream, _timeout, null);
+            return GitHubClient.LoadUriContentsIntoStream(GetChannelSpecificUri(releaseChannel), stream, _timeout, null);
         }
 
         /// <summary>

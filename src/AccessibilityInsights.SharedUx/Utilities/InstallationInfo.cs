@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Newtonsoft.Json;
 using System;
@@ -20,7 +20,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         internal static Action<string, InstallationInfo> WriteToDiskOverride;
         #endregion
 
-        private readonly static DateTime DistantPast = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime DistantPast = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         [JsonProperty]
         public Guid InstallationGuid { get; private set; }
@@ -29,7 +29,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         public DateTime LastReset { get; private set; }
 
         /// <summary>
-        /// Production ctor - Uses a new installId and current time
+        /// Production constructor - Uses a new installId and current time
         /// </summary>
         public InstallationInfo()
             : this(Guid.NewGuid(), DateTime.UtcNow)
@@ -37,7 +37,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         }
 
         /// <summary>
-        /// Unit test ctor - lets caller specify installID and lastReset time
+        /// Unit test constructor - lets caller specify installID and lastReset time
         /// </summary>
         /// <param name="installId">The initial value of InstallationGuid</param>
         /// <param name="lastReset">The initial value of LastReset</param>
@@ -62,10 +62,8 @@ namespace AccessibilityInsights.SharedUx.Utilities
         /// <returns>whether the object reset</returns>
         private bool ResetIfMonthChanged(DateTime utcNow)
         {
-            bool needToReset = utcNow.Month > LastReset.Month || utcNow.Year > LastReset.Year;
-            // months range from 1 to 12, year from 1 to 9999
-            // reset if the current month is later than old month.
-            // - need to check year too in case we compare 12/2017 to 1/2018
+            // We need to reset unless we're in the same month and year
+            bool needToReset = utcNow.Month != LastReset.Month || utcNow.Year != LastReset.Year;
             if (needToReset)
             {
                 RegenerateFields(Guid.NewGuid(), utcNow);

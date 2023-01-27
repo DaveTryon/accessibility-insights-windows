@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 namespace AccessibilityInsights.SharedUx.Telemetry
 {
@@ -30,6 +30,9 @@ namespace AccessibilityInsights.SharedUx.Telemetry
         UIAccessEnabled,
         UpdateTimedOut,
         UpdateInitializationTime,
+        UpdateManifestRequestUri,
+        UpdateManifestResponseUri,
+        UpdateManifestSizeInBytes,
         UpdateOptionWaitTime,
         UpdateOption,
         UpdateInstallerUpdateTime,
@@ -38,6 +41,22 @@ namespace AccessibilityInsights.SharedUx.Telemetry
         ReleaseChannelConsidered,
         IssueReporter,
         InstalledDotNetFrameworkVersion,
+        OsArchitecture,
         CustomUIAPropertyCount,
+        IsNowEnabled,
+        Confidence, // For automatic colour contrast detection
+        BitmapSize, // For automatic colour contrast detection
+
+        // properties added for VersionSwitcher_VersionSwitcherResult
+        StartingVersion,
+        Result,
+        RequestedMsi,
+        ResolvedMsi,
+        ExpectedMsiSize,
+        ExpectedMsiSha512,
+        ActualMsiSize,
+        ActualMsiSha512,
+        NewChannel,
+        ExecutionTimeInMilliseconds,
     }
 }

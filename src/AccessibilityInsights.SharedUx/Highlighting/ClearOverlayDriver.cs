@@ -18,7 +18,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
     /// Since OverlayHighlighter is used for Tabstop which doesn't record data into Any context.
     /// it is using element to set highlighting information.
     /// </summary>
-    public class ClearOverlayDriver:IDisposable
+    public class ClearOverlayDriver : IDisposable
     {
         /// <summary>
         /// OverlayHighlighter to use
@@ -42,7 +42,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         }
 
         /// <summary>
-        /// Show Toast on top of the hiligher window
+        /// Show Toast on top of the highlighter window
         /// </summary>
         public void ShowToast(UserControl toast)
         {
@@ -112,11 +112,11 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         /// <param name="num">Id Number of highlighter</param>
         public void AddElement(A11yElement e, string num)
         {
-            Highlighter.AddElementRoundBorder(e,num);
+            Highlighter.AddElementRoundBorder(e, num);
         }
 
         /// <summary>
-        /// Clear highligted elements in bitmap.
+        /// Clear highlighted elements in bitmap.
         /// Overlay highlighter needs element than Id. please see comment above at class definition.
         /// </summary>
         public void Clear()

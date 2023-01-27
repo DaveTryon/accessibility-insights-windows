@@ -24,7 +24,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
     /// </summary>
     public partial class ConfigurationControl : IssueConfigurationControl
     {
-        // This code can't be in a ctor due to initialization order
+        // This code can't be in a constructor due to initialization order
         private static IDevOpsIntegration AzureDevOps => AzureBoardsIssueReporting.DevOpsIntegration;
 
         public ConfigurationControl()
@@ -66,10 +66,6 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         /// </summary>
         public ConfigurationViewModel VMConfig { get; private set; } = new ConfigurationViewModel();
 
-        /// <summary>
-        /// List of team projects
-        /// </summary>
-        public BindingList<TeamProjectViewModel> projects { get; private set; } = new BindingList<TeamProjectViewModel>();
         public override Action UpdateSaveButton { get; set; }
 
         #region configuration updating code
@@ -167,10 +163,10 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
         }
 
         /// <summary>
-        /// Convert a Url string to a Uri, with proper handling of null inputs
+        /// Convert a URL string to a Uri, with proper handling of null inputs
         /// </summary>
-        /// <param name="stringValue">The url (potentially empty or null) to convert</param>
-        /// <returns>The Uri if the url is neither empty nor null</returns>
+        /// <param name="stringValue">The URL (potentially empty or null) to convert</param>
+        /// <returns>The URI if the URL is neither empty nor null</returns>
         private static Uri ToUri(string stringValue)
         {
             if (string.IsNullOrEmpty(stringValue))
@@ -249,11 +245,10 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                 try
                 {
                     ToggleLoading(true);
-                    Dispatcher.Invoke(projects.Clear);
+                    Dispatcher.Invoke(VMConfig.Projects.Clear);
                     var newProjectList = await UpdateTeamProjects().ConfigureAwait(true); // need to come back to original UI thread.
-                    Dispatcher.Invoke(() => newProjectList.ForEach(p => projects.Add(p)));
+                    Dispatcher.Invoke(() => newProjectList.ForEach(p => VMConfig.Projects.Add(p)));
                     ToggleLoading(false);
-                    Dispatcher.Invoke(() => serverTreeview.ItemsSource = projects);
                     Dispatcher.Invoke(() => serverTreeview.Focus());
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -304,10 +299,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
             if (AutomationPeer.ListenerExists(AutomationEvents.AsyncContentLoaded))
             {
                 UserControlAutomationPeer peer = UIElementAutomationPeer.FromElement(this) as UserControlAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(state, state == AsyncContentLoadedState.Beginning ? 0 : 100));
-                }
+                peer?.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(state, state == AsyncContentLoadedState.Beginning ? 0 : 100));
             }
         }
 
@@ -369,10 +361,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
                 if (starting)
                 {
                     var peer = FrameworkElementAutomationPeer.FromElement(ctrlProgressRing);
-                    if (peer != null)
-                    {
-                        peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
-                    }
+                    peer?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
                 }
                 this.IsEnabled = InteractionAllowed;
             });
@@ -526,9 +515,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps
             }
         }
 
-#pragma warning disable CA1801 // unused parameter
-        private void IssueConfigurationControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-#pragma warning restore CA1801 // unused parameter
+        private void IssueConfigurationControl_IsVisibleChanged(object _, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue)
             {

@@ -19,7 +19,7 @@ namespace AccessibilityInsights.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -88,7 +88,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in 2 of 2.
+        ///   Looks up a localized string similar to Sign in.
         /// </summary>
         public static string btnAccountConfigAutomationPropertiesName {
             get {
@@ -106,7 +106,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color contrast analyzer 3 of 3.
+        ///   Looks up a localized string similar to Color contrast analyzer.
         /// </summary>
         public static string btnCCAAutomationPropertiesName {
             get {
@@ -151,7 +151,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings 1 of 2.
+        ///   Looks up a localized string similar to Application Settings.
         /// </summary>
         public static string btnConfigAutomationPropertiesName {
             get {
@@ -160,7 +160,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings.
+        ///   Looks up a localized string similar to Application Settings.
         /// </summary>
         public static string btnConfigAutomationPropertiesNameNoBugFiling {
             get {
@@ -223,7 +223,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inspect mode 1 of 3.
+        ///   Looks up a localized string similar to Inspect mode.
         /// </summary>
         public static string btnInspectAutomationPropertiesName {
             get {
@@ -331,7 +331,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests FastPass mode 2 of 3.
+        ///   Looks up a localized string similar to Tests FastPass mode.
         /// </summary>
         public static string btnTestAutomationPropertiesName {
             get {
@@ -439,7 +439,8 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ratio: {0}\nConfidence: {1}.
+        ///   Looks up a localized string similar to Ratio: {0}
+        ///Confidence: {1}.
         /// </summary>
         public static string ColorContrast_RatioAndConfidenceFormat {
             get {
@@ -462,6 +463,15 @@ namespace AccessibilityInsights.Properties {
         public static string ColorContrast_UnknownElementType {
             get {
                 return ResourceManager.GetString("ColorContrast_UnknownElementType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _x.
+        /// </summary>
+        public static string ConfigPane_Exit_AccessText {
+            get {
+                return ResourceManager.GetString("ConfigPane_Exit_AccessText", resourceCulture);
             }
         }
         
@@ -592,7 +602,7 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SignIn.
+        ///   Looks up a localized string similar to Sign in.
         /// </summary>
         public static string HandleLogoutRequestSignIn {
             get {
@@ -691,6 +701,15 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Tab or Shift+Tab to move between fields in the currently active pane. Use F6 or Shift+F6 to move between panes.
+        /// </summary>
+        public static string LiveModeControl_Keyboard {
+            get {
+                return ResourceManager.GetString("LiveModeControl_Keyboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn more about automated checks.
         /// </summary>
         public static string LiveModeControl_LearnMoreAutomated {
@@ -705,6 +724,15 @@ namespace AccessibilityInsights.Properties {
         public static string LiveModeControl_LearnMoreInspect {
             get {
                 return ResourceManager.GetString("LiveModeControl_LearnMoreInspect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn more about keyboard shortcuts.
+        /// </summary>
+        public static string LiveModeControl_LearnMoreKeyboard {
+            get {
+                return ResourceManager.GetString("LiveModeControl_LearnMoreKeyboard", resourceCulture);
             }
         }
         
@@ -799,15 +827,6 @@ namespace AccessibilityInsights.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: {1} of {2}.
-        /// </summary>
-        public static string MainWindow_UpdateMainCommandButtons_0_1_of_2 {
-            get {
-                return ResourceManager.GetString("MainWindow_UpdateMainCommandButtons_0_1_of_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Accessibility Insights for Windows - {0}.
         /// </summary>
         public static string MainWindow_UpdateTitleString_Accessibility_Insights_for_Windows_0 {
@@ -840,6 +859,24 @@ namespace AccessibilityInsights.Properties {
         public static string ModeIsEnabled {
             get {
                 return ResourceManager.GetString("ModeIsEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _c.
+        /// </summary>
+        public static string NavBar_Config_AccessText {
+            get {
+                return ResourceManager.GetString("NavBar_Config_AccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _i.
+        /// </summary>
+        public static string NavBar_IssueFilingConfig_AccessText {
+            get {
+                return ResourceManager.GetString("NavBar_IssueFilingConfig_AccessText", resourceCulture);
             }
         }
         

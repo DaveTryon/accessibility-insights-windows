@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Utilities;
 using Axe.Windows.Core.Bases;
@@ -19,7 +19,6 @@ namespace AccessibilityInsights.SharedUx.Highlighting
     /// </summary>
     public class OverlayHighlighter : WindowHighlighterBase, IDisposable
     {
-
         /// <summary>
         /// Selected element rectangle
         /// </summary>
@@ -138,10 +137,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         {
             try
             {
-                if (canvas != null)
-                {
-                    canvas.Children.Remove(brd);
-                }
+                canvas?.Children.Remove(brd);
             }
             catch (InvalidOperationException)
             {
@@ -216,8 +212,8 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
             try
             {
-                var xyDpi = HelperMethods.GetDPI((int)this.HighlightWindow.Left+ (3 * GapWidth), (int)this.HighlightWindow.Top + (3 * GapWidth));
-                var l = (Dimensions.Width / xyDpi- toast.Width) - (GapWidth * 2) ;
+                var xyDpi = HelperMethods.GetDPI((int)this.HighlightWindow.Left + (3 * GapWidth), (int)this.HighlightWindow.Top + (3 * GapWidth));
+                var l = (Dimensions.Width / xyDpi - toast.Width) - (GapWidth * 2);
                 var t = (Dimensions.Height / xyDpi - toast.Height) - (GapWidth * 2);
                 canvas.Children.Add(toast);
                 toast.SetValue(Canvas.LeftProperty, l);

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Telemetry;
 using AccessibilityInsights.SharedUx.ViewModels;
@@ -17,15 +17,15 @@ namespace AccessibilityInsights.SharedUx.Dialogs
     /// </summary>
     public partial class MoveTextRangeDialog : Window
     {
-        private TextRangeViewModel ViewModel;
-        private OpMode Mode;
-        private MethodInfo MethodInfo;
-        private List<Parameter> Parameters;
-        private Type ReturnType;
+        private readonly TextRangeViewModel ViewModel;
+        private readonly OpMode Mode;
+        private readonly MethodInfo MethodInfo;
+        private readonly List<Parameter> Parameters;
+        private readonly Type ReturnType;
         /// <summary>
-        /// Notify TextPattern Explorer to update Hilighter
+        /// Notify TextPattern Explorer to update Highlighter
         /// </summary>
-        private Action UpdateHighlighter;
+        private readonly Action UpdateHighlighter;
 
         public MoveTextRangeDialog(TextRangeViewModel vm, OpMode mode, IList<TextRangeViewModel> customList, Action updateHighlighter)
         {
@@ -62,7 +62,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
                     break;
                 case OpMode.Move:
                 case OpMode.MoveEndpointByUnit:
-                    this.lbxTargetRanges.Visibility =  Visibility.Collapsed;
+                    this.lbxTargetRanges.Visibility = Visibility.Collapsed;
                     this.lbTargetTR.Visibility = Visibility.Collapsed;
                     break;
                 case OpMode.Compare:
@@ -100,7 +100,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
             try
             {
                 var ps = GetParametersArray();
-                var ret = this.MethodInfo.Invoke(this.ViewModel.TextRange, ps );
+                var ret = this.MethodInfo.Invoke(this.ViewModel.TextRange, ps);
 
                 if (this.ReturnType != typeof(void))
                 {
@@ -108,10 +108,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
                 }
 
                 /// Refresh Highlighter via TextPatternExplorer dialog
-                if(UpdateHighlighter != null)
-                {
-                    UpdateHighlighter();
-                }
+                UpdateHighlighter?.Invoke();
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
@@ -139,7 +136,7 @@ namespace AccessibilityInsights.SharedUx.Dialogs
 
         private object GetConvertedValue(Parameter p)
         {
-            if(p.ParamType == typeof(Axe.Windows.Desktop.UIAutomation.Patterns.TextRange))
+            if (p.ParamType == typeof(Axe.Windows.Desktop.UIAutomation.Patterns.TextRange))
             {
                 return ((TextRangeViewModel)this.lbxTargetRanges.SelectedItem).TextRange;
             }

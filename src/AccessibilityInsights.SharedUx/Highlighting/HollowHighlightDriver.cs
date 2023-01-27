@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.Enums;
 using Axe.Windows.Actions;
@@ -15,7 +15,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
     /// hovering over the resulting rectangle still allows clicking through to the
     /// underlying element
     /// </summary>
-    public class HollowHighlightDriver:IDisposable
+    public class HollowHighlightDriver : IDisposable
     {
         readonly Highlighter Highlighter;
 
@@ -26,7 +26,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
         #region public members
         /// <summary>
-        /// Hilight an element with selected hilighter
+        /// Highlight an element with selected highlighter
         /// </summary>
         /// <param name="ecId">ElementContext Id</param>
         /// <param name="eId"></param>
@@ -124,7 +124,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         }
 
         /// <summary>
-        /// Remove exising highlighter information
+        /// Remove existing highlighter information
         /// it will turn off highlighter
         /// </summary>
         public void Clear()
@@ -164,7 +164,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         #endregion
 
         #region static methods
-        static Dictionary<string, HollowHighlightDriver> sHighlightActions = new Dictionary<string, HollowHighlightDriver>();
+        static readonly Dictionary<string, HollowHighlightDriver> sHighlightActions = new Dictionary<string, HollowHighlightDriver>();
 
         /// <summary>
         /// Get default HighlightAction
@@ -192,9 +192,9 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         /// <returns></returns>
         public static HollowHighlightDriver GetInstance(string name)
         {
-            HollowHighlightDriver ha = null;
+            HollowHighlightDriver ha;
 
-            if(sHighlightActions.ContainsKey(name))
+            if (sHighlightActions.ContainsKey(name))
             {
                 ha = sHighlightActions[name];
             }
@@ -215,9 +215,9 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         /// </summary>
         public static void ClearAllHighlighters()
         {
-            if(sHighlightActions != null && sHighlightActions.Count != 0)
+            if (sHighlightActions != null && sHighlightActions.Count != 0)
             {
-                foreach(var ha in sHighlightActions.Values)
+                foreach (var ha in sHighlightActions.Values)
                 {
                     ha.Dispose();
                 }

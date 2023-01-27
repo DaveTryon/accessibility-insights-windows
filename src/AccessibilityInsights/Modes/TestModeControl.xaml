@@ -37,18 +37,21 @@
                         </Grid>
                     </TabItem.Header>
                 </TabItem>
-                <TabItem x:Name="tbiAutomatedChecks" Header="{x:Static properties:Resources.tbiAutomatedChecksHeader}" AutomationProperties.Name="{x:Static properties:Resources.tbiAutomatedChecksAutomationPropertiesName}" IsSelected="True">
+                <TabItem x:Name="tbiAutomatedChecks" Header="{x:Static properties:Resources.tbiAutomatedChecksHeader}" AutomationProperties.Name="{x:Static properties:Resources.tbiAutomatedChecksAutomationPropertiesName}"
+                         AutomationProperties.PositionInSet="1" AutomationProperties.SizeOfSet="2" IsSelected="True">
                     <TestTabViews:AutomatedChecksControl x:Name="ctrlAutomatedChecks" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                 </TabItem>
-                <TabItem x:Name="tbiTabStop" Header="{x:Static properties:Resources.tbiTabStopHeader}" AutomationProperties.Name="{x:Static properties:Resources.tbiTabStopAutomationPropertiesName}">
+                <TabItem x:Name="tbiTabStop" Header="{x:Static properties:Resources.tbiTabStopHeader}" AutomationProperties.Name="{x:Static properties:Resources.tbiTabStopAutomationPropertiesName}"
+                         AutomationProperties.PositionInSet="2" AutomationProperties.SizeOfSet="2">
                     <TestTabViews:TabStopControl x:Name="ctrlTabStop" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                 </TabItem>
             </TabControl>
         </Border>
         <fabric:ProgressRingControl Size="30"
                                    x:Name="ctrlProgressRing"
+                                   SelectedSound="Scanner"
                                    Visibility="Collapsed"
-                                   WithSound="{Binding Path=(Util:HelperMethods.PlayScanningSound)}"
+                                   WithSound="{Binding Path=(Util:HelperMethods.ShouldPlaySound)}"
                                    Grid.Row="1" Grid.Column="1" Background="{DynamicResource ResourceKey=PrimaryBGBrush}"/>
         <Grid Grid.Row="1" x:Name="instructionsAutomatedChecks" Margin="230,50,40,0" Visibility="Visible">
             <Grid.RowDefinitions>

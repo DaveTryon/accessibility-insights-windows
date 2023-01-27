@@ -104,7 +104,7 @@
                 <Button x:Name="btnSetting" Grid.Column="1"
                         HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
                         Height="28" Width="35" 
-                        AutomationProperties.Name="{x:Static Properties:Resources.btnSettingAutomationPropertiesName}">
+                        AutomationProperties.Name="{x:Static Properties:Resources.btnEventSettingsAutomationPropertiesName}">
                     <i:Interaction.Behaviors>
                         <behaviors:DropDownButtonBehavior/>
                         <behaviors:KeyboardToolTipButtonBehavior/>
@@ -116,28 +116,28 @@
                     </Button.Style>
                     <fabric:FabricIconControl GlyphName="Settings" GlyphSize="Custom" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource hoverAwareFabricIconOnButtonParent}"/>
                     <Button.ContextMenu>
-                        <ContextMenu FlowDirection="LeftToRight" Loaded="ContextMenu_Loaded" Unloaded="ContextMenu_Unloaded">
+                        <ContextMenu FlowDirection="LeftToRight" Loaded="ContextMenu_Loaded" Unloaded="ContextMenu_Unloaded" Style="{StaticResource ctxMenuDefault}">
                             <MenuItem Header="{x:Static Properties:Resources.EventRecordControlScopeHeader}">
-                                <MenuItem x:Name="mniRaw" IsCheckable="False" Click="mniRB_Click"
+                                <customcontrols:ToggleMenuItem x:Name="mniRaw" IsCheckable="False" Click="mniRB_Click" Style="{StaticResource miBoldOnSelection}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.mniRawAutomationPropertiesName}">
                                     <MenuItem.Header>
                                         <RadioButton x:Name="radiobuttonScopeSelf" GroupName="groupScope" Content="{x:Static Properties:Resources.mniRawAutomationPropertiesName}" Focusable="False"/>
                                     </MenuItem.Header>
-                                </MenuItem>
-                                <MenuItem x:Name="mniControl" IsCheckable="False" Click="mniRB_Click"
+                                </customcontrols:ToggleMenuItem>
+                                <customcontrols:ToggleMenuItem x:Name="mniControl" IsCheckable="False" Click="mniRB_Click" Style="{StaticResource miBoldOnSelection}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.radiobuttonScopeSubtreeContent}">
                                     <MenuItem.Header>
                                         <RadioButton x:Name="radiobuttonScopeSubtree" GroupName="groupScope" Content="{x:Static Properties:Resources.radiobuttonScopeSubtreeContent}" Focusable="False"/>
                                     </MenuItem.Header>
-                                </MenuItem>
-                                <MenuItem x:Name="mniContent" IsCheckable="False" Click="mniRB_Click"
+                                </customcontrols:ToggleMenuItem>
+                                <customcontrols:ToggleMenuItem x:Name="mniContent" IsCheckable="False" Click="mniRB_Click" Style="{StaticResource miBoldOnSelection}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.mniContentAutomationPropertiesName}">
                                     <MenuItem.Header>
                                         <RadioButton x:Name="radiobuttonScopeDescendents" GroupName="groupScope" Content="{x:Static Properties:Resources.mniContentAutomationPropertiesName}" Focusable="False"/>
                                     </MenuItem.Header>
-                                </MenuItem>
+                                </customcontrols:ToggleMenuItem>
                             </MenuItem>
-                            <MenuItem Header="Record _AutomationFocusChanged Event" x:Name="mniFocusChanged" IsCheckable="True"/>
+                            <MenuItem Header="{x:Static Properties:Resources.EventRecordControl_Menu_RecordAutomationFocusChanged}" x:Name="mniFocusChanged" IsCheckable="True"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
@@ -158,10 +158,15 @@
                       SelectionChanged="listEvents_SelectionChanged" SelectionMode="Single"
                       HorizontalContentAlignment="Stretch"
                       FontSize="11" Margin="2,0"
-                      Style="{StaticResource dgStyle}" CellStyle="{StaticResource dgcStyle}" RowStyle="{StaticResource dgrStyle}" ColumnHeaderStyle="{StaticResource dgchStyle}">
+                      Style="{StaticResource dgStyle}" CellStyle="{StaticResource dgcStyle}" ColumnHeaderStyle="{StaticResource dgchStyle}">
                 <i:Interaction.Behaviors>
                     <behaviors:ColumnResizeHotkeyBehavior/>
                 </i:Interaction.Behaviors>
+                <DataGrid.RowStyle>
+                    <Style BasedOn="{StaticResource dgrStyle}" TargetType="DataGridRow">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Path=EventId, Converter={StaticResource cvtIdToName}}"/>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=TimeStamp}" ElementStyle="{StaticResource DataGridTextCellStyle}" Header="{x:Static Properties:Resources.DataGridTextColumnHeaderTimeStamp}" Width="Auto" IsReadOnly="True" />
                     <DataGridTextColumn Binding="{Binding Path=EventId, Converter={StaticResource cvtIdToName}}" ElementStyle="{StaticResource DataGridTextCellStyle}" Header="{x:Static Properties:Resources.DataGridTextColumnHeaderEventName}" Width="Auto" IsReadOnly="True" />
@@ -184,7 +189,7 @@
                                    Size="30" 
                                    Grid.Row="1" 
                                    Visibility="Collapsed"
-                                   WithSound="{Binding Path=(Util:HelperMethods.PlayScanningSound)}"
+                                   WithSound="{Binding Path=(Util:HelperMethods.ShouldPlaySound)}"
                                    HorizontalAlignment="Center" 
                                    VerticalAlignment="Center">
         </fabric:ProgressRingControl>

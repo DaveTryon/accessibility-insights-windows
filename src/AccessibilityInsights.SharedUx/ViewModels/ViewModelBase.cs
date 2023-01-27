@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.ComponentModel;
 
@@ -7,7 +7,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// <summary>
     /// ViewModel base class
     /// </summary>
-    public class ViewModelBase: INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
         /// to notify property changes
@@ -16,8 +16,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
 
         protected void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
         }
     }
 }

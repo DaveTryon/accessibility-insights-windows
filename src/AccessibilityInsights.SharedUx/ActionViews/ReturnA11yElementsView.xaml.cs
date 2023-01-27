@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.SharedUx.Enums;
@@ -29,7 +29,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
     {
         public ReturnA11yElementsViewModel ActionViewModel { get; private set; }
         int Counter;
-        System.Timers.Timer timerInvoke;
+        readonly System.Timers.Timer timerInvoke;
         private readonly object _lockObject = new object();
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
 
                 if (value)
                 {
-                    if(hollowDriver.IsEnabled)
+                    if (hollowDriver.IsEnabled)
                     {
                         overlayDriver.Show();
                         ClearOverlayDriver.BringMainWindowOfPOIElementToFront();
@@ -151,7 +151,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             TurnOffHighlighter();
         }
 
-        public ReturnA11yElementsView(ReturnA11yElementsViewModel a )
+        public ReturnA11yElementsView(ReturnA11yElementsViewModel a)
         {
             this.ActionViewModel = a ?? throw new ArgumentNullException(nameof(a));
             this.Counter = 0;
@@ -168,9 +168,11 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             }
 
             this.tbResult.Visibility = Visibility.Collapsed;
-            this.timerInvoke = new System.Timers.Timer(1000);
-            this.timerInvoke.Enabled = false;
-            this.timerInvoke.AutoReset = false;
+            this.timerInvoke = new System.Timers.Timer(1000)
+            {
+                Enabled = false,
+                AutoReset = false
+            };
             this.timerInvoke.Elapsed += new ElapsedEventHandler(this.ontimerElapsed);
             this.Loaded += Window_Loaded;
         }
@@ -202,11 +204,10 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             });
         }
 
-         private void btnRun_Click(object sender, RoutedEventArgs e)
+        private void btnRun_Click(object sender, RoutedEventArgs e)
         {
             SetElement();
-            int delay;
-            if (Int32.TryParse(this.tbDelay.Text, out delay))
+            if (Int32.TryParse(this.tbDelay.Text, out int delay))
             {
                 if (delay >= 1)
                 {
@@ -376,9 +377,7 @@ namespace AccessibilityInsights.SharedUx.ActionViews
             e.Handled = !e.Text.IsTextAllowed();
         }
 
-#pragma warning disable CA1801 // unused parameter
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-#pragma warning restore CA1801 // unused parameter
+        private void UserControl_IsVisibleChanged(object _, DependencyPropertyChangedEventArgs _1)
         {
             lock (_lockObject)
             {

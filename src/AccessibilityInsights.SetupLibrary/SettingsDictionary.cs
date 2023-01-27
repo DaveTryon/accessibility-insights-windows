@@ -17,12 +17,12 @@ namespace AccessibilityInsights.SetupLibrary
 #pragma warning restore CA2229 // Implement serialization constructors
     {
         /// <summary>
-        /// Typical ctor
+        /// Typical constructor
         /// </summary>
         public SettingsDictionary() { }
 
         /// <summary>
-        /// Copy ctor--converts longs to ints, JArrays to int arrays
+        /// Copy constructor--converts longs to ints, JArrays to int arrays
         /// </summary>
         public SettingsDictionary(SettingsDictionary source)
         {
@@ -40,7 +40,7 @@ namespace AccessibilityInsights.SetupLibrary
                         var jArray = (JArray)(pair.Value);
 
                         List<int> list = new List<int>();
-                        foreach (int value in jArray)
+                        foreach (int value in jArray.Select(v => (int)v))
                         {
                             list.Add(value);
                         }
@@ -103,7 +103,7 @@ namespace AccessibilityInsights.SetupLibrary
         {
             if (TryGetValue(oldSettingKey, out object value))
             {
-                if (!TryGetValue(newSettingKey, out object dummyValue))
+                if (!TryGetValue(newSettingKey, out _))
                 {
                     Add(newSettingKey, value);
                 }

@@ -35,7 +35,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         ImageBrush ib;
 
         /// <summary>
-        /// Sets highlighter button staste
+        /// Sets highlighter button states
         /// </summary>
         readonly Action<bool> setHighlightBtnState;
 
@@ -61,7 +61,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         /// <param name="el"></param>
         /// <param name="gap"></param>
         /// <param name="brush"></param>
-        public void SetElement(A11yElement el, int gap = 2, SolidColorBrush brush=null)
+        public void SetElement(A11yElement el, int gap = 2, SolidColorBrush brush = null)
         {
             this.BaseElement = el ?? throw new ArgumentNullException(nameof(el));
             if (brush == null)
@@ -79,7 +79,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
         /// <summary>
         /// Set button click handler
-        /// if it is set to nall, button would not be shown on highlighter.
+        /// if it is set to null, button would not be shown on highlighter.
         /// </summary>
         /// <param name="h"></param>
         public void SetButtonClickHandler(MouseButtonEventHandler h)
@@ -98,7 +98,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
 
             // check whether el is from saved file.
             // if so make sure that dimension is correct to be visible.
-            if(el.PlatformObject == null)
+            if (el.PlatformObject == null)
             {
                 var dpi = HelperMethods.GetDPI((int)Application.Current.MainWindow.Top, (int)Application.Current.MainWindow.Left);
                 this.WinRect = new Rect()
@@ -114,7 +114,7 @@ namespace AccessibilityInsights.SharedUx.Highlighting
         }
 
         /// <summary>
-        /// Set highlighter background imaage
+        /// Set highlighter background image
         /// </summary>
         /// <param name="bmp"></param>
         public void SetBackground(Bitmap bmp)

@@ -16,7 +16,7 @@ namespace AccessibilityInsights.SetupLibrary
         private readonly IReadOnlyDictionary<string, string> _settings;
 
         /// <summary>
-        /// ctor
+        /// constructor
         /// </summary>
         /// <param name="configFile">The name of the file that contains the config data</param>
         /// <param name="exceptionReporter">The optional sink for exceptions</param>
@@ -37,10 +37,7 @@ namespace AccessibilityInsights.SetupLibrary
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception e)
                 {
-                    if (exceptionReporter != null)
-                    {
-                        exceptionReporter.ReportException(e);
-                    }
+                    exceptionReporter?.ReportException(e);
                 }
 #pragma warning restore CA1031 // Do not catch general exception types
             }

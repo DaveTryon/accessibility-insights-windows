@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
@@ -15,7 +15,10 @@ using Axe.Windows.Desktop.UIAutomation.EventHandlers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
@@ -36,10 +39,13 @@ namespace AccessibilityInsights.SharedUx.Controls
 
         public TwoStateButtonViewModel vmEventRecorder { get; private set; } = new TwoStateButtonViewModel(ButtonState.Off);
 
+        private Stream startRecordingSoundStream, stopRecordingSoundStream;
+        private SoundPlayer player;
+
         /// <summary>
         /// Event handler to main window for recording start
         /// </summary>
-        public Action<bool> NotifyRecordingChange{ get; set; }
+        public Action<bool> NotifyRecordingChange { get; set; }
 
         /// Updates the focus changed checkbox based on current config setting
         public Action UpdateGlobalFocusEventCheckbox { get; set; }
@@ -71,7 +77,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             set
             {
                 // if we already have it, release it from ListenAction first.
-                if(_eventRecorderId != null)
+                if (_eventRecorderId != null)
                 {
                     ListenAction.ReleaseInstance(_eventRecorderId.Value);
                 }
@@ -95,8 +101,12 @@ namespace AccessibilityInsights.SharedUx.Controls
         public EventRecordControl()
         {
             InitializeComponent();
-
             InitCommandBindings();
+
+            player = new SoundPlayer();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            startRecordingSoundStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".Resources.Sound.start_event_recording.wav");
+            stopRecordingSoundStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".Resources.Sound.stop_event_recording.wav");
         }
 
         void InitCommandBindings()
@@ -147,7 +157,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         }
 
         /// <summary>
-        /// App configation
+        /// App configuration
         /// </summary>
         public static ConfigurationModel Configuration
         {
@@ -182,6 +192,18 @@ namespace AccessibilityInsights.SharedUx.Controls
         {
             ToggleRecording();
             HollowHighlightDriver.GetDefaultInstance().Clear();
+        }
+
+        /// <summary>If sounds are enabled, play the passed-in stream. Used to enable sound feedback when toggling recording.</summary>
+        private void PlaySoundIfNeeded(Stream stream)
+        {
+            if (HelperMethods.ShouldPlaySound)
+            {
+                player.Stop();
+                player.Stream = stream;
+                player.Stream.Position = 0;
+                player.Play();
+            }
         }
 
         /// <summary>
@@ -236,6 +258,8 @@ namespace AccessibilityInsights.SharedUx.Controls
                 this.tbIntro.Visibility = Visibility.Collapsed;
                 this.svData.Visibility = Visibility.Visible;
 
+                PlaySoundIfNeeded(startRecordingSoundStream);
+
                 this.NotifyRecordingChange(true);
 
                 Logger.PublishTelemetryEvent(TelemetryAction.Event_Start_Record);
@@ -279,8 +303,8 @@ namespace AccessibilityInsights.SharedUx.Controls
         private static IEnumerable<int> GeneratePropertyIds(RecorderSetting config)
         {
             return from c in config.Properties
-                where config.IsListeningAllEvents || c.CheckedCount > 0
-                select c.Id;
+                   where config.IsListeningAllEvents || c.CheckedCount > 0
+                   select c.Id;
         }
 
         /// <summary>
@@ -288,7 +312,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         /// </summary>
         public async void StopRecordEvents(bool onclose = false)
         {
-            if(onclose)
+            if (onclose)
             {
                 this.isClosed = true;
                 if (this.EventRecorderId != null)
@@ -302,12 +326,15 @@ namespace AccessibilityInsights.SharedUx.Controls
             {
                 this.ctrlProgressRing.Activate();
 
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     var la = ListenAction.GetInstance(this.EventRecorderId.Value);
                     la.Stop();
                 }).ConfigureAwait(false);
 
                 this.ctrlProgressRing.Deactivate();
+
+                PlaySoundIfNeeded(stopRecordingSoundStream);
 
                 this.vmEventRecorder.State = ButtonState.Off;
                 this.NotifyRecordingChange(false);
@@ -346,10 +373,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             if (AutomationPeer.ListenerExists(AutomationEvents.AsyncContentLoaded))
             {
                 ListBoxAutomationPeer peer = UIElementAutomationPeer.FromElement(this.dgEvents) as ListBoxAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(AsyncContentLoadedState.Completed, 100));
-                }
+                peer?.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(AsyncContentLoadedState.Completed, 100));
             }
         }
 
@@ -366,7 +390,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         {
             if (this.EventRecorderId != null)
             {
-                var la = ListenAction.GetInstance(this.EventRecorderId.Value);
+                _ = ListenAction.GetInstance(this.EventRecorderId.Value);
                 if (HasRecordedEvents())
                 {
                     using (var dlg = new System.Windows.Forms.SaveFileDialog

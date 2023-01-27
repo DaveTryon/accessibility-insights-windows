@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
@@ -59,7 +60,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
             {
                 fn = GetTestResultFileNameWithId(namebase, idx, filetype);
 
-                if(File.Exists(Path.Combine(path,fn)) == false)
+                if (File.Exists(Path.Combine(path, fn)) == false)
                 {
                     break;
                 }
@@ -130,16 +131,16 @@ namespace AccessibilityInsights.SharedUx.Utilities
         /// Get Root Node Hierarchy ViewModel based on currently populated data.
         /// </summary>
         /// <param name="dc">Datacontext to create nodes from</param>
-        /// <param name="showAncestry">Should ancestory be shown</param>
+        /// <param name="showAncestry">Should ancestry be shown</param>
         /// <param name="showUncertain">Should uncertain scans be shown</param>
         /// <param name="isLiveMode">Is node for live mode</param>
         public static HierarchyNodeViewModel GetRootNodeHierarchyViewModel(this ElementDataContext dc, bool showAncestry, bool showUncertain, bool isLiveMode)
         {
             if (dc?.RootElment?.Properties != null && dc.RootElment.Properties.Count != 0 && dc.Element != null)
             {
-                // if need to show ancestry, start from rootnode
+                // if need to show ancestry, start from root node
                 // if not show ancestry, but element has no parent, return element itself.
-                return new HierarchyNodeViewModel(showAncestry ? dc.RootElment : dc.Element.Parent != null ? dc.Element.Parent : dc.Element, showUncertain, isLiveMode);
+                return new HierarchyNodeViewModel(showAncestry ? dc.RootElment : dc.Element.Parent ?? dc.Element, showUncertain, isLiveMode);
             }
 
             return null;
@@ -228,7 +229,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
         /// <param name="column">Column whose header is to be found</param>
         /// <param name="root">Element in which to search</param>
         /// <returns></returns>
-        public static DataGridColumnHeader GetDGColumnHeader(this DataGrid dg, DataGridColumn column, DependencyObject root=null)
+        public static DataGridColumnHeader GetDGColumnHeader(this DataGrid dg, DataGridColumn column, DependencyObject root = null)
         {
             if (root == null)
                 root = dg;
@@ -351,6 +352,43 @@ namespace AccessibilityInsights.SharedUx.Utilities
                 }
 
                 Marshal.Copy(pixelData, 0, bitmapData.Scan0, pixelDataSize);
+            }
+        }
+
+        /// <summary>
+        /// Finds object up parent hierarchy of specified type
+        /// </summary>
+        internal static DependencyObject GetParentElem<T>(this DependencyObject obj)
+        {
+            try
+            {
+                var par = VisualTreeHelper.GetParent(obj);
+
+                if (par is T)
+                {
+                    return par;
+                }
+                else
+                {
+                    return GetParentElem<T>(par);
+                }
+            }
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception e)
+            {
+                e.ReportException();
+                return null;
+            }
+#pragma warning restore CA1031 // Do not catch general exception types
+        }
+
+        internal static ToggleState ConvertToToggleState(bool? value)
+        {
+            switch (value)
+            {
+                case (true): return ToggleState.On;
+                case (false): return ToggleState.Off;
+                default: return ToggleState.Indeterminate;
             }
         }
     }

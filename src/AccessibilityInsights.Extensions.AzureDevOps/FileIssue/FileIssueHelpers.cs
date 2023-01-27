@@ -1,10 +1,10 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.Extensions.AzureDevOps.Enums;
 using AccessibilityInsights.Extensions.Helpers;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
+using HtmlAgilityPack;
 using Microsoft.Web.WebView2.Core;
-using mshtml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -61,9 +61,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
                     : string.Empty;
                 Uri url = CreateIssuePreviewAsync(connection, issueInfo).Result;
 
-                int? issueId = testIssueId.HasValue
-                    ? testIssueId.Value
-                    : FileIssueWindow(url, onTop, zoomLevel, updateZoom, configurationPath);
+                int? issueId = testIssueId ?? FileIssueWindow(url, onTop, zoomLevel, updateZoom, configurationPath);
 
                 return (issueId, a11yIssueId);
             }
@@ -118,7 +116,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
                 case WebException webEx:
                     return TransientWebExceptions.Contains(webEx.Status);
                 // This is what we saw happen to issue attachments in our telemetry
-                case TimeoutException tEx:
+                case TimeoutException _:
                     return true;
                 default:
                     return false;
@@ -126,7 +124,7 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         }
 
         // If a web exception contains one of the following status values, it might be transient.
-        private readonly static HashSet<WebExceptionStatus> TransientWebExceptions = new HashSet<WebExceptionStatus>()
+        private static readonly HashSet<WebExceptionStatus> TransientWebExceptions = new HashSet<WebExceptionStatus>()
         {
             WebExceptionStatus.ConnectionClosed,
             WebExceptionStatus.Timeout,
@@ -180,8 +178,9 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
                     htmlDescription = $"<img src=\"{imgUrl}\" alt=\"screenshot\"></img>";
                 }
 
-                var scrubbedHTML = RemoveInternalHTML(filedIssueReproSteps, a11yIssueId) + htmlDescription;
-                await _devOpsIntegration.ReplaceIssueDescription(scrubbedHTML, issueId).ConfigureAwait(false);
+                var scrubbedHTML = RemoveInternalHTML(filedIssueReproSteps, a11yIssueId);
+                var updatedHTML = WrapInHtmlBody(scrubbedHTML) + htmlDescription;
+                await _devOpsIntegration.ReplaceIssueDescription(updatedHTML, issueId).ConfigureAwait(false);
                 File.Delete(snapshotFileName);
                 if (imageFileName != null)
                 {
@@ -218,23 +217,23 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
         /// <returns></returns>
         internal static string RemoveInternalHTML(string inputHTML, string keyText)
         {
-            object[] htmlText = { inputHTML };
-            HTMLDocument doc = new HTMLDocument();
-            IHTMLDocument2 doc2 = doc as IHTMLDocument2;
-            doc2.write(htmlText);
-            IHTMLDOMNode node = null;
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(inputHTML);
+
+            HtmlNode documentNode = doc.DocumentNode;
+            HtmlNode node = null;
 
             // search div with matching issueguid.
             // remove any of it if there is matched one.
-            var divnodes = doc.getElementsByTagName("div");
+            var divnodes = documentNode.Elements("div");
 
             if (divnodes != null)
             {
-                foreach (IHTMLDOMNode divnode in divnodes)
+                foreach (var divnode in divnodes)
                 {
-                    foreach (IHTMLDOMNode child in GetChildren(divnode))
+                    foreach (var child in divnode.ChildNodes)
                     {
-                        string nodevalue = child.nodeValue?.ToString();
+                        string nodevalue = child.NextSibling?.InnerHtml?.ToString();
                         if (nodevalue != null && nodevalue.Contains(keyText) == true)
                         {
                             node = divnode;
@@ -251,21 +250,18 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
 
             if (node != null)
             {
-                foreach (IHTMLDOMNode child in GetChildren(node).ToList())
+                foreach (var child in node.ChildNodes.ToList())
                 {
-                    node.removeChild(child);
+                    node.RemoveChild(child);
                 }
             }
 
-            return doc.body.outerHTML;
+            return documentNode.WriteContentTo();
         }
 
-        private static IEnumerable<IHTMLDOMNode> GetChildren(IHTMLDOMNode node)
+        internal static string WrapInHtmlBody(string innerHtml)
         {
-            for (IHTMLDOMNode child = node.firstChild; child != null; child = child.nextSibling)
-            {
-                yield return child;
-            }
+            return $"<body>{innerHtml}</body>";
         }
 
         /// <summary>
@@ -295,8 +291,10 @@ namespace AccessibilityInsights.Extensions.AzureDevOps.FileIssue
             }
 
             Trace.WriteLine(Invariant($"Url is {url.AbsoluteUri.Length} long: {url}"));
-            var dlg = new IssueFileForm(url, onTop, zoomLevel, updateZoom, configurationPath);
-            dlg.ScriptToRun = "window.onerror = function(msg,url,line) { window.external.Log(msg); return true; };";
+            var dlg = new IssueFileForm(url, onTop, zoomLevel, updateZoom, configurationPath)
+            {
+                ScriptToRun = "window.onerror = function(msg,url,line) { window.external.Log(msg); return true; };"
+            };
 
             dlg.ShowDialog();
 

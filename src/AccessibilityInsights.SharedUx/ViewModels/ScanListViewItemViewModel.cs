@@ -1,7 +1,8 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
+using AccessibilityInsights.SharedUx.Interfaces;
 using AccessibilityInsights.SharedUx.Properties;
 using AccessibilityInsights.SharedUx.Utilities;
 using Axe.Windows.Core.Bases;
@@ -23,7 +24,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// <summary>
     /// ViewModel class for scanlistview Item
     /// </summary>
-    public class ScanListViewItemViewModel:ViewModelBase
+    public class ScanListViewItemViewModel : ViewModelBase, IIssueFilingSource
     {
         public static IList<ScanListViewItemViewModel> GetScanListViewItemViewModels(A11yElement e)
         {
@@ -34,9 +35,9 @@ namespace AccessibilityInsights.SharedUx.ViewModels
 
             var list = new List<ScanListViewItemViewModel>();
 
-            foreach(var sr in tr.Items)
+            foreach (var sr in tr.Items)
             {
-                foreach(var rr in sr.Items )
+                foreach (var rr in sr.Items)
                 {
                     list.Add(new ScanListViewItemViewModel(e, rr));
                 }
@@ -65,6 +66,11 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         public string Source { get; private set; }
 
         /// <summary>
+        /// The text to display for the hyperlink
+        /// </summary>
+        public string HyperlinkText { get; private set; }
+
+        /// <summary>
         /// Error icon to show
         /// </summary>
         public FabricIcon Icon
@@ -79,7 +85,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
                 {
                     return FabricIcon.CompletedSolid;
                 }
-                else if(this.Status == ScanStatus.ScanNotSupported)
+                else if (this.Status == ScanStatus.ScanNotSupported)
                 {
                     return FabricIcon.MapDirections;
                 }
@@ -168,24 +174,40 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             this.HelpUrl = sr.HelpUrl;
             this.HelpLinkVisibility = this.HelpUrl != null ? Visibility.Visible : Visibility.Collapsed;
 
-            if (this.Status != ScanStatus.Pass && sr.MetaInfo.PropertyId != 0 && StandardLinksHelper.GetDefaultInstance().HasStoredLink(sr.MetaInfo))
-            {
-                this.SnippetLink = StandardLinksHelper.GetDefaultInstance().GetSnippetQueryUrl(sr.MetaInfo);
-            }
-            else
-            {
-                this.SnippetLink = null;
-            }
-
             this.AutomationHelpText = GetAutomationHelpText();
 
+            this.HowToFixText = GetPossiblyOverriddenHowToFixText(sr);
+            this.HyperlinkText = GetHyperlinkText(sr);
+            this.SnippetLink = GetHyperlinkTarget(this.Status, sr);
+            this.Source = sr.Source;
+        }
+
+        private static string GetHyperlinkTarget(ScanStatus status, RuleResult rr)
+        {
+            if (status != ScanStatus.Pass && rr.MetaInfo.PropertyId != 0 && StandardLinksHelper.GetDefaultInstance().HasStoredLink(rr.MetaInfo))
+            {
+                return StandardLinksHelper.GetDefaultInstance().GetSnippetQueryUrl(rr.MetaInfo);
+            }
+            return rr.FrameworkIssueLink;
+        }
+
+        private static string GetPossiblyOverriddenHowToFixText(RuleResult rr)
+        {
+            if (rr.FrameworkIssueLink != null) return Resources.ScannerResultControl_FrameworkIssueBoilerplate;
+
             StringBuilder sb = new StringBuilder();
-            foreach (var message in sr.Messages)
+            foreach (var message in rr.Messages)
             {
                 sb.AppendLine(message);
             }
-            this.HowToFixText = sb.ToString();
-            this.Source = sr.Source;
+            return sb.ToString();
+        }
+
+        private static string GetHyperlinkText(RuleResult rr)
+        {
+            if (rr.FrameworkIssueLink == null) return Resources.ScannerResultControl_ViewCodeSample;
+
+            return Resources.ScannerResultControl_HowToInvestigate;
         }
 
         private string GetAutomationHelpText()
@@ -199,7 +221,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, 
+            return string.Format(CultureInfo.InvariantCulture,
                 Resources.ScanListViewItemViewModel_StatusFormat,
                 this.Status, this.Header);
         }
@@ -242,10 +264,6 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         public void InvokeHelpLink()
         {
             Process.Start(new ProcessStartInfo(this.HelpUrl.Url));
-
-            var dic = new Dictionary<string, string>();
-            dic.Add("HelpLink", this.HelpUrl.Url);
-            dic.Add("UrlType", this.HelpUrl.Type.ToString());
         }
         #endregion
 

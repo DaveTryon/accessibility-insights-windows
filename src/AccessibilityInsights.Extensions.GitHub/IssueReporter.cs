@@ -11,20 +11,22 @@ using System.Threading.Tasks;
 namespace AccessibilityInsights.Extensions.GitHub
 {
     /// <summary>
-    /// GitHub Issue Reprting
+    /// GitHub Issue Reporting
     /// </summary>
     [Export(typeof(IIssueReporting))]
     public class IssueReporter : IIssueReporting
     {
         private IssueReporter _instance;
-        private ConfigurationModel configurationControl;
+        private readonly ConfigurationModel configurationControl;
 
 #pragma warning disable RS0034 // Exported parts should have [ImportingConstructor]
         private IssueReporter()
         {
-            configurationControl = new ConfigurationModel();
-            configurationControl.IsConfigured = SetIsConfigured;
-            configurationControl.Config = new ConnectionConfiguration(string.Empty);
+            configurationControl = new ConfigurationModel
+            {
+                IsConfigured = SetIsConfigured,
+                Config = new ConnectionConfiguration(string.Empty)
+            };
         }
 #pragma warning restore RS0034 // Exported parts should have [ImportingConstructor]
 
@@ -46,7 +48,7 @@ namespace AccessibilityInsights.Extensions.GitHub
 
         public string ServiceName => Properties.Resources.extensionName;
 
-        public Guid StableIdentifier => new Guid ("bbdf3582-d4a6-4b76-93ea-ef508d1fd4b8");
+        public Guid StableIdentifier => new Guid("bbdf3582-d4a6-4b76-93ea-ef508d1fd4b8");
         public bool IsConfigured { get; private set; }
 
         public string ConfigurationPath { get; private set; }
@@ -93,7 +95,7 @@ namespace AccessibilityInsights.Extensions.GitHub
         private void RestoreConfigurationAsyncAction(string serializedConfig)
         {
             ConnectionConfiguration config = JsonConvert.DeserializeObject<ConnectionConfiguration>(serializedConfig);
-            if (config!=null && !string.IsNullOrEmpty(config.RepoLink) && LinkValidator.IsValidGitHubRepoLink(config.RepoLink))
+            if (config != null && !string.IsNullOrEmpty(config.RepoLink) && LinkValidator.IsValidGitHubRepoLink(config.RepoLink))
             {
                 this.configurationControl.Config = config;
                 this.IsConfigured = true;

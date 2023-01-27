@@ -13,7 +13,7 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
         private readonly IGitHubWrapper _gitHubWrapper;
 
         /// <summary>
-        /// ctor
+        /// constructor
         /// </summary>
         /// <param name="gitHubWrapper">Provides access to GitHub</param>
         /// <param name="exceptionReporter">Provides a way to report exceptions</param>
@@ -24,11 +24,11 @@ namespace AccessibilityInsights.Extensions.GitHubAutoUpdate
         }
 
         /// <summary>
-        /// Implements <see cref="IChannelInfoProvider.TryGetChannelInfo(string, out ChannelInfo)"/>
+        /// Implements <see cref="IChannelInfoProvider.TryGetChannelInfo(string, out EnrichedChannelInfo)"/>
         /// </summary>
-        public bool TryGetChannelInfo(ReleaseChannel releaseChannel, out ChannelInfo channelInfo)
+        public bool TryGetChannelInfo(ReleaseChannel releaseChannel, out EnrichedChannelInfo enrichedChannelInfo)
         {
-            return ChannelInfoUtilities.TryGetChannelInfo(releaseChannel, out channelInfo, _gitHubWrapper, exceptionReporter: _exceptionReporter);
+            return ChannelInfoUtilities.TryGetChannelInfo(releaseChannel, out enrichedChannelInfo, _gitHubWrapper, exceptionReporter: _exceptionReporter);
         }
     }
 }

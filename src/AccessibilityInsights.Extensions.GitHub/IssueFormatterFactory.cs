@@ -7,7 +7,7 @@ using System.Globalization;
 namespace AccessibilityInsights.Extensions.GitHub
 {
     /// <summary>
-    /// GitHub Issue Issue Formatting
+    /// GitHub Issue Formatting
     /// </summary>
     public static class IssueFormatterFactory
     {
@@ -16,7 +16,7 @@ namespace AccessibilityInsights.Extensions.GitHub
             if (issueInfo == null)
                 throw new ArgumentNullException(nameof(issueInfo));
 
-            IIssueFormatter formatter = null;
+            IIssueFormatter formatter;
             switch (issueInfo.IssueType)
             {
                 case IssueType.NoFailure:

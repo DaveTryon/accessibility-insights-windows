@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.SharedUx.Misc;
@@ -66,7 +66,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         {
             get
             {
-                return (bool) this.GetValue(CanDragReorderProperty);
+                return (bool)this.GetValue(CanDragReorderProperty);
             }
             set
             {
@@ -107,7 +107,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         {
             get
             {
-                return (bool) this.GetValue(ShowColumnLabelsProperty);
+                return (bool)this.GetValue(ShowColumnLabelsProperty);
             }
             set
             {
@@ -206,7 +206,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             new CommandBinding(MoveFocusToSearchCommand, OnMoveFocusToSearchField) };
         }
 
-    protected override AutomationPeer OnCreateAutomationPeer()
+        protected override AutomationPeer OnCreateAutomationPeer()
         {
             return new CustomControlOverridingAutomationPeer(this, "pane");
         }
@@ -260,10 +260,7 @@ namespace AccessibilityInsights.SharedUx.Controls
             if (AutomationPeer.ListenerExists(AutomationEvents.AsyncContentLoaded))
             {
                 UserControlAutomationPeer peer = UIElementAutomationPeer.FromElement(this) as UserControlAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(AsyncContentLoadedState.Completed, 100));
-                }
+                peer?.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(AsyncContentLoadedState.Completed, 100));
             }
         }
 
@@ -456,7 +453,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         }
 
         /// <summary>
-        /// Switch listviewitem side on doubleclick
+        /// Switch listviewitem side on double-click
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -464,7 +461,7 @@ namespace AccessibilityInsights.SharedUx.Controls
         {
             var lvi = sender as ListViewItem;
             var listView = ItemsControl.ItemsControlFromItemContainer(lvi) as ListView;
-            var records =  from l in this.List where l.Id == (lvi.Content as RecordEntitySetting).Id select l;
+            var records = from l in this.List where l.Id == (lvi.Content as RecordEntitySetting).Id select l;
             var record = records.FirstOrDefault();
 
             if (listView == lvLeft)
@@ -547,8 +544,8 @@ namespace AccessibilityInsights.SharedUx.Controls
             }
             else
             {
-                btnMoveUp.IsEnabled = lvRight.SelectedItems.Contains(SelectedList[0]) ? false : true;
-                btnMoveDown.IsEnabled = lvRight.SelectedItems.Contains(SelectedList.Last()) ? false : true;
+                btnMoveUp.IsEnabled = !lvRight.SelectedItems.Contains(SelectedList[0]);
+                btnMoveDown.IsEnabled = !lvRight.SelectedItems.Contains(SelectedList.Last());
             }
         }
 

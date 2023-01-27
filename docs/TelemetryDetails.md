@@ -10,6 +10,21 @@ Application events are queried from the `customEvents` table. All application ev
 - A `name` property that matches one of the events defined below.
 - An optional set of event-specific properties, as defined with each event.
 
+#### ColorContrast_AutoDetect
+Trigger: Automatic contrast detection is run.
+Additional properties:
+Name | Value
+--- | ---
+`Confidence` | The confidence of the analysis. One of `High`, `Mid`, `Low`, or `None`.
+`BitmapSize` | The size in pixels (width times height) of the bitmap being processed.
+
+#### ColorContrast_Click_Autodetect_Toggle
+Trigger: The user clicks the "Auto detect contrast ratio" button in the color contrast view.
+Additional properties:
+Name | Value
+--- | ---
+`IsNowEnabled` | one of `true` or `false` indicating whether automatic detection is enabled.
+
 #### ColorContrast_Click_Dropdown
 Trigger: The user opens a color picker popup in the Color Contrast view.  
 Additional properties: None.
@@ -27,7 +42,7 @@ Trigger: The application was configured with a `CustomUIA.json` file as describe
 Additional properties:
 Name | Value 
 --- | ---
-CustomUIAPropertyCount | The count of custom UIA properties that were defined in the `CustomUIA.json` file.
+`CustomUIAPropertyCount` | The count of custom UIA properties that were defined in the `CustomUIA.json` file.
 
 #### Event_Load
 Trigger: The user successfully opens a previously-saved A11yEvents file.  
@@ -78,7 +93,8 @@ Additional properties:
 Name | Value
 --- | ---
 `customDimensions.UIAccessEnabled` | `True` if the user has explicitly enabled UIAccess, otherwise `False`. 
-c`ustomDimensions.InstalledDotNetFrameworkVersion` | The numeric version of the installed .NET Framework version. If this value is 528040 or greater, then .NET Framework 4.8 is installed. Otherwise, .NET Framework 4.7.2 is installed.
+`customDimensions.InstalledDotNetFrameworkVersion` | The numeric version of the installed .NET Framework version. If this value is 528040 or greater, then .NET Framework 4.8 is installed.
+`customDimensions.OsArchitecture` | The architecture of the current Windows platform. Supported values: `x86` or `x64`
 
 #### Mainwindow_Timer_Started
 Trigger: The user uses the "Scan with Timer" feature with a non-default value. *Note that this does not send data if the default value is used*.   
@@ -154,6 +170,9 @@ Additional properties:
 Name | Value
 --- | ---
 `customDimensions.UpdateInitializationTime` | The updater's measurement of how long it took to determine the UpdateOption. Format is Hours:Minutes:Seconds.FractionalSeconds.
+`customDimensions.UpdateManifestRequestUri` | The URI used to request the update manifest
+`customDimensions.UpdateManifestResponseUri` | The URI the ultimately provided the update manifest
+`customDimensions.UpdateManifestSizeInBytes` | The byte count of the retrieved update manifest
 `customDimensions.UpdateOptionWaitTime` | The app's measurement of how long it took to determine the UpdateOption. It is different from UpdateInitializationTime, since they start at different times on different threads. Format is Hours:Minutes:Seconds.FractionalSeconds.
 `customDimensions.UpdateOption` | The UpdateOption that was returned to the app (will be ignored if we timed out).
 `customDimensions.UpdateTimedOut` | `True` if the AutoUpdate process exceeded the 2 second timeout, otherwise `False`.
@@ -179,6 +198,22 @@ Name | Value
 --- | ---
 `customDimensions.Error` | The error from clicking the release notes button *note: Should this include the Exception type and/or the Uri to the release notes?*
 
+#### Upgrade_VersionSwitcherResults
+Trigger: The application starts up after running `AccessibilityInsights.VersionSwitcher.exe` to either upgrade or change release channels
+Additional properties: 
+Name | Value
+--- | ---
+`customDimensions.ActualMsiSha512` | The _actual_ SHA512 of the MSI file
+`customDimensions.ActualMsiSize` | The _actual_ size (in bytes) of the downladed MSI file
+`customDimensions.ExecutionTimeInMilliseconds` | The number of milliseconds spent running the VersionSwitcher
+`customDimensions.ExpectedMsiSha512` | The _expected_ SHA512 of the MSI file. Will be set to `null` if the SHA512 was unknown
+`customDimensions.ExpectedMsiSize` | The _expected_ size (in bytes) of the MSI file. Will be set to 0 if the size was unknown
+`customDimensions.NewChannel` | The new channel if VersionSwitcher was used to change channels. Supported values are `Production`, `Insider`, or `Canary` if the channel was changed, or `null` if this was an upgrade within the same channel
+`customDimensions.RequestedMsi` | The `Uri` used to request the MSI file
+`customDimensions.ResolvedMsi` | The final `Uri` (after all redirects) that identifies where the source of the MSI file
+`customDimensions.Result` | The result of the operation. Supported values: `Unknown`, `ErrorBadCommandLine`, `ErrorMsiDownloadFailed`, `ErrorMsiBadSignature`, `ErrorMsiSizeMismatch`, `ErrorMsiSha512Mismatch`, `ErrorInstallingMsi`, or `Success`.
+`customDimensions.StartingVersion` | The installed version of Accessibility Insights for Windows before the version switch
+
 ### Events from Axe.Windows
 Accessibility Insights for Windows provides a mechanism by which Axe.Windows is able to provide telemetry that then gets merged into the telemetry stream that already exists for the application. These events inherit all of the [Common Data Properties](#common-data-properties), and appear just like events that originate from Accessibility Insights for Windows. These will be documented in the Axe.Windows repo, but are duplicated here for convenience:
 
@@ -189,6 +224,7 @@ Name | Value
 --- | ---
 `customDimensions.ElementsInScan` | The number of elements included in the scan.
 `customDimensions.UpperBoundExceeded` | `True` if ElementsInScan exceeds our upper bound of 20,000, otherwise `False`.
+`customDimensions.ScanDurationInMilliseconds` | The time (measured in milliseconds) spent running the scan.
 
 #### SingleRule_Tested_Results
 Trigger: A single rule runs on all elements within a scan.  
@@ -300,7 +336,7 @@ Name | Description | Dynamic Value? | Sample
 `customDimensions.ModeSessionId` | A Guid that allows correlation within a specific mode change within a session. | Yes | *some guid*
 
 ##### client_OS Values
-The Windows version is fetched directly from the registry. The CurrentVersion and CurrentBuildVersion registry values from the "HKLM\SOFTWARE\Microsoft\Windows NT" key are combined into a single string format. The current mappings (based on a blend of https://en.wikipedia.org/wiki/Windows_10_version_history and http://www.jrsoftware.org/ishelp/index.php?topic=winvernotes) include:
+The Windows version is fetched directly from the registry. The CurrentVersion and CurrentBuildVersion registry values from the "HKLM\SOFTWARE\Microsoft\Windows NT" key are combined into a single string format. The current mappings (based on a blend of https://en.wikipedia.org/wiki/Windows_10_version_history, https://en.wikipedia.org/wiki/Windows_11_version_history, and http://www.jrsoftware.org/ishelp/index.php?topic=winvernotes) include:
 
 Value | OS Version
 --- | ---
@@ -318,6 +354,10 @@ Value | OS Version
 6.3.18363 | Windows 10 (1909)
 6.3.19041 | Windows 10 (2004)
 6.3.19042 | Windows 10 (20H2)
+6.3.19043 | Windows 10 (21H1)
+6.3.19044 | Windows 10 (21H2)
+6.3.20348 | Windows Server 2022 (21H2)
+6.3.22000 | Windows 11 (21H2)
 
 This table includes only officially published builds. The data in table may also include builds that were not officially published, such as insider or preview builds.
 

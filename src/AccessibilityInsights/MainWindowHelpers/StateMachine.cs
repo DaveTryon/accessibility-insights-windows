@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Dialogs;
 using AccessibilityInsights.Enums;
@@ -22,7 +22,9 @@ namespace AccessibilityInsights
     /// this is partial class for MainWindow
     /// this portion will contain State machine logic
     /// </summary>
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     public partial class MainWindow
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         /// <summary>
         /// Current Page variable to keep track of state.
@@ -132,7 +134,7 @@ namespace AccessibilityInsights
                 this.btnPause.Visibility = Visibility.Visible;
             }
 
-            // clear selected element highliter
+            // clear selected element highlighter
             HollowHighlightDriver.GetInstance(HighlighterType.Selected).Clear();
             ImageOverlayDriver.ClearDefaultInstance();
 
@@ -236,7 +238,7 @@ namespace AccessibilityInsights
                     }
                 }
 
-                // Based on Ux model feedback from PM team, we decided to go to AutomatedTestResults as default page view for snapshot.
+                // Based on UX model feedback from PM team, we decided to go to AutomatedTestResults as default page view for snapshot.
                 StartTestMode(TestView.AutomatedTestResults);
 
                 Logger.PublishTelemetryEvent(TelemetryEventFactory.ForTestRequested(
@@ -336,7 +338,7 @@ namespace AccessibilityInsights
         delegate void FileLoadHandler(string path, int? selectedElementId = null);
 
         /// <summary>
-        /// Handle Load snapshot data and Request Ux Change
+        /// Handle Load snapshot data and Request UX Change
         /// </summary>
         /// <param name="path"></param>
         /// <param name="selectedEelement"></param>
@@ -349,7 +351,7 @@ namespace AccessibilityInsights
         }
 
         /// <summary>
-        /// Handle Load snapshot data and Request Ux Change
+        /// Handle Load snapshot data and Request UX Change
         /// </summary>
         /// <param name="path"></param>
         /// <param name="selectedEelement">Not used</param>
@@ -372,7 +374,7 @@ namespace AccessibilityInsights
             // array of file handlers to be attempted in order. If one throws an exception, the next will be tried
             FileLoadHandler[] fileHandlers = { HandleLoadingSnapshotData, HandleLoadingEventData };
 
-            foreach(var fileHandler in fileHandlers)
+            foreach (var fileHandler in fileHandlers)
             {
                 try
                 {
@@ -534,7 +536,7 @@ namespace AccessibilityInsights
 
             HollowHighlightDriver.GetDefaultInstance().HighlighterMode = configManager.AppConfig.HighlighterMode;
 
-            if (changes != null && changes.ContainsKey(ConfigurationModel.keyFontSize))
+            if (changes != null && changes.ContainsKey(ConfigurationModel.KeyFontSize))
             {
                 SetFontSize();
             }

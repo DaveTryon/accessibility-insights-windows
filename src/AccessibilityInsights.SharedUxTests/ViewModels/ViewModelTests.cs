@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.SharedUx.ViewModels;
 using Axe.Windows.Core.Bases;
@@ -14,7 +14,7 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
     public class ViewModelTests
     {
         /// <summary>
-        /// Tests the descendent status counts in HierarchyNodeViewModel
+        /// Tests the descendant status counts in HierarchyNodeViewModel
         /// </summary>
         [TestMethod()]
         public void GetDescendentStatusCounts()
@@ -63,7 +63,7 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
         }
 
         /// <summary>
-        /// Populates all descendents with test results and sets them to
+        /// Populates all descendants with test results and sets them to
         ///     pass if the control is a button (any predicate would work)
         ///     and returns number that should pass
         /// </summary>
@@ -74,8 +74,10 @@ namespace AccessibilityInsights.SharedUxTests.ViewModels
             foreach (var item in e.ScanResults.Items)
             {
                 item.Items = new List<RuleResult>();
-                RuleResult r = new RuleResult();
-                r.Status = e.ControlTypeId == Axe.Windows.Core.Types.ControlType.UIA_ButtonControlTypeId ? ScanStatus.Pass : ScanStatus.Fail;
+                RuleResult r = new RuleResult
+                {
+                    Status = e.ControlTypeId == Axe.Windows.Core.Types.ControlType.UIA_ButtonControlTypeId ? ScanStatus.Pass : ScanStatus.Fail
+                };
                 item.Items.Add(r);
             };
             foreach (var c in e.Children)

@@ -53,8 +53,8 @@
                         </Style>
                     </Button.Style>
                     <Grid>
-                        <AccessText Text="_h"  Opacity="0"/>
-                        <fabric:FabricIconControl Height="18" Width="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource ResourceKey=IconBrush}" GlyphSize="Custom" FontSize="18">
+                        <AccessText Text="{x:Static Properties:Resources.TextRangeControl_HighlightButton_AccessText}"  Opacity="0"/>
+                        <fabric:FabricIconControl Height="18" Width="18" VerticalAlignment="Center" HorizontalAlignment="Center" GlyphSize="Custom" FontSize="18">
                             <fabric:FabricIconControl.Style>
                                 <Style TargetType="fabric:FabricIconControl">
                                     <Style.Triggers>
@@ -63,6 +63,12 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Path=vmHilighter.State, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextRangeControl}}" Value="Off">
                                             <Setter Property="GlyphName" Value="UnSetColor"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button,AncestorLevel=1}, Path=IsMouseOver}" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=IconHoverFGBrush}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button,AncestorLevel=1}, Path=IsMouseOver}" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=UnthemedIconFGBrush}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -98,13 +104,13 @@
                         <i:Interaction.Behaviors>
                             <behaviors:DropDownButtonBehavior/>
                         </i:Interaction.Behaviors>
-                        <fabric:FabricIconControl GlyphName="Settings" GlyphSize="Custom" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource hoverAwareFabricIconOnButtonParent}"/>
+                        <fabric:FabricIconControl GlyphName="Settings" GlyphSize="Custom" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource hoverAwareFabricIconOnUnthemedButtonParent}"/>
                         <Button.ContextMenu>
-                            <ContextMenu FlowDirection="LeftToRight">
-                                <MenuItem Header="_Collapse AnnotationTypes" IsChecked="True" IsCheckable="True" Click="MenuItem_Click"/>
+                            <ContextMenu FlowDirection="LeftToRight" Style="{StaticResource menuPlainWhite}">
+                                <MenuItem Header="{x:Static Properties:Resources.TextRangeControl_Menu_CollapseAnnotationTypes}" IsChecked="True" IsCheckable="True" Click="MenuItem_Click"/>
                                 <Separator/>
-                                <MenuItem Header="_Include all attributes that have values" IsChecked="True" IsCheckable="True" Name="mniShowAll" Click="mniShowAll_Click"/>
-                                <MenuItem Header="_Configure attributes to always show" IsCheckable="False" Name="mniConfig" Click="mniConfig_Click"/>
+                                <MenuItem Header="{x:Static Properties:Resources.TextRangeControl_Menu_ShowAllAttributesWithValues}" IsChecked="True" IsCheckable="True" Name="mniShowAll" Click="mniShowAll_Click"/>
+                                <MenuItem Header="{x:Static Properties:Resources.TextRangeControl_Menu_ConfigureAttributesToAlwaysShow}" IsCheckable="False" Name="mniConfig" Click="mniConfig_Click"/>
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
@@ -119,7 +125,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Name}"  Header="Name" Width="140"/>
-                        <GridViewColumn Header="Value" Width="200">
+                        <GridViewColumn Header="{x:Static Properties:Resources.TextRangeControl_Value_Header}" Width="200">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -175,10 +181,10 @@
                 <i:Interaction.Behaviors>
                     <behaviors:DropDownButtonBehavior/>
                 </i:Interaction.Behaviors>
-                <fabric:FabricIconControl GlyphName="Settings" GlyphSize="Custom" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource hoverAwareFabricIconOnButtonParent}"/>
+                <fabric:FabricIconControl GlyphName="Settings" GlyphSize="Custom" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource hoverAwareFabricIconOnUnthemedButtonParent}"/>
                 <Button.ContextMenu>
-                    <ContextMenu FlowDirection="LeftToRight">
-                        <MenuItem Header="_Replace whitespace with formatting symbols" IsChecked="True" IsCheckable="True" Name="mniWhitespace" Click="mniWhitespace_Click"/>
+                    <ContextMenu FlowDirection="LeftToRight" Style="{StaticResource menuPlainWhite}">
+                        <MenuItem Header="{x:Static Properties:Resources.TextRangeControl_Menu_ReplaceWhitespaceWithSymbols}" IsChecked="True" IsCheckable="True" Name="mniWhitespace" Click="mniWhitespace_Click"/>
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>

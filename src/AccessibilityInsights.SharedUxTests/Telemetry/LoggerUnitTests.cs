@@ -5,9 +5,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-
-using TelemetryPropertyBag = System.Collections.Generic.IReadOnlyDictionary<AccessibilityInsights.SharedUx.Telemetry.TelemetryProperty, string>;
 using StringPropertyBag = System.Collections.Generic.IReadOnlyDictionary<string, string>;
+using TelemetryPropertyBag = System.Collections.Generic.IReadOnlyDictionary<AccessibilityInsights.SharedUx.Telemetry.TelemetryProperty, string>;
 
 namespace AccessibilityInsights.SharedUXTests.Telemetry
 {
@@ -239,6 +238,29 @@ namespace AccessibilityInsights.SharedUXTests.Telemetry
             {
                 Assert.AreEqual(pair.Value, actual[pair.Key.ToString()]);
             }
+        }
+
+        [TestMethod]
+        [Timeout(1000)]
+        public void FlushAndShutDown_SinkIsNotEnabled_DoesNotChainToSink()
+        {
+            _sinkMock.Setup(x => x.IsEnabled).Returns(false);
+
+            Logger.FlushAndShutDown();
+
+            _sinkMock.VerifyAll();
+        }
+
+        [TestMethod]
+        [Timeout(1000)]
+        public void FlushAndShutDown_SinkIsEnabled_ChainsToSink()
+        {
+            _sinkMock.Setup(x => x.IsEnabled).Returns(true);
+            _sinkMock.Setup(x => x.FlushAndShutDown());
+
+            Logger.FlushAndShutDown();
+
+            _sinkMock.VerifyAll();
         }
     }
 }

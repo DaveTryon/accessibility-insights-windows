@@ -13,6 +13,7 @@
   <ItemGroup>
     <Drop3PartySignedFile Include="$(TargetDir)\Ben.Demystifier.dll" />
     <Drop3PartySignedFile Include="$(TargetDir)\CommandLine.dll" />
+    <Drop3PartySignedFile Include="$(TargetDir)\HtmlAgilityPack.dll" />
     <Drop3PartySignedFile Include="$(TargetDir)\Microsoft.Deployment.WindowsInstaller.dll" />
     <Drop3PartySignedFile Include="$(TargetDir)\Newtonsoft.Json.dll" />
   </ItemGroup>
@@ -20,12 +21,13 @@
   <Import Project="..\..\build\NetFrameworkRelease.targets" />
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AccessibilityInsights.Extensions.AzureDevOps\Extensions.AzureDevOps.csproj" />
+    <ProjectReference Include="..\AccessibilityInsights.Extensions.DiskLoggingTelemetry\Extensions.DiskLoggingTelemetry.csproj" />
     <ProjectReference Include="..\AccessibilityInsights.Extensions.GitHubAutoUpdate\Extensions.GitHubAutoUpdate.csproj" />
     <ProjectReference Include="..\AccessibilityInsights.Extensions.GitHub\Extensions.GitHub.csproj" />
     <ProjectReference Include="..\AccessibilityInsights.Extensions.Telemetry\Extensions.Telemetry.csproj" />

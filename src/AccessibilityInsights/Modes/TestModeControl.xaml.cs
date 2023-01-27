@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.CommonUxComponents.Dialogs;
@@ -25,7 +25,6 @@ using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using static System.FormattableString;
 
 namespace AccessibilityInsights.Modes
 {
@@ -54,7 +53,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// App configation
+        /// App configuration
         /// </summary>
         public static ConfigurationModel Configuration
         {
@@ -85,7 +84,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Hide control and hilighter
+        /// Hide control and highlighter
         /// </summary>
         public void HideControl()
         {
@@ -93,7 +92,7 @@ namespace AccessibilityInsights.Modes
         }
 
         /// <summary>
-        /// Show control and hilighter
+        /// Show control and highlighter
         /// </summary>
         public void ShowControl()
         {
@@ -149,6 +148,7 @@ namespace AccessibilityInsights.Modes
 
                     await Task.Run(() =>
                     {
+                        Stopwatch stopwatch = Stopwatch.StartNew();
                         bool contextChanged = CaptureAction.SetTestModeDataContext(ecId,
                             this.DataContextMode, Configuration.TreeViewMode);
                         ec = GetDataAction.GetElementContext(ecId);
@@ -164,7 +164,7 @@ namespace AccessibilityInsights.Modes
                         }
                         if (contextChanged && this.DataContextMode != DataContextMode.Load)
                         {
-                            dc.PublishScanResults();
+                            dc.PublishScanResults(stopwatch.ElapsedMilliseconds);
                         }
                     }).ConfigureAwait(false);
 
@@ -218,7 +218,7 @@ namespace AccessibilityInsights.Modes
                             }
 
                             var count = ec.DataContext?.GetRuleResultsViewModelList()?.Count ?? 0;
-                            AutomationProperties.SetName(this, 
+                            AutomationProperties.SetName(this,
                                 string.Format(CultureInfo.InvariantCulture, Properties.Resources.TestModeControl_DetectedFailureFormat,
                                     this.ElementContext.Element.Glimpse, count));
 
@@ -247,7 +247,8 @@ namespace AccessibilityInsights.Modes
 #pragma warning restore CA1031 // Do not catch general exception types
                 finally
                 {
-                    Application.Current.Dispatcher.Invoke(() => {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
                         this.ctrlProgressRing.Deactivate();
                     });
                 }
@@ -303,10 +304,7 @@ namespace AccessibilityInsights.Modes
             if (AutomationPeer.ListenerExists(AutomationEvents.AsyncContentLoaded))
             {
                 UserControlAutomationPeer peer = UIElementAutomationPeer.FromElement(this) as UserControlAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(state, state == AsyncContentLoadedState.Beginning ? 0 : 100));
-                }
+                peer?.RaiseAsyncContentLoadedEvent(new AsyncContentLoadedEventArgs(state, state == AsyncContentLoadedState.Beginning ? 0 : 100));
             }
         }
 
@@ -340,7 +338,7 @@ namespace AccessibilityInsights.Modes
         public bool IsRefreshEnabled { get; private set; }
 
         /// <summary>
-        /// Save button is neeeded on main command bar
+        /// Save button is needed on main command bar
         /// if it is load mode(PlatformObject is null), disable it.
         /// </summary>
         public bool IsSaveEnabled { get; private set; }

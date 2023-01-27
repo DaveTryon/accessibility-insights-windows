@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using AccessibilityInsights.CommonUxComponents.Controls;
 using AccessibilityInsights.Extensions.Interfaces.IssueReporting;
+using AccessibilityInsights.SharedUx.Interfaces;
 using AccessibilityInsights.SharedUx.Utilities;
 using Axe.Windows.Core.Bases;
 using Axe.Windows.Core.Misc;
@@ -18,7 +19,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
     /// Class RuleResultViewModel
     /// this is for FastPass scan result display
     /// </summary>
-    public class RuleResultViewModel: ViewModelBase
+    public class RuleResultViewModel : ViewModelBase, IIssueFilingSource
     {
         /// <summary>
         /// Element
@@ -96,14 +97,14 @@ namespace AccessibilityInsights.SharedUx.ViewModels
         public string SnippetLink { get; }
 
         /// <summary>
-        /// Name of Glypth for Fabric Icon
+        /// Name of Glyph for Fabric Icon
         /// </summary>
         public FabricIcon GlyphName { get; }
 
         /// <summary>
         /// reference to rule result object
         /// </summary>
-        public RuleResult RuleResult { get;}
+        public RuleResult RuleResult { get; }
 
         private System.Windows.Visibility loadingVisibility;
         /// <summary>
@@ -137,7 +138,7 @@ namespace AccessibilityInsights.SharedUx.ViewModels
             var p = e.Properties.ById(rr.MetaInfo.PropertyId);
             if (p != null)
             {
-                this.Properties= String.Format(CultureInfo.InvariantCulture, "{0}={1}", p.Name, p.TextValue);
+                this.Properties = String.Format(CultureInfo.InvariantCulture, "{0}={1}", p.Name, p.TextValue);
             }
 
             if (StandardLinksHelper.GetDefaultInstance().HasStoredLink(rr.MetaInfo))
