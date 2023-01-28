@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using AccessibilityInsights.SharedUx.Utilities;
 using System;
 using System.Drawing;
@@ -10,10 +11,10 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 {
     public static class VisionSimulator
     {
-        private readonly static ConditionMatrix Protonopia;
-        private readonly static ConditionMatrix Deuteranopia;
-        private readonly static ConditionMatrix Tritanopia;
-        private readonly static ConditionMatrix Achromatopsia;
+        private static readonly ConditionMatrix Protonopia;
+        private static readonly ConditionMatrix Deuteranopia;
+        private static readonly ConditionMatrix Tritanopia;
+        private static readonly ConditionMatrix Achromatopsia;
 
 #pragma warning disable CA1810 // Initialize reference type static fields inline
         static VisionSimulator()

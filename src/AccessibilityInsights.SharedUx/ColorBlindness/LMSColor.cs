@@ -11,8 +11,8 @@ namespace AccessibilityInsights.SharedUx.ColorBlindness
 {
     internal class LMSColor
     {
-        private readonly static Transform FromRgb;
-        private readonly static Transform ToRgb;
+        private static readonly Transform FromRgb;
+        private static readonly Transform ToRgb;
 
         private Vector<double> _lms;
 

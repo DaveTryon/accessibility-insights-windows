@@ -318,7 +318,7 @@ namespace AccessibilityInsights.SharedUx.Utilities
             {
                 const int bitsPerPixel = 3;
                 BitmapData bitmapData = holder.BitmapData;
-                int stride = Math.Abs(bitmapData.Stride);  // Stride can be negative, we'll always be positive
+                int stride = Math.Abs(bitmapData.Stride);  // Always use a positive value for stride
                 ColorCache colorCache = new ColorCache();
 
                 int pixelDataSize = bitmap.Height * stride;
