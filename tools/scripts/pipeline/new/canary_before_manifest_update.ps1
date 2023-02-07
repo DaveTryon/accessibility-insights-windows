@@ -3,12 +3,11 @@
 # Environment variables set by the pipeline:
 #     GITHUB_TOKEN              is the PAT to access the repo
 #     A11yInsightsVersion       is the version (e.g., 1.1.2227.01) begin published by the pipeline
-#     A11yInsightsTagName       is the name of the tag (e.g., v1.1.2227.01) associated with this release
 #     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
-#     DeleteReleases            is true if cleanup should actually delete (if false, just report what would be cleaned up)
 #
 # Objective: Return error if a more recent release (i.e., a higher version) already exists
 #
+# This assumes that the task is run from the default working directory
 
 # Extracts a version from the release name.
 function Get-ReleaseVersion($specificRelease)
@@ -17,7 +16,6 @@ function Get-ReleaseVersion($specificRelease)
     if($versionString -match ".*v(\d+\.\d+\.\d+\.\d+).*"){
         return $matches[1]
     } else {
-        $deleteList += $specificRelease
         return [string]::Empty
     }
 }
@@ -76,6 +74,11 @@ function DisallowBackfill($newestVersion)
 # Initialize the client
 function Get-Client()
 {
+    if ($null -eq $env:GITHUB_TOKEN)
+    {
+        throw 'Run this script with the GITHUB_TOKEN environment variable set to a GitHub Personal Access Token with "repo" permissions'
+    }
+
     # Load the octokit dll
     Add-Type -Path ((Get-Location).Path + "\Octokit.$($env:OctokitVersion)\lib\netstandard2.0\Octokit.dll")
 
