@@ -13,7 +13,7 @@
 function Get-ReleaseVersion($specificRelease)
 {
     $versionString = $specificRelease.Name
-    if($versionString -match ".*v(\d+\.\d+\.\d+\.\d+).*"){
+    if($versionString -match '.*v(\d+\.\d+\.\d+\.\d+).*'){
         return $matches[1]
     } else {
         return [string]::Empty
@@ -41,14 +41,14 @@ function SortReleases($releases)
 # Dump the sorted releases for debugging
 function Write-ReleaseMap($releaseMap)
 {
-    Write-Host "==================================="
-    Write-Host "Sorted Releases"
-    Write-Host "Version       Id          Name"
-    Write-Host "-------       --          ----"
+    Write-Host '==================================='
+    Write-Host 'Sorted Releases'
+    Write-Host 'Version       Id          Name'
+    Write-Host '-------       --          ----'
     foreach($releaseKV in $releaseMap){
         Write-Host $releaseKV.Key '  ' $releaseKV.Value.Id '  ' $releaseKV.Value.Name
     }
-    Write-Host "==================================="
+    Write-Host '==================================='
 }
 
 # Return the newest release version
@@ -83,7 +83,7 @@ function Get-Client()
     Add-Type -Path ((Get-Location).Path + "\Octokit.$($env:OctokitVersion)\lib\netstandard2.0\Octokit.dll")
 
     # Get a new client
-    $productHeader = [Octokit.ProductHeaderValue]::new("Canary-Pipeline-PreValidation")
+    $productHeader = [Octokit.ProductHeaderValue]::new('Canary-Pipeline-PreValidation')
     $client = [Octokit.GitHubClient]::new($productHeader)
 
     # Add credentials for authentication
@@ -93,10 +93,10 @@ function Get-Client()
 
 # Main program
 $client = Get-Client
-$repoId = $client.Repository.Get("Microsoft", "accessibility-insights-windows").Result.Id;
+$repoId = $client.Repository.Get('Microsoft', 'accessibility-insights-windows').Result.Id;
 $releases = $client.Repository.Release.GetAll($repoId)
 
-Write-Host "Unsorted Releases:" 
+Write-Host 'Unsorted Releases:' 
 $releases.Result | Select-Object -Property Name, TagName, Id | Format-Table
 
 $releaseMap = SortReleases $releases
