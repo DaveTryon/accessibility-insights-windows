@@ -4,11 +4,12 @@
 #     GITHUB_TOKEN              is the PAT to access the repo
 #     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
 #     DeleteReleases            is true if cleanup should actually delete (if false, just report what would be cleaned up)
+#     IsForcedProdUpdate        is true if cleanup should keep only 1 production release instead of 2
 #
 # Objective: Cleanup of unneeded releases & tags. We want to keep the following:
 #  - All draft releases newer than the version being promoted to Production
-#  - The 2 most recent non-draft releases
-#  - The tags associated with non-draft releases
+#  - The 2 (or 1 if IsForcedProdUpdate is true) most recent non-draft releases
+#  - The tags associated with non-draft releases that we are removing
 #
 # This assumes that the task is run from the default working directory
 
@@ -136,6 +137,7 @@ function Remove-ReleaseAndPerhapsItsTag($client, $release, $deleteReleases)
 $client = Get-Client
 $releases = $client.Repository.Release.GetAll($Owner, $Repo)
 $deleteReleases = $env:DeleteReleases -eq "true"
+$isForcedProdUpdate = $env:IsForcedProdUpdate -eq "true"
 
 Write-Host "Releases found" 
 $releases.Result | Select-Object -Property Name, TagName | Format-Table
@@ -143,6 +145,14 @@ $releases.Result | Select-Object -Property Name, TagName | Format-Table
 $releaseMap = SortReleases $releases
 
 $prodCount = 0
+if ($isForcedProdUpdate -eq $true)
+{
+    $prodVersionsToKeep = 1
+}
+else
+{
+    $prodVersionsToKeep = 2
+}
 
 foreach($releaseKV in $releaseMap)
 {
@@ -157,7 +167,7 @@ foreach($releaseKV in $releaseMap)
     }
     else
     {
-        if($prodCount -lt 2)
+        if($prodCount -lt $prodVersionsToKeep)
         {
             $prodCount++
             continue
@@ -166,6 +176,7 @@ foreach($releaseKV in $releaseMap)
     }
 }
 
+Write-Host "IsForcedProdUpdate = $($isForcedProdUpdate)"
 Write-Host "Delete releases option is set to $($deleteReleases)" 
 
 if($deleteList.Count -eq 0)
