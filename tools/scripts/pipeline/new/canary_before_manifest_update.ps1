@@ -9,24 +9,47 @@
 #
 # This assumes that the task is run from the default working directory
 
+# Constants
+$Owner = "Microsoft"
+$Repo = "accessibility-insights-windows"
+
 # Extracts a version from the release name.
 function Get-ReleaseVersion($specificRelease)
 {
     $versionString = $specificRelease.Name
-    if($versionString -match ".*v(\d+\.\d+\.\d+\.\d+).*"){
+    if($versionString -match ".*v(\d+\.\d+\.\d+\.\d+).*")
+    {
         return $matches[1]
-    } else {
+    }
+    else
+    {
         return [string]::Empty
     }
+}
+
+# Dump the sorted releases for debugging
+function Write-ReleaseMap($releaseMap)
+{
+    Write-Host "==================================="
+    Write-Host "Sorted Releases"
+    Write-Host "Version       Name"
+    Write-Host "-------       ----"
+    foreach($releaseKV in $releaseMap)
+    {
+        Write-Host $releaseKV.Key "  " $releaseKV.Value.Name
+    }
+    Write-Host "==================================="
 }
 
 # Sorts the releases based on the version number
 function SortReleases($releases)
 {
     $releaseMap = @{}
-    foreach($release in $releases.Result){
+    foreach($release in $releases)
+    {
         $releaseVersion = [System.Version](Get-ReleaseVersion $release)
-        if(-not [string]::IsNullOrEmpty($releaseVersion)){
+        if(-not [string]::IsNullOrEmpty($releaseVersion))
+        {
             $releaseMap.Add($releaseVersion,$release)
         }
     }
@@ -36,19 +59,6 @@ function SortReleases($releases)
     Write-ReleaseMap $releaseMap
 
     return $releaseMap
-}
-
-# Dump the sorted releases for debugging
-function Write-ReleaseMap($releaseMap)
-{
-    Write-Host "==================================="
-    Write-Host "Sorted Releases"
-    Write-Host "Version       Id          Name"
-    Write-Host "-------       --          ----"
-    foreach($releaseKV in $releaseMap){
-        Write-Host $releaseKV.Key "  " $releaseKV.Value.Id "  " $releaseKV.Value.Name
-    }
-    Write-Host "==================================="
 }
 
 # Return the newest release version
@@ -64,9 +74,12 @@ function DisallowBackfill($newestVersion)
 
     Write-Host "Comparing release version" $releaseVersion "to newest release" $newestVersion
 
-    if ($newestVersion -gt $releaseVersion) {
+    if ($newestVersion -gt $releaseVersion)
+    {
         Write-Error "Backfill validation FAILED"
-    } else {
+    }
+    else
+    {
         Write-Host "Backfill validation passed"
     }
 }
@@ -93,11 +106,10 @@ function Get-Client()
 
 # Main program
 $client = Get-Client
-$repoId = $client.Repository.Get("Microsoft", "accessibility-insights-windows").Result.Id;
-$releases = $client.Repository.Release.GetAll($repoId)
+$releases = $client.Repository.Release.GetAll($Owner, $Repo).Result
 
 Write-Host "Unsorted Releases:" 
-$releases.Result | Select-Object -Property Name, TagName, Id | Format-Table
+$releases | Select-Object -Property Name, TagName | Format-Table
 
 $releaseMap = SortReleases $releases
 $newestReleaseVersion = Get-NewestReleaseVersion($releaseMap)
