@@ -1,7 +1,6 @@
 # This will run before updating the Canary manifest
 #
 # Environment variables set by the pipeline:
-#     GITHUB_TOKEN              is the PAT to access the repo
 #     A11yInsightsVersion       is the version (e.g., 1.1.2227.01) begin published by the pipeline
 #     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
 #
@@ -32,11 +31,11 @@ function Write-ReleaseMap($releaseMap)
 {
     Write-Host "==================================="
     Write-Host "Sorted Releases"
-    Write-Host "Version       Name"
-    Write-Host "-------       ----"
+    Write-Host "Version       TagName         Name"
+    Write-Host "-------       -------         ----"
     foreach($releaseKV in $releaseMap)
     {
-        Write-Host $releaseKV.Key "  " $releaseKV.Value.Name
+        Write-Host $releaseKV.Key "  " $releaseKV.Value.TagName "  " $releaseKV.Value.Name
     }
     Write-Host "==================================="
 }
@@ -87,11 +86,6 @@ function DisallowBackfill($newestVersion)
 # Initialize the client
 function Get-Client()
 {
-    if ($null -eq $env:GITHUB_TOKEN)
-    {
-        throw "Run this script with the GITHUB_TOKEN environment variable set to a GitHub Personal Access Token with 'repo' permissions"
-    }
-
     # Load the octokit dll
     Add-Type -Path ((Get-Location).Path + "\Octokit.$($env:OctokitVersion)\lib\netstandard2.0\Octokit.dll")
 
@@ -100,7 +94,6 @@ function Get-Client()
     $client = [Octokit.GitHubClient]::new($productHeader)
 
     # Add credentials for authentication
-    $client.Credentials = [Octokit.Credentials]::new($env:GITHUB_TOKEN)
     return $client
 }
 
