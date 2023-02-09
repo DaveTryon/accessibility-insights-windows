@@ -13,6 +13,12 @@
 #  - The latest release's Name property does not contain the string "Production Release"
 #  - The latest release's Body property does not contain the string "Production Release"
 #
+# This assumes that the task is run from the default working directory
+
+# Constants
+$Owner = "Microsoft"
+$Repo = "accessibility-insights-windows"
+
 # Initialize the client
 function Get-Client()
 {
@@ -37,7 +43,7 @@ function Get-Client()
 $productionReleaseMarker = "Production Release"
 
 $client = Get-Client
-$latestRelease = $client.Repository.Release.GetLatest("Microsoft", "accessibility-insights-windows").Result
+$latestRelease = $client.Repository.Release.GetLatest($Owner, $Repo).Result
 
 if ($null -eq $latestRelease)
 {
