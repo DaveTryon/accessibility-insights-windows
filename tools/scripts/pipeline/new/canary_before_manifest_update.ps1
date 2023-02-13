@@ -93,7 +93,6 @@ function Get-Client()
     $productHeader = [Octokit.ProductHeaderValue]::new("Canary-Pipeline-PreValidation")
     $client = [Octokit.GitHubClient]::new($productHeader)
 
-    # Add credentials for authentication
     return $client
 }
 
