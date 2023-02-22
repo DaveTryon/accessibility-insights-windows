@@ -110,7 +110,7 @@ function Remove-ReleaseAndPerhapsItsTag($client, $release, $deleteReleases)
             if ($wasPrerelease)
             {
                 Write-Host "Deleting prerelease tag '$($release.TagName)"
-                #$client.Git.Reference.Delete($Owner, $Repo, "tags/$($release.TagName)").Wait()
+                $client.Git.Reference.Delete($Owner, $Repo, "tags/$($release.TagName)").Wait()
             }
             else
             {
