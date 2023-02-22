@@ -14,7 +14,7 @@ Write-Host "Unaigned Manifest:"
 Write-Host $json
 
 $a11yInsightsTagName = "v" + $info.current_version
-$a11yInsightsMinProdVersionTag = $info.production_minimum_version
+$a11yInsightsMinProdVersionTag = "v" + $info.production_minimum_version
 
 # Diagnostic use only--does NOT set environment variables
 Write-Host "Diagnostics values:"
