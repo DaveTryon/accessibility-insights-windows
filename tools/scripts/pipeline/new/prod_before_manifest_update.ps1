@@ -1,7 +1,6 @@
 # This file will run after updating the Production manifest
 #
 # Environment variables set by the pipeline:
-#     GITHUB_TOKEN              is the PAT to access the repo
 #     A11yInsightsTagName       is the name of the tag (e.g., v1.1.2227.01) associated with this release
 #     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
 #
@@ -22,11 +21,6 @@ $Repo = "accessibility-insights-windows"
 # Initialize the client
 function Get-Client()
 {
-    if ($null -eq $env:GITHUB_TOKEN)
-    {
-        throw "Run this script with the GITHUB_TOKEN environment variable set to a GitHub Personal Access Token with 'repo' permissions"
-    }
-
     # Load the octokit dll
     Add-Type -Path ((Get-Location).Path + "\Octokit.$($env:OctokitVersion)\lib\netstandard2.0\Octokit.dll")
 
@@ -34,8 +28,6 @@ function Get-Client()
     $productHeader = [Octokit.ProductHeaderValue]::new("Production-Pipeline-PreValidation")
     $client = [Octokit.GitHubClient]::new($productHeader)
 
-    # Add credentials for authentication
-    $client.Credentials = [Octokit.Credentials]::new($env:GITHUB_TOKEN)
     return $client
 }
 
