@@ -1,10 +1,10 @@
 # This file will run after updating the Production manifest
 #
 # Environment variables set by the pipeline:
-#     GITHUB_TOKEN              is the PAT to access the repo
-#     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
-#     DeleteReleases            is true if cleanup should actually delete (if false, just report what would be cleaned up)
-#     IsForcedProdUpdate        is true if cleanup should keep only 1 production release instead of 2
+#     GITHUB_TOKEN                     is the PAT to access the repo
+#     OctokitVersion                   is the version of OctoKit we've pinned to. A previous task will install this package
+#     DeleteReleases                   is true if cleanup should actually delete (if false, just report what would be cleaned up)
+#     A11yInsightsMinProdVersionTag    is the tag of the oldest prod release that we will retain
 #
 # Objective: Cleanup of unneeded releases & tags. We want to keep the following:
 #  - All draft releases newer than the version being promoted to Production
@@ -137,46 +137,31 @@ function Remove-ReleaseAndPerhapsItsTag($client, $release, $deleteReleases)
 $client = Get-Client
 $releases = $client.Repository.Release.GetAll($Owner, $Repo)
 $deleteReleases = $env:DeleteReleases -eq "true"
-$isForcedProdUpdate = $env:IsForcedProdUpdate -eq "true"
+$minProdVersionTag = $env:A11yInsightsMinProdVersionTag
 
 Write-Host "Releases found" 
 $releases.Result | Select-Object -Property Name, TagName | Format-Table
 
 $releaseMap = SortReleases $releases
 
-$prodCount = 0
-if ($isForcedProdUpdate -eq $true)
-{
-    $prodVersionsToKeep = 1
-}
-else
-{
-    $prodVersionsToKeep = 2
-}
+$foundMinProdVersion = $false
 
 foreach($releaseKV in $releaseMap)
 {
     $release = $releaseKV.Value
-    if ($release.Prerelease -eq $true)
+    if ($foundMinProdVersion -eq $true)
     {
-        if($prodCount -gt 0)
-        {
-            $deleteList += $release
-            continue
-        }
-    }
-    else
-    {
-        if($prodCount -lt $prodVersionsToKeep)
-        {
-            $prodCount++
-            continue
-        }
         $deleteList += $release
+        continue
+    }
+
+    if (($release.Prerelease -eq $false) -and (($($release.TagName) -eq $($minProdVersionTag))))
+    {
+        $foundMinProdVersion = $true
     }
 }
 
-Write-Host "IsForcedProdUpdate = $($isForcedProdUpdate)"
+Write-Host "A11yInsightsMinProdVersionTag = $($minProdVersionTag)"
 Write-Host "Delete releases option is set to $($deleteReleases)" 
 
 if($deleteList.Count -eq 0)
