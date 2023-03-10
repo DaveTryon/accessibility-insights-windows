@@ -1,18 +1,25 @@
-# This file will run after updating the Production manifest
-#
-# Environment variables set by the pipeline:
-#     A11yInsightsTagName       is the name of the tag (e.g., v1.1.2227.01) associated with this release
-#     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
-#
-# Objective: Return error if the release being promote if any of the follwing are true:
-#  - The latest release does not exist
-#  - The latest release's TagName property does not match A11yInsightsTagName
-#  - The latest release's Prerelease property is true
-#  - The latest release's Draft property is true
-#  - The latest release's Name property does not contain the string "Production Release"
-#  - The latest release's Body property does not contain the string "Production Release"
-#
-# This assumes that the task is run from the default working directory
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+<#
+.SYNOPSIS
+Pipeline script that runs to confirm that the targeted release is ready to release to Production.
+It returns an error if any of the following conditions are true:
+  - The latest release does not exist
+  - The latest release's TagName property does not match A11yInsightsTagName
+  - The latest release's Prerelease property is true
+  - The latest release's Draft property is true
+  - The latest release's Name property does not contain the string "Production Release"
+  - The latest release's Body property does not contain the string "Production Release"
+
+It consumes the following environment variables:
+    A11yInsightsTagName    is the name of the tag (e.g., v1.1.2227.01) associated with this release
+    OctokitVersion         is the version of OctoKit we've pinned to. A previous task will install this package
+
+The script is assumed to run from the default working directory of the pipeline.
+#>
+
+Set-StrictMode -Version Latest
+$script:ErrorActionPreference = 'Stop'
 
 # Constants
 $Owner = "Microsoft"

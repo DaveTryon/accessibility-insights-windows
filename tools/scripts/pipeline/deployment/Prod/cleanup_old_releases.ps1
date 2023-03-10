@@ -1,17 +1,23 @@
-# This file will run after updating the Production manifest
-#
-# Environment variables set by the pipeline:
-#     GITHUB_TOKEN                     is the PAT to access the repo
-#     OctokitVersion                   is the version of OctoKit we've pinned to. A previous task will install this package
-#     DeleteReleases                   is true if cleanup should actually delete (if false, just report what would be cleaned up)
-#     A11yInsightsMinProdVersionTag    is the tag of the oldest prod release that we will retain
-#
-# Objective: Cleanup of unneeded releases & tags. We want to keep the following:
-#  - All draft releases newer than the version being promoted to Production
-#  - The 2 (or 1 if IsForcedProdUpdate is true) most recent non-draft releases
-#  - The tags associated with non-draft releases that we are removing
-#
-# This assumes that the task is run from the default working directory
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+<#
+.SYNOPSIS
+Pipeline script that runs to perform cleanup of old releases. We want to keep the following:
+  - All draft releases newer than the version being promoted to Production
+  - The 2 (or 1 if IsForcedProdUpdate is true) most recent non-draft releases
+  - The tags associated with non-draft releases that we are removing
+
+It consumes the following environment variables:
+    GITHUB_TOKEN                     is the R/W PAT to access the repo
+    OctokitVersion                   is the version of OctoKit we've pinned to. A previous task will install this package
+    DeleteReleases                   is true if cleanup should actually delete (if false, just report what would be cleaned up)
+    A11yInsightsMinProdVersionTag    is the tag of the oldest prod release that we will retain
+
+The script is assumed to run from the default working directory of the pipeline.
+#>
+
+Set-StrictMode -Version Latest
+$script:ErrorActionPreference = 'Stop'
 
 # Constants
 $Owner = "Microsoft"

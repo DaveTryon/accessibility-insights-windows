@@ -1,10 +1,19 @@
-# This will run early in both Canary and Release stages
-#
-# Objective: Set values for A11yInsightsTagName and A11yInsightsMinProdVersionTag
-#
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+<#
+.SYNOPSIS
+Set build variables that will be consumed by downstream scripts. It sets the following variables:
 
-# This assumes that the task working directory is $(Release.PrimaryArtifactSourceAlias)
-Write-Host 
+    A11yInsightsTagName              is the associated tag name (e.g., v1.1.2227.01) for this release
+    A11yInsightsMinProdVersionTag    is the minimum supported Prod Release once this version deploys to Prod
+
+The script is assumed to run from $(Release.PrimaryArtifactSourceAlias)
+
+#>
+
+Set-StrictMode -Version Latest
+$script:ErrorActionPreference = 'Stop'
+
 $unsignedManifestFile = Join-Path "manifest" "ReleaseInfo.json"
 Write-Host $unsignedManifestFile
 $json = Get-Content $unsignedManifestFile | Out-String

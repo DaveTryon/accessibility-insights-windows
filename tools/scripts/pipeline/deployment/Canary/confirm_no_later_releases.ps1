@@ -1,12 +1,19 @@
-# This will run before updating the Canary manifest
-#
-# Environment variables set by the pipeline:
-#     A11yInsightsVersion       is the version (e.g., 1.1.2227.01) begin published by the pipeline
-#     OctokitVersion            is the version of OctoKit we've pinned to. A previous task will install this package
-#
-# Objective: Return error if a more recent release (i.e., a higher version) already exists
-#
-# This assumes that the task is run from the default working directory
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+<#
+.SYNOPSIS
+Release pipeline script that runs to prevent backfilling of Canary releases. It fails if any releases
+exist that are newer than this release.
+
+It consumes the following environment variables:
+    A11yInsightsVersion    is the version (e.g., 1.1.2227.01) begin published by the pipeline
+    OctokitVersion         is the version of OctoKit we've pinned to. A previous task will install this package
+
+The script is assumed to run from the default working directory of the pipeline.
+#>
+
+Set-StrictMode -Version Latest
+$script:ErrorActionPreference = 'Stop'
 
 # Constants
 $Owner = "Microsoft"

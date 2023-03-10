@@ -1,9 +1,20 @@
-# This will run early in both Canary and Release stages
-#
-# Objective: Set values for A11yInsightsVersion and A11yInsightsTagName
-#
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+<#
+.SYNOPSIS
+Set build variables that will be consumed by downstream scripts. It sets the following variables:
 
-# This assumes that the task working directory is $(Release.PrimaryArtifactSourceAlias)
+    A11yInsightsMsiFile    is the relative path to the MSI file (e.g., 1.1.2227.01\AccessibilityInsights.msi)
+    A11yInsightsVersion    is the version (e.g., 1.1.2227.01) for this release
+    A11yInsightsTagName    is the associated tag name (e.g., v1.1.2227.01) for this release
+
+This script is assumed to run from $(Release.PrimaryArtifactSourceAlias)
+
+#>
+
+Set-StrictMode -Version Latest
+$script:ErrorActionPreference = 'Stop'
+
 $msiFolder = ".\msi"
 $a11yInsightsVersion = Get-ChildItem -Name -Directory $($msiFolder)
 $a11yInsightsTagName = "v" + $($a11yInsightsVersion)
