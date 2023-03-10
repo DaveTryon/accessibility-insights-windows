@@ -25,6 +25,20 @@ $script:ErrorActionPreference = 'Stop'
 $Owner = "Microsoft"
 $Repo = "accessibility-insights-windows"
 
+function CheckEnvironmentVariables()
+{
+    if ($null -eq $env:A11yInsightsTagName)
+    {
+        Write-Error "Could not find an environment variable for 'A11yInsightsTagName'"
+        exit 1
+    }
+    if ($null -eq $env:OctokitVersion)
+    {
+        Write-Error "Could not find an environment variable for 'OctokitVersion'"
+        exit 1
+    }
+}
+
 # Initialize the client
 function Get-Client()
 {
@@ -39,6 +53,7 @@ function Get-Client()
 }
 
 # Main program
+CheckEnvironmentVariables
 $productionReleaseMarker = "Production Release"
 
 $client = Get-Client

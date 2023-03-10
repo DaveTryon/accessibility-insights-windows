@@ -19,6 +19,20 @@ $script:ErrorActionPreference = 'Stop'
 $Owner = "Microsoft"
 $Repo = "accessibility-insights-windows"
 
+function CheckEnvironmentVariables()
+{
+    if ($null -eq $env:A11yInsightsVersion)
+    {
+        Write-Error "Could not find an environment variable for 'A11yInsightsVersion'"
+        exit 1
+    }
+    if ($null -eq $env:OctokitVersion)
+    {
+        Write-Error "Could not find an environment variable for 'OctokitVersion'"
+        exit 1
+    }
+}
+
 # Extracts a version from the release name.
 function Get-ReleaseVersion($specificRelease)
 {
@@ -104,6 +118,7 @@ function Get-Client()
 }
 
 # Main program
+CheckEnvironmentVariables
 $client = Get-Client
 $releases = $client.Repository.Release.GetAll($Owner, $Repo).Result
 
